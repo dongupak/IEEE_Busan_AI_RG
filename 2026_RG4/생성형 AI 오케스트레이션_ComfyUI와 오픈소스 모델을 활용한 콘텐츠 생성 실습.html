@@ -1,0 +1,3720 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>생성형 AI 오케스트레이션_ComfyUI와 오픈소스 모델을 활용한 콘텐츠 생성 실습.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+<link rel="stylesheet" href="file:///Users/leesg/Downloads/style.css" type="text/css">
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%EC%83%9D%EC%84%B1%ED%98%95-ai-%EC%98%A4%EC%BC%80%EC%8A%A4%ED%8A%B8%EB%A0%88%EC%9D%B4%EC%85%98-comfyui%EC%99%80-%EC%98%A4%ED%94%88%EC%86%8C%EC%8A%A4-%EB%AA%A8%EB%8D%B8%EC%9D%84-%ED%99%9C%EC%9A%A9%ED%95%9C-%EC%BD%98%ED%85%90%EC%B8%A0-%EC%83%9D%EC%84%B1-%EC%8B%A4%EC%8A%B5">생성형 AI 오케스트레이션: ComfyUI와 오픈소스 모델을 활용한 콘텐츠 생성 실습</h1>
+<h2 id="%EA%B0%95%EC%9D%98%EB%85%B8%ED%8A%B8">강의노트</h2>
+<h3 id="%EB%8F%99%EC%84%9C%EB%8C%80%ED%95%99%EA%B5%90-%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4%ED%95%99%EA%B3%BC-%EC%9D%B4%EC%83%81%EA%B1%B8-leesgdongseoackr">동서대학교 소프트웨어학과 이상걸 (leesg@dongseo.ac.kr)</h3>
+<hr>
+<h2 id="%EB%AA%A9%EC%B0%A8">목차</h2>
+<ol>
+<li><a href="#1-comfyui-%EA%B0%9C%EC%9A%94">ComfyUI 개요</a></li>
+<li><a href="#2-%EC%88%98%EC%B9%98-%EC%A0%95%EB%B0%80%EB%8F%84-numerical-precision">수치 정밀도 (Numerical Precision)</a></li>
+<li><a href="#3-%EB%AA%A8%EB%8D%B8-%ED%8C%8C%EC%9D%BC-%ED%98%95%EC%8B%9D">모델 파일 형식</a></li>
+<li><a href="#4-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EC%9D%B8%EC%BD%94%EB%8D%94-text-encoders">텍스트 인코더 (Text Encoders)</a></li>
+<li><a href="#5-vae-variational-autoencoder">VAE (Variational Autoencoder)</a></li>
+<li><a href="#6-%EC%96%91%EC%9E%90%ED%99%94-quantization">양자화 (Quantization)</a></li>
+<li><a href="#7-%EC%A3%BC%EC%9A%94-%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98">주요 생성 모델 아키텍처</a></li>
+<li><a href="#8-lora%EC%99%80-%ED%8C%8C%EC%9D%B8%ED%8A%9C%EB%8B%9D">LoRA와 파인튜닝</a></li>
+<li><a href="#9-%EC%8B%A4%EC%8A%B5-%ED%8C%81%EA%B3%BC-%EC%9B%8C%ED%81%AC%ED%94%8C%EB%A1%9C%EC%9A%B0-%EA%B5%AC%EC%84%B1">실습 팁과 워크플로우 구성</a></li>
+</ol>
+<hr>
+<h2 id="1-comfyui-%EA%B0%9C%EC%9A%94">1. ComfyUI 개요</h2>
+<h3 id="11-comfyui%EB%9E%80">1.1 ComfyUI란?</h3>
+<ul>
+<li><strong>노드 기반 워크플로우 시스템</strong>: 시각적 프로그래밍 방식으로 생성형 AI 파이프라인 구축</li>
+<li><strong>크로스 플랫폼</strong>: Windows, macOS, Linux 지원</li>
+<li><strong>확장성</strong>: 커스텀 노드 개발 가능</li>
+<li><strong>로컬 실행</strong>: 개인 하드웨어에서 완전한 제어권 확보</li>
+</ul>
+<h3 id="12-2026%EB%85%84-%EC%B5%9C%EC%8B%A0-%EB%B2%84%EC%A0%84-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5">1.2 2026년 최신 버전 주요 기능</h3>
+<p>(2026년 2월 기준)</p>
+<p><strong>Version 0.14.2 주요 업데이트:</strong></p>
+<ul>
+<li><strong>Gemma 12B 지원</strong>: 양자화 가중치 지원</li>
+<li><strong>LTXAV 텍스트 인코더</strong>: 디바이스 선택 및 VRAM 사용량 감소</li>
+<li><strong>FP8MM 오프로딩</strong>: 성능 개선</li>
+<li><strong>통합 Jobs API</strong>: <code>/api/jobs</code> 엔드포인트를 통한 워크플로우 모니터링</li>
+</ul>
+<p><strong>모델 지원 확장:</strong></p>
+<ul>
+<li><strong>이미지 생성</strong>: Qwen Image, Z-Image Fun Control, Kandinsky 5.0</li>
+<li><strong>비디오 생성</strong>: Wan2.6, Kling Omni (텍스트→비디오, 이미지→비디오+오디오)</li>
+<li><strong>3D 모델</strong>: Tripo3.0</li>
+<li><strong>오디오</strong>: 네이티브 오디오 녹음 노드, 오디오-비디오 통합</li>
+</ul>
+<p><strong>성능 최적화:</strong></p>
+<ul>
+<li>AMD GPU 지원 강화 (FP8 연산 활성화)</li>
+<li>Apple Silicon FP16 어텐션 문제 해결</li>
+<li>서브그래프 위젯 편집 기능</li>
+<li>템플릿 모달 재설계 (모델 태그 및 카테고리별 필터링)</li>
+</ul>
+<h3 id="13-%EB%94%94%EB%A0%89%ED%86%A0%EB%A6%AC-%EA%B5%AC%EC%A1%B0">1.3 디렉토리 구조</h3>
+<pre class="hljs"><code><div>ComfyUI/
+├── models/
+│   ├── checkpoints/        # 전체 모델 파일 (.safetensors, .ckpt)
+│   ├── unet/                # UNet 컴포넌트만 있는 모델
+│   ├── vae/                 # VAE 인코더/디코더
+│   ├── text_encoders/       # CLIP, T5 등 텍스트 인코더
+│   │   ├── clip_g.safetensors
+│   │   ├── clip_l.safetensors
+│   │   ├── t5xxl_fp8_e4m3fn.safetensors
+│   │   └── t5xxl_fp16.safetensors
+│   ├── loras/               # LoRA 어댑터 파일
+│   └── controlnet/          # ControlNet 모델
+</div></code></pre>
+<p><strong>파일 배치 규칙:</strong></p>
+<ul>
+<li>CLIP 컴포넌트가 <strong>포함된</strong> 모델: <code>checkpoints/</code> 폴더</li>
+<li>CLIP 컴포넌트가 <strong>없는</strong> 모델: <code>unet/</code> 폴더</li>
+<li>텍스트 인코더 (T5 포함): <code>text_encoders/</code> 또는 <code>clip/</code> 폴더</li>
+</ul>
+<hr>
+<h2 id="2-%EC%88%98%EC%B9%98-%EC%A0%95%EB%B0%80%EB%8F%84-numerical-precision">2. 수치 정밀도 (Numerical Precision)</h2>
+<h3 id="21-%EA%B8%B0%EB%B3%B8-%EA%B0%9C%EB%85%90">2.1 기본 개념</h3>
+<p>수치 정밀도는 모델의 가중치와 활성화 값을 표현하는 비트 수를 의미합니다. 정밀도가 높을수록 정확도는 높아지지만, 메모리 사용량과 계산 비용이 증가합니다.</p>
+<h3 id="22-%EB%B6%80%EB%8F%99%EC%86%8C%EC%88%98%EC%A0%90-%ED%98%95%EC%8B%9D-%EB%B9%84%EA%B5%90">2.2 부동소수점 형식 비교</h3>
+<h4 id="fp64-double-precision-floating-point">FP64 (Double Precision Floating Point)</h4>
+<ul>
+<li><strong>비트 구성</strong>: 64비트</li>
+<li><strong>정밀도</strong>: 매우 높음 (약 15-17 자릿수)</li>
+<li><strong>용도</strong>: 과학 계산, 정밀한 수치 시뮬레이션</li>
+<li><strong>AI 사용</strong>: 거의 사용되지 않음 (오버킬)</li>
+</ul>
+<h4 id="fp32-single-precision-floating-point">FP32 (Single Precision Floating Point)</h4>
+<ul>
+<li><strong>비트 구성</strong>: 32비트 (부호 1비트 + 지수 8비트 + 가수 23비트)</li>
+<li><strong>정밀도</strong>: 높음 (약 6-9 자릿수)</li>
+<li><strong>동적 범위</strong>: ±3.4 × 10³⁸</li>
+<li><strong>용도</strong>: 일반적인 딥러닝 학습 및 추론</li>
+<li><strong>메모리</strong>: 모델 파라미터당 4바이트</li>
+<li><strong>특징</strong>: 안정성과 정확도의 균형</li>
+</ul>
+<h4 id="fp16-half-precision-floating-point--ieee-754-half-precision">FP16 (Half Precision Floating Point / IEEE 754 Half Precision)</h4>
+<ul>
+<li><strong>비트 구성</strong>: 16비트 (부호 1비트 + 지수 5비트 + 가수 10비트)</li>
+<li><strong>정밀도</strong>: 중간 (약 3-4 자릿수)</li>
+<li><strong>동적 범위</strong>: ±65,504 (매우 제한적)</li>
+<li><strong>장점</strong>:
+<ul>
+<li>FP32 대비 50% 메모리 절감</li>
+<li>더 높은 수치 정밀도 (2¹⁰ ≈ 1024 단계)</li>
+<li>추론 시 세밀한 표현 가능</li>
+</ul>
+</li>
+<li><strong>단점</strong>:
+<ul>
+<li>학습 시 그래디언트 언더플로우/오버플로우 위험</li>
+<li>±65,000 범위 초과 시 스케일링 필요</li>
+</ul>
+</li>
+<li><strong>용도</strong>: 추론, 혼합 정밀도 학습</li>
+<li><strong>메모리</strong>: 모델 파라미터당 2바이트</li>
+</ul>
+<h4 id="bf16-brain-floating-point-16">BF16 (Brain Floating Point 16)</h4>
+<ul>
+<li><strong>비트 구성</strong>: 16비트 (부호 1비트 + 지수 8비트 + 가수 7비트)</li>
+<li><strong>정밀도</strong>: 낮음 (약 2-3 자릿수)</li>
+<li><strong>동적 범위</strong>: FP32와 동일 (±3.4 × 10³⁸)</li>
+<li><strong>장점</strong>:
+<ul>
+<li>FP32와 같은 지수 범위 → 수치 안정성 우수</li>
+<li>그래디언트 스케일링 불필요</li>
+<li>학습 시 더 안정적</li>
+<li>더 작은 수 표현 가능 (9.18e-41까지)</li>
+</ul>
+</li>
+<li><strong>단점</strong>:
+<ul>
+<li>FP16보다 낮은 정밀도 (2⁷ ≈ 128 단계)</li>
+<li>0에 가까운 값은 0으로 반올림될 위험</li>
+</ul>
+</li>
+<li><strong>용도</strong>: 대규모 언어 모델 학습 (TPU, 최신 GPU)</li>
+<li><strong>메모리</strong>: 모델 파라미터당 2바이트</li>
+<li><strong>주요 사용</strong>: Google TPU, NVIDIA A100 이상</li>
+</ul>
+<h4 id="tf32-tensorfloat-32">TF32 (TensorFloat-32)</h4>
+<ul>
+<li><strong>비트 구성</strong>: 내부적으로 19비트 (부호 1비트 + 지수 8비트 + 가수 10비트)</li>
+<li><strong>특징</strong>:
+<ul>
+<li>NVIDIA Ampere 아키텍처(A100, RTX 3090 이상) 전용</li>
+<li>Tensor Core 연산에서 자동 사용</li>
+<li>FP32 코드를 수정하지 않고 가속</li>
+<li>저장은 FP32, 연산은 TF32</li>
+</ul>
+</li>
+<li><strong>용도</strong>: 딥러닝 학습 가속</li>
+</ul>
+<h4 id="fp8-8-bit-floating-point">FP8 (8-bit Floating Point)</h4>
+<ul>
+<li><strong>비트 구성</strong>: 8비트 (여러 변형 존재)
+<ul>
+<li><strong>E4M3</strong>: 지수 4비트 + 가수 3비트</li>
+<li><strong>E5M2</strong>: 지수 5비트 + 가수 2비트</li>
+</ul>
+</li>
+<li><strong>장점</strong>:
+<ul>
+<li>FP16 대비 50% 추가 메모리 절감</li>
+<li>최신 GPU(H100, H200)에서 하드웨어 가속</li>
+</ul>
+</li>
+<li><strong>단점</strong>: 매우 낮은 정밀도</li>
+<li><strong>용도</strong>: 대규모 모델 추론, 최첨단 학습</li>
+</ul>
+<h4 id="int8-8-bit-integer">INT8 (8-bit Integer)</h4>
+<ul>
+<li><strong>비트 구성</strong>: 8비트 정수</li>
+<li><strong>범위</strong>: -128 ~ 127 (signed) 또는 0 ~ 255 (unsigned)</li>
+<li><strong>용도</strong>: 양자화된 모델 추론</li>
+<li><strong>장점</strong>: 매우 빠른 연산 속도, 적은 메모리</li>
+<li><strong>단점</strong>: 정밀도 손실</li>
+</ul>
+<h3 id="23-%EC%A0%95%EB%B0%80%EB%8F%84-%EB%B9%84%EA%B5%90-%ED%91%9C">2.3 정밀도 비교 표</h3>
+<table>
+<thead>
+<tr>
+<th>형식</th>
+<th>비트</th>
+<th>지수</th>
+<th>가수</th>
+<th>동적 범위</th>
+<th>정밀도</th>
+<th>메모리 (13B 모델)</th>
+<th>주요 용도</th>
+<th>상대 속도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FP64</strong></td>
+<td>64</td>
+<td>11</td>
+<td>52</td>
+<td>±1.8×10³⁰⁸</td>
+<td>최고</td>
+<td>104 GB</td>
+<td>과학 계산</td>
+<td>0.5x</td>
+</tr>
+<tr>
+<td><strong>FP32</strong></td>
+<td>32</td>
+<td>8</td>
+<td>23</td>
+<td>±3.4×10³⁸</td>
+<td>높음</td>
+<td>52 GB</td>
+<td>기본 학습/추론</td>
+<td>1x</td>
+</tr>
+<tr>
+<td><strong>TF32</strong></td>
+<td>19*</td>
+<td>8</td>
+<td>10</td>
+<td>±3.4×10³⁸</td>
+<td>중상</td>
+<td>52 GB (저장)</td>
+<td>Ampere+ 학습</td>
+<td>1.5-2x</td>
+</tr>
+<tr>
+<td><strong>BF16</strong></td>
+<td>16</td>
+<td>8</td>
+<td>7</td>
+<td>±3.4×10³⁸</td>
+<td>중하</td>
+<td>26 GB</td>
+<td>LLM 학습</td>
+<td>2x</td>
+</tr>
+<tr>
+<td><strong>FP16</strong></td>
+<td>16</td>
+<td>5</td>
+<td>10</td>
+<td>±65,504</td>
+<td>중상</td>
+<td>26 GB</td>
+<td>추론, 혼합 정밀 학습</td>
+<td>2x</td>
+</tr>
+<tr>
+<td><strong>FP8</strong></td>
+<td>8</td>
+<td>4-5</td>
+<td>2-3</td>
+<td>제한적</td>
+<td>낮음</td>
+<td>13 GB</td>
+<td>최첨단 추론</td>
+<td>3-4x</td>
+</tr>
+<tr>
+<td><strong>INT8</strong></td>
+<td>8</td>
+<td>-</td>
+<td>-</td>
+<td>-128~127</td>
+<td>낮음</td>
+<td>13 GB</td>
+<td>양자화 추론</td>
+<td>3-4x</td>
+</tr>
+</tbody>
+</table>
+<p>*TF32는 내부 연산 형식</p>
+<h3 id="24-%ED%8C%8C%EC%9D%BC%EB%AA%85-%ED%91%9C%EA%B8%B0-%EC%98%88%EC%8B%9C">2.4 파일명 표기 예시</h3>
+<ul>
+<li><code>flux_dev_fp16.safetensors</code>: FP16 정밀도</li>
+<li><code>sd3.5_large_bf16.safetensors</code>: BF16 정밀도</li>
+<li><code>t5xxl_fp8_e4m3fn.safetensors</code>: FP8 E4M3 정밀도</li>
+<li><code>umt5-xxl-enc-bf16.safetensors</code>: BF16 인코더</li>
+</ul>
+<h3 id="25-%EC%8B%A4%EB%AC%B4-%EC%84%A0%ED%83%9D-%EA%B0%80%EC%9D%B4%EB%93%9C">2.5 실무 선택 가이드</h3>
+<p><strong>학습 (Training):</strong></p>
+<ul>
+<li>일반적: FP32 또는 혼합 정밀도 (FP32 + FP16/BF16)</li>
+<li>대규모 LLM: BF16 (안정성 우수)</li>
+<li>최신 GPU (A100+): TF32 자동 활성화</li>
+</ul>
+<p><strong>추론 (Inference):</strong></p>
+<ul>
+<li>품질 우선: FP16 (24배 더 높은 수치 정밀도 vs BF16)</li>
+<li>메모리 제약: INT8 양자화 또는 FP8</li>
+<li>균형: BF16 또는 FP16</li>
+</ul>
+<p><strong>ComfyUI에서:</strong></p>
+<ul>
+<li>SDXL/SD3: BF16 또는 FP16</li>
+<li>Flux: FP16 권장 (프롬프트 이해도 향상)</li>
+<li>T5 인코더: FP8 또는 FP16 (메모리 vs 품질 트레이드오프)</li>
+</ul>
+<hr>
+<h2 id="3-%EB%AA%A8%EB%8D%B8-%ED%8C%8C%EC%9D%BC-%ED%98%95%EC%8B%9D">3. 모델 파일 형식</h2>
+<h3 id="31-safetensors-safetensors">3.1 Safetensors (.safetensors)</h3>
+<h4 id="%EA%B0%9C%EC%9A%94">개요</h4>
+<ul>
+<li><strong>개발</strong>: Hugging Face</li>
+<li><strong>형식</strong>: 바이너리 파일 형식</li>
+<li><strong>보안</strong>: 임의 코드 실행 방지 (pickle 취약점 해결)</li>
+<li><strong>속도</strong>: 빠른 로딩 및 저장</li>
+<li><strong>메모리 안전</strong>: 메모리 매핑(mmap) 지원</li>
+</ul>
+<h4 id="%EA%B5%AC%EC%A1%B0">구조</h4>
+<pre class="hljs"><code><div>┌─────────────────────┐
+│   메타데이터 헤더    │  ← JSON 형식, 모델 정보
+├─────────────────────┤
+│   텐서 메타데이터    │  ← 텐서 이름, 크기, dtype, 오프셋
+├─────────────────────┤
+│     텐서 데이터      │  ← 실제 가중치 데이터
+└─────────────────────┘
+</div></code></pre>
+<h4 id="%EC%9E%A5%EC%A0%90">장점</h4>
+<ul>
+<li>✅ <strong>보안</strong>: .ckpt 파일의 pickle 취약점 없음</li>
+<li>✅ <strong>빠른 로딩</strong>: 메모리 매핑으로 전체 파일 로드 불필요</li>
+<li>✅ <strong>크로스 플랫폼</strong>: Python, Rust, JavaScript에서 사용 가능</li>
+<li>✅ <strong>호환성</strong>: PyTorch, TensorFlow, JAX 지원</li>
+</ul>
+<h4 id="%EB%8B%A8%EC%A0%90">단점</h4>
+<ul>
+<li>❌ Python 객체 직렬화 불가 (오직 텐서만)</li>
+</ul>
+<h4 id="%ED%8C%8C%EC%9D%BC%EB%AA%85-%EC%98%88%EC%8B%9C">파일명 예시</h4>
+<pre class="hljs"><code><div>sd_xl_base_1.0.safetensors           # SDXL 기본 모델
+flux1-dev-fp16.safetensors           # Flux Dev FP16
+sdxl_vae.safetensors                 # SDXL VAE
+clip_l.safetensors                   # CLIP-L 텍스트 인코더
+t5xxl_fp8_e4m3fn.safetensors         # T5-XXL FP8 인코더
+</div></code></pre>
+<h3 id="32-checkpoint-ckpt-pt-pth">3.2 Checkpoint (.ckpt, .pt, .pth)</h3>
+<h4 id="%EA%B0%9C%EC%9A%94">개요</h4>
+<ul>
+<li><strong>형식</strong>: PyTorch pickle 기반</li>
+<li><strong>역사적 표준</strong>: 이전 Stable Diffusion 모델에 널리 사용</li>
+<li><strong>보안 우려</strong>: 임의 코드 실행 가능</li>
+</ul>
+<h4 id="%EC%9E%A5%EC%A0%90">장점</h4>
+<ul>
+<li>✅ 복잡한 Python 객체 저장 가능</li>
+<li>✅ 레거시 호환성</li>
+</ul>
+<h4 id="%EB%8B%A8%EC%A0%90">단점</h4>
+<ul>
+<li>❌ <strong>보안 위험</strong>: 악성 코드 포함 가능</li>
+<li>❌ 느린 로딩 속도</li>
+<li>❌ 큰 파일 크기</li>
+</ul>
+<h4 id="%EA%B6%8C%EC%9E%A5%EC%82%AC%ED%95%AD">권장사항</h4>
+<p>⚠️ <strong>ComfyUI에서는 .safetensors 사용을 강력히 권장</strong></p>
+<h3 id="33-gguf-gpt-generated-unified-format">3.3 GGUF (GPT-Generated Unified Format)</h3>
+<h4 id="%EA%B0%9C%EC%9A%94">개요</h4>
+<ul>
+<li><strong>개발</strong>: llama.cpp 프로젝트 (Georgi Gerganov)</li>
+<li><strong>목적</strong>: 빠른 로딩과 효율적인 추론을 위한 바이너리 형식</li>
+<li><strong>주요 사용</strong>: 대규모 언어 모델 (LLM) 양자화 및 배포</li>
+<li><strong>후속 형식</strong>: GGML, GGMF, GGJT의 개선판</li>
+</ul>
+<h4 id="%EA%B5%AC%EC%A1%B0">구조</h4>
+<pre class="hljs"><code><div>┌──────────────────────────┐
+│   메타데이터 섹션         │  ← 키-밸류 쌍 (모델 아키텍처, 버전, 하이퍼파라미터)
+├──────────────────────────┤
+│   텐서 메타데이터 섹션    │  ← 텐서 이름, 크기, dtype, 오프셋
+├──────────────────────────┤
+│   텐서 데이터 섹션        │  ← 양자화된 가중치 데이터
+└──────────────────────────┘
+</div></code></pre>
+<h4 id="%EC%96%91%EC%9E%90%ED%99%94-%EC%8A%A4%ED%82%B4-quantization-schemes">양자화 스킴 (Quantization Schemes)</h4>
+<p>GGUF의 핵심 특징은 유연한 양자화 지원입니다:</p>
+<ul>
+<li><strong>Q4_K_M</strong>: 4비트, K-평균 클러스터링, 중간 블록 크기</li>
+<li><strong>Q5_K_M</strong>: 5비트, K-평균 클러스터링, 중간 블록 크기</li>
+<li><strong>Q8_0</strong>: 8비트, 기본 선형 양자화</li>
+<li><strong>IQ4_XS</strong>: 4비트, 초소형 블록 (고급 압축)</li>
+</ul>
+<h4 id="%EC%9E%A5%EC%A0%90">장점</h4>
+<ul>
+<li>✅ <strong>CPU 최적화</strong>: 소비자 하드웨어에서 효율적 실행</li>
+<li>✅ <strong>빠른 로딩</strong>: mmap 지원으로 초고속 모델 로드</li>
+<li>✅ <strong>단일 파일</strong>: 모든 정보를 하나의 파일에 포함</li>
+<li>✅ <strong>확장성</strong>: 메타데이터 추가 시 하위 호환성 유지</li>
+<li>✅ <strong>양자화</strong>: 다양한 정밀도 옵션 (Q2~Q8)</li>
+</ul>
+<h4 id="%EB%8B%A8%EC%A0%90">단점</h4>
+<ul>
+<li>❌ <strong>제한적 사용</strong>: 주로 LLM, 디퓨전 모델은 덜 일반적</li>
+<li>❌ <strong>GPU 가속 제한</strong>: CPU 추론에 최적화</li>
+</ul>
+<h4 id="%EC%A7%80%EC%9B%90-%ED%94%84%EB%A0%88%EC%9E%84%EC%9B%8C%ED%81%AC">지원 프레임워크</h4>
+<ul>
+<li>llama.cpp</li>
+<li>Ollama</li>
+<li>vLLM</li>
+<li>GPT4All</li>
+<li>LM Studio</li>
+</ul>
+<h4 id="%EC%82%AC%EC%9A%A9-%EC%98%88%EC%8B%9C">사용 예시</h4>
+<pre class="hljs"><code><div><span class="hljs-comment"># Hugging Face 모델을 GGUF로 변환</span>
+python convert-hf-to-gguf.py --model-id meta-llama/Llama-3-8B
+
+<span class="hljs-comment"># Ollama에서 GGUF 모델 실행</span>
+ollama run llama3:8b-q4_k_m
+</div></code></pre>
+<h4 id="gguf-%ED%8C%8C%EC%9D%BC%EB%AA%85-%EC%98%88%EC%8B%9C">GGUF 파일명 예시</h4>
+<pre class="hljs"><code><div>llama-3-8b-q4_k_m.gguf               # Llama 3 8B, Q4_K_M 양자화
+mistral-7b-instruct-q5_k_m.gguf      # Mistral 7B, Q5_K_M 양자화
+phi-3-mini-q8_0.gguf                 # Phi-3 Mini, Q8_0 양자화
+</div></code></pre>
+<h3 id="34-%ED%98%95%EC%8B%9D-%EB%B9%84%EA%B5%90-%ED%91%9C">3.4 형식 비교 표</h3>
+<table>
+<thead>
+<tr>
+<th>특성</th>
+<th>Safetensors</th>
+<th>Checkpoint (.ckpt)</th>
+<th>GGUF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>보안</strong></td>
+<td>✅ 안전</td>
+<td>❌ 취약</td>
+<td>✅ 안전</td>
+</tr>
+<tr>
+<td><strong>로딩 속도</strong></td>
+<td>⚡ 빠름</td>
+<td>느림</td>
+<td>⚡⚡ 매우 빠름</td>
+</tr>
+<tr>
+<td><strong>메모리 효율</strong></td>
+<td>✅ mmap 지원</td>
+<td>❌ 전체 로드</td>
+<td>✅✅ mmap 최적화</td>
+</tr>
+<tr>
+<td><strong>양자화 지원</strong></td>
+<td>부분적</td>
+<td>부분적</td>
+<td>✅✅ 네이티브</td>
+</tr>
+<tr>
+<td><strong>크로스 플랫폼</strong></td>
+<td>✅</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>주요 용도</strong></td>
+<td>디퓨전 모델</td>
+<td>레거시</td>
+<td>LLM</td>
+</tr>
+<tr>
+<td><strong>ComfyUI 권장</strong></td>
+<td>✅✅ 최우선</td>
+<td>△ 호환성만</td>
+<td>❌ 비지원*</td>
+</tr>
+</tbody>
+</table>
+<p>*ComfyUI는 주로 디퓨전 모델용이므로 GGUF는 거의 사용되지 않음</p>
+<h3 id="35-%ED%8C%8C%EC%9D%BC-%ED%99%95%EC%9E%A5%EC%9E%90-%EC%9A%94%EC%95%BD">3.5 파일 확장자 요약</h3>
+<ul>
+<li><code>.safetensors</code>: 최신 표준, 보안 우수 ✅</li>
+<li><code>.ckpt</code>, <code>.pt</code>, <code>.pth</code>: 레거시 PyTorch 체크포인트 ⚠️</li>
+<li><code>.gguf</code>: LLM 양자화 전용 (llama.cpp)</li>
+<li><code>.bin</code>: 구형 Hugging Face 형식</li>
+<li><code>.yaml</code>: 모델 설정 파일 (체크포인트와 함께 사용)</li>
+</ul>
+<hr>
+<h2 id="4-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EC%9D%B8%EC%BD%94%EB%8D%94-text-encoders">4. 텍스트 인코더 (Text Encoders)</h2>
+<h3 id="41-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EC%9D%B8%EC%BD%94%EB%8D%94%EC%9D%98-%EC%97%AD%ED%95%A0">4.1 텍스트 인코더의 역할</h3>
+<p>텍스트 인코더는 자연어 프롬프트를 디퓨전 모델이 이해할 수 있는 수치 벡터(임베딩)로 변환합니다.</p>
+<pre class="hljs"><code><div>&quot;A cat sitting on a mat&quot; → [0.23, -0.45, 0.89, ...] (임베딩 벡터)
+                              ↓
+                        디퓨전 모델 조건화
+                              ↓
+                          이미지 생성
+</div></code></pre>
+<h3 id="42-clip-contrastive-language-image-pre-training">4.2 CLIP (Contrastive Language-Image Pre-training)</h3>
+<h4 id="%EA%B0%9C%EB%85%90">개념</h4>
+<ul>
+<li><strong>개발</strong>: OpenAI (2021)</li>
+<li><strong>학습 방법</strong>: 대조 학습 (이미지-텍스트 쌍 4억 개)</li>
+<li><strong>목적</strong>: 텍스트와 이미지를 공유 임베딩 공간에 매핑</li>
+</ul>
+<h4 id="clip-%EB%B3%80%ED%98%95-%EB%B9%84%EA%B5%90">CLIP 변형 비교</h4>
+<h5 id="clip-l-large">CLIP-L (Large)</h5>
+<ul>
+<li><strong>모델 크기</strong>: ViT-L/14 (Large Vision Transformer)</li>
+<li><strong>파라미터</strong>: 약 427M (4억 2700만)</li>
+<li><strong>임베딩 차원</strong>: 768차원</li>
+<li><strong>토큰 제한</strong>: 77 토큰 (실효 길이 ~20 토큰)</li>
+<li><strong>특징</strong>:
+<ul>
+<li>키워드 중심 이해</li>
+<li>간단한 프롬프트에 효과적</li>
+<li>낮은 메모리 사용량</li>
+</ul>
+</li>
+<li><strong>사용 예</strong>: Stable Diffusion 1.x, 2.x</li>
+</ul>
+<h5 id="clip-g-giant">CLIP-G (Giant)</h5>
+<ul>
+<li><strong>모델 크기</strong>: ViT-G/14 (Giant Vision Transformer)</li>
+<li><strong>파라미터</strong>: 약 1.4B (14억)</li>
+<li><strong>임베딩 차원</strong>: 1280차원</li>
+<li><strong>토큰 제한</strong>: 77 토큰</li>
+<li><strong>특징</strong>:
+<ul>
+<li>더 균형잡힌 데이터 분포</li>
+<li>복잡한 프롬프트 이해 향상</li>
+<li>CLIP-L보다 높은 표현력</li>
+</ul>
+</li>
+<li><strong>사용 예</strong>: Stable Diffusion XL (SDXL)</li>
+</ul>
+<h5 id="clip-h-huge">CLIP-H (Huge)</h5>
+<ul>
+<li><strong>파라미터</strong>: 약 632M (6억 3200만)</li>
+<li><strong>임베딩 차원</strong>: 1024차원</li>
+<li><strong>특징</strong>: CLIP-L과 CLIP-G 사이의 중간 크기</li>
+<li><strong>사용 예</strong>: 일부 실험적 모델</li>
+</ul>
+<h4 id="clip-%ED%95%9C%EA%B3%84">CLIP 한계</h4>
+<p>⚠️ <strong>77 토큰 제한</strong>: 긴 상세한 프롬프트 처리 어려움
+⚠️ <strong>실효 길이</strong>: 20 토큰 이후 성능 저하
+⚠️ <strong>문법 이해 부족</strong>: 키워드 중심, 문장 구조 이해 약함</p>
+<h4 id="long-clip">Long-CLIP</h4>
+<ul>
+<li><strong>개선점</strong>: 248 토큰까지 지원</li>
+<li><strong>방법</strong>:
+<ul>
+<li>Knowledge-Preserved Stretching (위치 임베딩 확장)</li>
+<li>Primary Component Matching (CLIP 특성 유지)</li>
+</ul>
+</li>
+<li><strong>성능</strong>: 긴 캡션 검색 25% 향상</li>
+<li><strong>호환성</strong>: 기존 CLIP 교체 가능 (Stable Diffusion 플러그인)</li>
+</ul>
+<h3 id="43-t5-text-to-text-transfer-transformer">4.3 T5 (Text-To-Text Transfer Transformer)</h3>
+<h4 id="%EA%B0%9C%EB%85%90">개념</h4>
+<ul>
+<li><strong>개발</strong>: Google Research (2019)</li>
+<li><strong>아키텍처</strong>: 인코더-디코더 트랜스포머</li>
+<li><strong>학습 데이터</strong>: C4 (Colossal Clean Crawled Corpus)</li>
+<li><strong>특징</strong>: 자연어 모델링 (비전 학습 아님)</li>
+</ul>
+<h4 id="t5-%EB%B3%80%ED%98%95-%EB%B9%84%EA%B5%90">T5 변형 비교</h4>
+<h5 id="t5-small">T5-Small</h5>
+<ul>
+<li><strong>파라미터</strong>: 60M (6천만)</li>
+<li><strong>레이어</strong>: 인코더 6층, 디코더 6층</li>
+<li><strong>임베딩 차원</strong>: 512</li>
+<li><strong>용도</strong>: 경량 실험</li>
+</ul>
+<h5 id="t5-base">T5-Base</h5>
+<ul>
+<li><strong>파라미터</strong>: 220M (2억 2천만)</li>
+<li><strong>레이어</strong>: 인코더 12층, 디코더 12층</li>
+<li><strong>임베딩 차원</strong>: 768</li>
+<li><strong>특징</strong>:
+<ul>
+<li>T5-XXL 대비 50배 작음</li>
+<li>시각적 매력과 의미 이해 97% 유지</li>
+<li>텍스트 렌더링에 효과적</li>
+</ul>
+</li>
+<li><strong>메모리</strong>: 매우 효율적</li>
+</ul>
+<h5 id="t5-large">T5-Large</h5>
+<ul>
+<li><strong>파라미터</strong>: 770M (7억 7천만)</li>
+<li><strong>레이어</strong>: 인코더 24층, 디코더 24층</li>
+<li><strong>임베딩 차원</strong>: 1024</li>
+</ul>
+<h5 id="t5-xl">T5-XL</h5>
+<ul>
+<li><strong>파라미터</strong>: 3B (30억)</li>
+<li><strong>레이어</strong>: 인코더 24층, 디코더 24층</li>
+<li><strong>임베딩 차원</strong>: 2048</li>
+<li><strong>특징</strong>:
+<ul>
+<li>T5-XXL 성능의 97% 유지</li>
+<li>4배 작은 크기</li>
+<li>실용적 선택</li>
+</ul>
+</li>
+</ul>
+<h5 id="t5-xxl-extra-extra-large">T5-XXL (Extra Extra Large)</h5>
+<ul>
+<li><strong>Full name</strong>: Text-To-Text Transfer Transformer - Extra Extra Large</li>
+<li><strong>파라미터</strong>: 11B (110억)</li>
+<li><strong>레이어</strong>: 인코더 24층, 디코더 24층</li>
+<li><strong>임베딩 차원</strong>: 4096</li>
+<li><strong>피드포워드 차원</strong>: 65,536</li>
+<li><strong>어텐션 헤드</strong>: 128</li>
+<li><strong>특징</strong>:
+<ul>
+<li>복잡한 프롬프트 이해 우수</li>
+<li>긴 문장 구조 파악</li>
+<li>텍스트 렌더링 (이미지 내 글자 생성) 능력</li>
+<li>공간 관계 이해 (2D, 3D)</li>
+<li>숫자 개념 (numeracy)</li>
+</ul>
+</li>
+<li><strong>단점</strong>:
+<ul>
+<li>높은 VRAM 요구량 (FP16: ~22GB)</li>
+<li>느린 인코딩 속도</li>
+</ul>
+</li>
+<li><strong>사용 예</strong>:
+<ul>
+<li>Google Imagen</li>
+<li>Stable Diffusion 3 (SD3)</li>
+<li>Flux</li>
+</ul>
+</li>
+</ul>
+<h4 id="t5-xxl-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EC%B5%9C%EC%A0%81%ED%99%94-%EC%A0%84%EB%9E%B5">T5-XXL 메모리 최적화 전략</h4>
+<ol>
+<li><strong>FP8 양자화</strong>: <code>t5xxl_fp8_e4m3fn.safetensors</code> (50% 메모리 절감)</li>
+<li><strong>제거</strong>: SD3에서 T5 제외 시 시각적 품질 유지, 타이포그래피만 약간 저하</li>
+<li><strong>증류 (Distillation)</strong>: T5-Base 사용 (품질 97% 유지, 크기 50배 감소)</li>
+</ol>
+<h3 id="44-umt5-universal-multilingual-t5">4.4 UMT5 (Universal Multilingual T5)</h3>
+<h4 id="%EA%B0%9C%EB%85%90">개념</h4>
+<ul>
+<li><strong>Full name</strong>: Universal Multilingual Text-To-Text Transfer Transformer</li>
+<li><strong>개발</strong>: Google Research</li>
+<li><strong>특징</strong>: T5의 다국어 확장 버전</li>
+<li><strong>지원 언어</strong>: 100개 이상 언어</li>
+</ul>
+<h4 id="umt5-xxl">UMT5-XXL</h4>
+<ul>
+<li><strong>Full name</strong>: Universal Multilingual T5 - Extra Extra Large</li>
+<li><strong>파라미터</strong>: 11B (T5-XXL과 동일 규모)</li>
+<li><strong>임베딩 차원</strong>: 4096</li>
+<li><strong>특징</strong>:
+<ul>
+<li>다국어 프롬프트 지원</li>
+<li>한국어, 중국어, 일본어 등 비영어권 언어 이해 우수</li>
+<li>T5-XXL과 유사한 아키텍처</li>
+</ul>
+</li>
+</ul>
+<h4 id="%ED%8C%8C%EC%9D%BC%EB%AA%85-%EC%98%88%EC%8B%9C">파일명 예시</h4>
+<pre class="hljs"><code><div>umt5-xxl-enc-bf16.safetensors        # UMT5-XXL 인코더, BF16 정밀도
+t5xxl_fp8_e4m3fn.safetensors         # T5-XXL, FP8 E4M3 양자화
+t5xxl_fp16.safetensors               # T5-XXL, FP16 정밀도
+</div></code></pre>
+<h3 id="45-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EC%9D%B8%EC%BD%94%EB%8D%94-%EC%A1%B0%ED%95%A9-%EC%A0%84%EB%9E%B5">4.5 텍스트 인코더 조합 전략</h3>
+<h4 id="stable-diffusion-152x">Stable Diffusion 1.5/2.x</h4>
+<pre class="hljs"><code><div>CLIP-L (단독) → 768차원 임베딩
+</div></code></pre>
+<h4 id="stable-diffusion-xl-sdxl">Stable Diffusion XL (SDXL)</h4>
+<pre class="hljs"><code><div>CLIP-L (768차원) + CLIP-G (1280차원) → 풀링된 프롬프트 임베딩
+</div></code></pre>
+<ul>
+<li><strong>장점</strong>: 두 인코더의 강점 결합</li>
+<li><strong>CLIP-G</strong>: 인간 언어 이해 (예: &quot;beautiful woman with red eyes&quot;)</li>
+<li><strong>CLIP-L</strong>: 키워드 스타일 (예: &quot;cinematic lighting, blurry background&quot;)</li>
+</ul>
+<h4 id="stable-diffusion-3-sd3">Stable Diffusion 3 (SD3)</h4>
+<pre class="hljs"><code><div>CLIP-L (768차원) + CLIP-G (1280차원) + T5-XXL (4096차원)
+</div></code></pre>
+<ul>
+<li><strong>역할 분담</strong>:
+<ul>
+<li><strong>CLIP 모델</strong>: 시각적 개념, 스타일, 색상</li>
+<li><strong>T5-XXL</strong>: 복잡한 문법, 공간 관계, 텍스트 렌더링</li>
+</ul>
+</li>
+<li><strong>메모리 절충</strong>: T5 제외 가능 (시각적 품질 유지, 타이포그래피 저하)</li>
+</ul>
+<h4 id="flux1">Flux.1</h4>
+<pre class="hljs"><code><div>CLIP-L (768차원) + T5-XXL (4096차원)
+</div></code></pre>
+<ul>
+<li><strong>특징</strong>: CLIP-G 제외, 간소화된 구조</li>
+<li><strong>강점</strong>: T5-XXL의 강력한 언어 이해</li>
+</ul>
+<h3 id="46-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EC%9D%B8%EC%BD%94%EB%8D%94-%EB%B9%84%EA%B5%90-%ED%91%9C">4.6 텍스트 인코더 비교 표</h3>
+<table>
+<thead>
+<tr>
+<th>인코더</th>
+<th>파라미터</th>
+<th>임베딩 차원</th>
+<th>토큰 제한</th>
+<th>강점</th>
+<th>약점</th>
+<th>주요 사용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CLIP-L</strong></td>
+<td>427M</td>
+<td>768</td>
+<td>77</td>
+<td>키워드 이해, 빠름</td>
+<td>긴 프롬프트 약함</td>
+<td>SD 1.x, 2.x</td>
+</tr>
+<tr>
+<td><strong>CLIP-G</strong></td>
+<td>1.4B</td>
+<td>1280</td>
+<td>77</td>
+<td>균형잡힌 이해</td>
+<td>토큰 제한</td>
+<td>SDXL, SD3</td>
+</tr>
+<tr>
+<td><strong>CLIP-H</strong></td>
+<td>632M</td>
+<td>1024</td>
+<td>77</td>
+<td>중간 성능</td>
+<td>토큰 제한</td>
+<td>실험적</td>
+</tr>
+<tr>
+<td><strong>T5-Base</strong></td>
+<td>220M</td>
+<td>768</td>
+<td>512+</td>
+<td>경량, 효율적</td>
+<td>품질 3% 손실</td>
+<td>증류 모델</td>
+</tr>
+<tr>
+<td><strong>T5-XL</strong></td>
+<td>3B</td>
+<td>2048</td>
+<td>512+</td>
+<td>좋은 균형</td>
+<td>중간 VRAM</td>
+<td>효율 중시</td>
+</tr>
+<tr>
+<td><strong>T5-XXL</strong></td>
+<td>11B</td>
+<td>4096</td>
+<td>512+</td>
+<td>최고 품질, 문법 이해</td>
+<td>높은 VRAM</td>
+<td>SD3, Flux, Imagen</td>
+</tr>
+<tr>
+<td><strong>UMT5-XXL</strong></td>
+<td>11B</td>
+<td>4096</td>
+<td>512+</td>
+<td>다국어 지원</td>
+<td>높은 VRAM</td>
+<td>다국어 모델</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="5-vae-variational-autoencoder">5. VAE (Variational Autoencoder)</h2>
+<h3 id="51-vae%EC%9D%98-%EC%97%AD%ED%95%A0">5.1 VAE의 역할</h3>
+<h4 id="%EA%B0%9C%EB%85%90">개념</h4>
+<p>VAE는 이미지와 잠재 공간(latent space) 사이를 변환하는 신경망입니다. 디퓨전 모델은 고해상도 픽셀 공간이 아닌 압축된 잠재 공간에서 작동합니다.</p>
+<h4 id="%EA%B5%AC%EC%A1%B0">구조</h4>
+<pre class="hljs"><code><div>이미지 (512×512×3)
+    ↓ Encoder
+잠재 표현 (64×64×4) ← 디퓨전 모델이 여기서 작동
+    ↓ Decoder
+재구성 이미지 (512×512×3)
+</div></code></pre>
+<h3 id="52-vae-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8">5.2 VAE 컴포넌트</h3>
+<h4 id="vae-encoder">VAE Encoder</h4>
+<ul>
+<li><strong>입력</strong>: 픽셀 이미지 (RGB, 예: 512×512×3)</li>
+<li><strong>출력</strong>: 잠재 표현 (예: 64×64×4)</li>
+<li><strong>압축 비율</strong>: 일반적으로 8배 (8×8×1 픽셀 → 1×1×4 잠재)</li>
+<li><strong>역할</strong>:
+<ul>
+<li>이미지를 압축된 벡터 공간으로 인코딩</li>
+<li>노이즈 추가 및 변환 준비</li>
+</ul>
+</li>
+<li><strong>사용 시점</strong>: 이미지→잠재 변환 (Image-to-Image, Inpainting)</li>
+</ul>
+<h4 id="vae-decoder">VAE Decoder</h4>
+<ul>
+<li><strong>입력</strong>: 잠재 표현 (예: 64×64×4)</li>
+<li><strong>출력</strong>: 픽셀 이미지 (RGB, 예: 512×512×3)</li>
+<li><strong>역할</strong>:
+<ul>
+<li>잠재 공간의 압축된 데이터를 실제 이미지로 복원</li>
+<li>최종 생성 이미지 출력</li>
+</ul>
+</li>
+<li><strong>사용 시점</strong>: 생성 파이프라인의 마지막 단계</li>
+</ul>
+<h3 id="53-%EC%A3%BC%EC%9A%94-vae-%EB%AA%A8%EB%8D%B8">5.3 주요 VAE 모델</h3>
+<h4 id="sd15-vae">SD1.5 VAE</h4>
+<ul>
+<li><strong>적용 모델</strong>: Stable Diffusion 1.x, 2.x</li>
+<li><strong>잠재 차원</strong>: 4 채널</li>
+<li><strong>압축 비율</strong>: 8x</li>
+<li><strong>특징</strong>: 기본 VAE, 가끔 색상 왜곡 발생</li>
+</ul>
+<h4 id="sdxl-vae">SDXL VAE</h4>
+<ul>
+<li><strong>파일명</strong>: <code>sdxl_vae.safetensors</code></li>
+<li><strong>적용 모델</strong>: Stable Diffusion XL (SDXL) 전용</li>
+<li><strong>특징</strong>:
+<ul>
+<li>SDXL 잠재 분포에 최적화</li>
+<li>SD1.5 VAE와 <strong>호환 불가</strong></li>
+<li>더 나은 색상 정확도</li>
+</ul>
+</li>
+<li><strong>VRAM</strong>: 약 2.5GB</li>
+<li><strong>주의사항</strong>:
+<ul>
+<li>⚠️ 파일명 변경 금지 (.safetensors 확장자 유지)</li>
+<li>⚠️ 다중 VAE 로드 금지 (파이프라인 혼란)</li>
+</ul>
+</li>
+</ul>
+<h4 id="sd3-vae">SD3 VAE</h4>
+<ul>
+<li><strong>적용 모델</strong>: Stable Diffusion 3</li>
+<li><strong>개선사항</strong>: 향상된 오토인코딩 모델</li>
+<li><strong>특징</strong>: 더 나은 디테일 보존</li>
+</ul>
+<h3 id="54-comfyui%EC%97%90%EC%84%9C-vae-%EC%82%AC%EC%9A%A9">5.4 ComfyUI에서 VAE 사용</h3>
+<h4 id="vae-encode-%EB%85%B8%EB%93%9C">VAE Encode 노드</h4>
+<ul>
+<li><strong>카테고리</strong>: <code>latent</code></li>
+<li><strong>입력</strong>:
+<ul>
+<li><code>pixels</code> (IMAGE): 인코딩할 픽셀 이미지</li>
+<li><code>vae</code> (VAE): 사용할 VAE 모델</li>
+</ul>
+</li>
+<li><strong>출력</strong>:
+<ul>
+<li><code>latent</code> (LATENT): 잠재 공간 표현</li>
+</ul>
+</li>
+<li><strong>용도</strong>: Image-to-Image, Inpainting 워크플로우</li>
+</ul>
+<h4 id="vae-decode-%EB%85%B8%EB%93%9C">VAE Decode 노드</h4>
+<ul>
+<li><strong>카테고리</strong>: <code>latent</code></li>
+<li><strong>입력</strong>:
+<ul>
+<li><code>samples</code> (LATENT): 디코딩할 잠재 데이터</li>
+<li><code>vae</code> (VAE): 사용할 VAE 모델</li>
+</ul>
+</li>
+<li><strong>출력</strong>:
+<ul>
+<li><code>image</code> (IMAGE): 재구성된 픽셀 이미지</li>
+</ul>
+</li>
+<li><strong>용도</strong>: 생성 파이프라인의 최종 출력</li>
+</ul>
+<h4 id="vae-loader-%EB%85%B8%EB%93%9C">VAE Loader 노드</h4>
+<ul>
+<li><strong>설정 예시</strong>:</li>
+</ul>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"id"</span>: <span class="hljs-number">5</span>,
+  <span class="hljs-attr">"type"</span>: <span class="hljs-string">"VAELoader"</span>,
+  <span class="hljs-attr">"properties"</span>: {
+    <span class="hljs-attr">"vae_name"</span>: <span class="hljs-string">"sdxl_vae.safetensors"</span>
+  }
+}
+</div></code></pre>
+<h4 id="%EC%9B%8C%ED%81%AC%ED%94%8C%EB%A1%9C%EC%9A%B0-%EC%97%B0%EA%B2%B0-%EC%98%88%EC%8B%9C">워크플로우 연결 예시</h4>
+<pre class="hljs"><code><div>Checkpoint → KSampler → VAE Decode → SaveImage
+                          ↑
+                    VAELoader (sdxl_vae)
+</div></code></pre>
+<h3 id="55-vae-%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85">5.5 VAE 트러블슈팅</h3>
+<h4 id="%EB%AC%B8%EC%A0%9C-1-vae-%EB%A1%9C%EB%8D%94%EC%97%90%EC%84%9C-%ED%8C%8C%EC%9D%BC%EC%9D%B4-%EC%9D%B8%EC%8B%9D%EB%90%98%EC%A7%80-%EC%95%8A%EC%9D%8C">문제 1: VAE 로더에서 파일이 인식되지 않음</h4>
+<p><strong>원인</strong>: 파일명 또는 확장자 변경
+<strong>해결</strong>:</p>
+<ul>
+<li>원본 파일명 복원</li>
+<li><code>.safetensors</code> 확장자 확인</li>
+<li><code>models/vae/</code> 폴더에 위치 확인</li>
+</ul>
+<h4 id="%EB%AC%B8%EC%A0%9C-2-%EC%83%89%EC%83%81-%EC%99%9C%EA%B3%A1-%EB%98%90%EB%8A%94-artifact">문제 2: 색상 왜곡 또는 artifact</h4>
+<p><strong>원인</strong>: 잘못된 VAE 사용 (모델 불일치)
+<strong>해결</strong>:</p>
+<ul>
+<li>SDXL 모델 → <code>sdxl_vae.safetensors</code> 사용</li>
+<li>SD1.5/2.x 모델 → 해당 VAE 사용</li>
+</ul>
+<h4 id="%EB%AC%B8%EC%A0%9C-3-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EB%B6%80%EC%A1%B1">문제 3: 메모리 부족</h4>
+<p><strong>원인</strong>: VAE 디코딩 시 높은 VRAM 사용
+<strong>해결</strong>:</p>
+<ul>
+<li>배치 크기 감소</li>
+<li>해상도 낮추기</li>
+<li>Tiled VAE 사용 (큰 이미지 분할 처리)</li>
+</ul>
+<hr>
+<h2 id="6-%EC%96%91%EC%9E%90%ED%99%94-quantization">6. 양자화 (Quantization)</h2>
+<h3 id="61-%EC%96%91%EC%9E%90%ED%99%94%EB%9E%80">6.1 양자화란?</h3>
+<h4 id="%EA%B0%9C%EB%85%90">개념</h4>
+<p>양자화는 모델의 가중치와 활성화 값을 낮은 비트 정밀도로 변환하여 메모리 사용량과 연산량을 줄이는 압축 기법입니다.</p>
+<h4 id="%EC%98%88%EC%8B%9C">예시</h4>
+<pre class="hljs"><code><div>원본 FP32: 3.14159265359 (32비트)
+    ↓ 양자화
+INT8:      3 (8비트, 4배 압축)
+</div></code></pre>
+<h3 id="62-%EC%96%91%EC%9E%90%ED%99%94-%EC%8A%A4%ED%82%B4-gguf-%EA%B8%B0%EB%B0%98">6.2 양자화 스킴 (GGUF 기반)</h3>
+<h4 id="q2k-2-bit-k-quantization">Q2_K (2-bit K-quantization)</h4>
+<ul>
+<li><strong>메모리 절감</strong>: FP16 대비 ~75%</li>
+<li><strong>품질 저하</strong>: 매우 심각 (30%+ 성능 손실)</li>
+<li><strong>속도</strong>: 4.0-5.0배 빠름</li>
+<li><strong>용도</strong>: 실험적, 극한 리소스 제약</li>
+<li><strong>권장</strong>: ❌ 실용적이지 않음</li>
+</ul>
+<h4 id="q3km-3-bit-k-quantization-medium">Q3_K_M (3-bit K-quantization, Medium)</h4>
+<ul>
+<li><strong>메모리 절감</strong>: FP16 대비 ~70%</li>
+<li><strong>품질 저하</strong>: 심각 (15-30% 성능 손실)</li>
+<li><strong>속도</strong>: 3.5-4.5배 빠름</li>
+<li><strong>용도</strong>: 매우 제한된 하드웨어</li>
+<li><strong>권장</strong>: △ 소비자 하드웨어 최소 요구사항</li>
+</ul>
+<h4 id="q4km-4-bit-k-quantization-medium">Q4_K_M (4-bit K-quantization, Medium)</h4>
+<ul>
+<li><strong>Full name</strong>: 4-bit K-means Quantization - Medium Block Size</li>
+<li><strong>메모리 절감</strong>: FP16 대비 ~50%</li>
+<li><strong>품질 저하</strong>: 낮음 (5-15% 성능 손실, 대부분 모델에서 95% 품질 유지)</li>
+<li><strong>속도</strong>: 3.0-4.0배 빠름</li>
+<li><strong>방법</strong>:
+<ul>
+<li>4비트 정밀도</li>
+<li>K-평균 클러스터링으로 유사 가중치 그룹화</li>
+<li>중간 크기 블록 (밀집 레이어 최소 왜곡)</li>
+</ul>
+</li>
+<li><strong>용도</strong>: <strong>가장 널리 사용되는 선택</strong> (소비자 하드웨어 배포)</li>
+<li><strong>권장</strong>: ✅✅ 대부분의 사용 사례에 최적</li>
+</ul>
+<p><strong>실용 예시:</strong></p>
+<pre class="hljs"><code><div>Llama 2 13B:
+- FP16: 32GB RAM 필요 (불가능 on 16GB PC)
+- Q4_K_M: 12GB RAM 필요 (가능) + 2배 속도 향상 + 95% 품질
+</div></code></pre>
+<h4 id="q4ks-4-bit-k-quantization-small">Q4_K_S (4-bit K-quantization, Small)</h4>
+<ul>
+<li><strong>메모리 절감</strong>: Q4_K_M과 유사</li>
+<li><strong>품질 저하</strong>: Q4_K_M보다 약간 높음</li>
+<li><strong>블록 크기</strong>: 더 작음 (더 공격적인 압축)</li>
+<li><strong>용도</strong>: 메모리 극한 최적화</li>
+<li><strong>권장</strong>: △ Q4_K_M 선호</li>
+</ul>
+<h4 id="q5km-5-bit-k-quantization-medium">Q5_K_M (5-bit K-quantization, Medium)</h4>
+<ul>
+<li><strong>메모리 절감</strong>: FP16 대비 ~40%</li>
+<li><strong>품질 저하</strong>: 최소 (5% 미만 성능 손실)</li>
+<li><strong>속도</strong>: 2.5-3.2배 빠름</li>
+<li><strong>용도</strong>: 높은 품질이 필요한 애플리케이션</li>
+<li><strong>권장</strong>: ✅ 품질 우선 시 선택</li>
+</ul>
+<h4 id="q6k-6-bit-k-quantization">Q6_K (6-bit K-quantization)</h4>
+<ul>
+<li><strong>메모리 절감</strong>: FP16 대비 ~30%</li>
+<li><strong>품질 저하</strong>: 매우 낮음 (3% 미만)</li>
+<li><strong>속도</strong>: 2.2-2.8배 빠름</li>
+<li><strong>용도</strong>: 거의 원본 품질 요구</li>
+<li><strong>권장</strong>: ✅ 높은 품질 + 적당한 압축</li>
+</ul>
+<h4 id="q80-8-bit-quantization">Q8_0 (8-bit Quantization)</h4>
+<ul>
+<li><strong>Full name</strong>: 8-bit Linear Quantization (Type 0)</li>
+<li><strong>메모리 절감</strong>: FP16 대비 ~20%</li>
+<li><strong>품질 저하</strong>: 거의 없음 (2% 미만)</li>
+<li><strong>속도</strong>: 2.0-2.5배 빠름</li>
+<li><strong>방법</strong>: 기본 선형(균일) 양자화, 고급 기법 없음 (0)</li>
+<li><strong>용도</strong>: 프로덕션 애플리케이션 (높은 품질 필수)</li>
+<li><strong>특징</strong>: BF16 네이티브 모델도 품질 잘 유지</li>
+<li><strong>권장</strong>: ✅ 연구 및 개발, 고품질 추론</li>
+</ul>
+<h3 id="63-%EC%96%91%EC%9E%90%ED%99%94-%EB%B9%84%EA%B5%90-%ED%91%9C">6.3 양자화 비교 표</h3>
+<table>
+<thead>
+<tr>
+<th>스킴</th>
+<th>비트</th>
+<th>메모리 (13B 모델)</th>
+<th>품질 손실</th>
+<th>속도 향상</th>
+<th>사용 사례</th>
+<th>권장도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FP16</strong></td>
+<td>16</td>
+<td>26 GB</td>
+<td>0%</td>
+<td>1x</td>
+<td>기준</td>
+<td>✅ 연구</td>
+</tr>
+<tr>
+<td><strong>Q8_0</strong></td>
+<td>8</td>
+<td>13 GB</td>
+<td>&lt;2%</td>
+<td>2.0-2.5x</td>
+<td>고품질 프로덕션</td>
+<td>✅ 품질 우선</td>
+</tr>
+<tr>
+<td><strong>Q6_K</strong></td>
+<td>6</td>
+<td>10.5 GB</td>
+<td><img class="emoji" alt="heart" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAMrUlEQVR4Xu1bC6wV1RVdZ+a+LxR9UAqI8lEpBCimCLZUUmkNbbSS0iYFU2wQQT4tVRAFbesvgpYiWqnVlAq1mNhgakybGFshtoJG8YMRQX6CAgIi8n2/O/fO3N21eTM9deY9594HBfncZOWMz+GevdZeZ5/PnTEigtP54xBnBDiNcUaATGsI3GBMuwrgEgMMBNCLbXsAhQDYDWBtAXj5AZF1x4rAt4zJDAIuFgJAXwfoDAAC7Cc2Eqsd4LV5IvWlcimpCM40prMA17vAj40xfQwABaLvMAaiSojUFoA3ACzxgaUUo7E1xG8xpo0AY1xgrAMMMkC5iREQ26cKv4QdLX5YZN8xF4Dkr3OB2Y4xXYwIokCMHUcIYgQCYxCIrC4As5id5SWSH+EA92aM6e+EMUbk3bAtxPosqBgi2wLgtt+I/OWY1ADavWKWMY8xkEUZoIsrggoAXc85BwNHjMDlM2bge/Pm4cr77sOwqVNx0RVXoHPnzigHEN47kNfP3mrMrYafYuzOG+8uA55hP/0zIqgsK8N5ffti8LhxGD57NkYsXoyRS5bgO3Pn4uv8W7fevVFJ8npvBujOWJ9kZwv0u47KAaOMKT8f+HOZMVcrGVXrvD59cNGUKehOotUUwZQrVesGP5dDw86d2PHCC1jLQLe//jr8MDt5kce2AJOfEglaErst8HiG/Tkqnuuix/Dh6Dd+PM4dMgSV7duDDoQUCoC6kMI4vKdx/35sX74cqx98MN7f4rnABOGnVQLcZsxvSf7GI5l0HAyaOBEDZ81CVadOyNfVIX/wIIRtIZttCorBOBUVyJx1Fso6dIDf0ICNzNSqOXNwqLYWYgxyIos2AZOsCFbs3qHYRgQ1Xbrga3fdhV4jR8LxPHh79iB/6BBAgREEEO2L4rvV1ch07IjKrl0RsL837r8frxFZ39chCF9k9r0it5csAG3/wwpjni5TC5LY0DvuwIDp0+HX1yP74YcofPwxApJHlA1CVYdCg2NgZSRR3aMH9rz6Kl6gaz7evh1oCuoPd4pMhiXv9iN5Zn6MZr4TXTbskUfQ4YILUL9pEwJmWEjaiYIOWwkBJsc5+2xU9eyJym7dsHbhQvz75pvRmM/DBwIfHKEizxctwE3GtK8G3qAAPVWAIdOmYSCz4X30EbyNGxEw8xpMNKQ1gCgwdYIACEQ043Dphrb9+uEQiSwbOxYH9u5VoRCI3PZLkV8DwD3GzCk35hdKvobD6tscOu2Y1foNGyDMpGsMDEmaqA/A9hf2GRDIZFBOwdsNGIA358/Hy/fcgzzjyQPrs8BgO02mCPArY26iFecr+V5Dh+LyJ5/ULKBhzRoY2t0ww0pekZiWQkAdQWhwUlWFLzCo3StWYAXF9EhKgHwAXFIA2maAF13Q0SQwlIF3GjQIDSSvsjqxflrqT3moSwIAlXROJQvj8muvxaZly+ADyAHXz2ENShVAx2IfZr8S+EobjufvPvEEvsgKXLdqFQqNjRQ5A8cGErNkMrACoYGpCFXnn48Njz6KdUuXKjkE7Efndl4PEAC9Od77TpqE7I4dMCRD4mFf6f0Vov5CEdpefDEOsG78c9Qo1HqeCvDKSuCb/xLxP3Ml+GUGU9a02sJ5l16KDiRfu3o1AhYgJa9FSGLkY8TDNhYsi2Dje++hx1VXoe6dd7D73XdRAQyKgu/Yqxd6clrV+gJ1mSWa3l8cFKHu7bdRM3gwul12GTY8/zxc4KvfIC8Aaz5TAF1xuYDLMYlzhw2Dt2sXfMJxnGh8Ay0FkBJYQWtH27bozWnNYaHax7qghNrTGRdMmADDolWgULS9JVd0fxZgnDpkPYrZmUncymEgIpU65FIFcKkSgSravw0XNN7770M0665rOygBEheBDspUVqIPCR9ctw4QQTsWSZdzemHfPpiiBE1C4qALPM46bWpqUMXv9snBBfoAQJoAnQlUc1pxmBGPSrps9QujMW0LEkoI2No3UItzONVweEFF8TydUnXMpwylFoknXUD46jiKXUHX1SsPoEuqAESFknJpebWsaLAkb1IsaT6DvCQLmLpKFy5WnOT8bkm38N/JwpssvgWizHGiYlqVKoAD5AkYjiOf41GzL7wuxAI1pVk0GXQxIhXXR5I4YGcExk8uUcxeMQLUKznxfc2QCgEQVqAUB6QIkHZfupDJfiWGQgR1QMjFARR1xQyBnQjHqS57HRYQ+H5I0tYAk5ItU6ILTAkOsbAZR0yAIFwh5sgj8Lyoz13FCLCJQJ7Zz37yCVwuScXzYMIvZWsXJ63NdhrBdPLp9idgDLJcenMGiETekCqAAOuVq18ouHXbtuk0olOXkocTQlKIHmtIqpuS9oe2dG/dBx807UsAD8UIkAPWlQMfAuh+mCu3Gm4uylyXivgxy1qItumF7ehJp5O39udWOcd1xeEtWyJhtnjAxlQB7hSpm2/MS2JM90bOzQfWrkXH/v0hOhUS+pHEMEi2CpNCyJRG1l43P+6tCEyYxrufy2GtAeQCEXmR3BpSBVD4wN8LwBgYg0NUMMO25sILm3Z4WlF1SVw6mdZPc8U6wHEgmYxWfRxYvx6HOYTJIXLF34o+FhdgmS+ys2BM14IIDm/eDGExacsDhyquEMGOoFMMhTCEnR2ar+rmaKa6lAWPxqIAs17QlSttX7t1K2q5eVPiftPZw2YXeKmkE6EHjXmgypjp1QCqRFQplOk1t7WVPO6q4EFHhtcux5oJz+lMCEs6dWosPeMkqzCExh6wQPvcpnskrLNWlpbPKXGikeTV81mRu6aJ3J3igMT8upDKTQqMqSaQaVJLO0Mjd1k5QotjWZs2cLnWLiMM192uWlAzEgmrooStoISPikpEp016reLqvkFIUs8kAyLPtUqebvRtHVDbqwAKzf6hAHi8VYeiDxmzuNqYcVUAKonyEBnCVYjA2OkRLqEilFVXw2FruKM06hCScFQY+wNKC6mXkLvRVRxEwQwLSRdIOlAwASRFspawJigICedCZIkGhchDzP60Vv005gHzykVG++oCwHZqs2QFiAgwSJ+IaoBLMtEJrqEICoSZJdGQt0SHq1rAFLr20FlHycLEdnn2vKD5adAn8tqKHAiAB1v92+BMkfULjHk4w8syvdnOs5Z0XJD4LzhKICQlxe8j7HeEVdykTINBCF9hRbh/hsi2VgugCIC5eZEf0QU9/ZCUE6kdE8FJELCiIAkrYJEbHrsfseQLFggUNvvvHgQWHPWvw9NF9rMW3JID/upaFyggSRGSCyNFykyQdpZgms+8JZ60fsDrG3VRd9QCKG4Uefr3xugPF2MzkQtsC7EAil0dFr99tm0CVoC8FQA54KGfiyw/pg9IFIBbciKbtYO8HW/WDSnbYlMkeaNIWUBZ4hHsDOCJvPUJcOcxf0KEiu71gQnswLMiEKkiWJhikFIP4sQJm3mRerbj1frHXADFz0RW+MDMSAA/4QQiORzSRUipDZL87iT5Jkxlot76vz4jNFlkgSfyp1xMhIQbSjnZKfbAw5JOLHzyIr/7qcjjx+UhKR+4gSKstCIQMQGIxDE6SrC/SZ7wWAFimWcs/9hFZx63p8SodB2JXZMVec+LO8GSt0hxQfP3tEw++DT5tfXAtRz32eMmgGKiyHYSvZoB7LM1IW1IpB+MJEkTLWd+N1mP4jS954Q8JzhB5M0c8JNGqt/ScBDbxrLdsgsKMcSJK9hnbR4YTTeuP47PCSZxvchzfzRmosMCZIxxmh/X6cfokuIAa30o+XwOGMu+V57YJ0WtCE9kgZkeAMI6oYXagHiBa2GB40eIsk6EfUwl+WeO75Oi6cNh/iJjvkQXzGy2qrd0ZNbixiZpe68p+7ezr4Un4lHZdBGAWxeLnEURJoVkE4TdsDXJ4pfc0VniyCpEHhgvMvtz+7C08LOd9mSWlnoavLVwokAmkbw3KqyeQmTRdSIzPvdPi3M+9g8C4yjCs0eyZokQcTGSpPMx22ebyD/F6yknzePy00UaKcI1FOHFbFQYLSzp5pC0/XN7gesmiuRPGgEU00QO+sDoBpHXIzI5i4QgNuuWfIPIygZgzM0i9SflCxOs1nsY+UgSeTtygiVpBfBillfQPatI/gdTRA6c1G+MTBXZRSLfp5XXNScCYa+t7d9spHDcfu87JV6ZIZFtOWaTxDbZwqhIks+JvNPIe7nE/eiUemdokshmn07wKEZE1ouDAjUAI0h+xyn50hQr+YY8cJXPYeHHZwWRrQFwpbrllH5rbLLIWnUCrb77v9MhSbMdQYG2HO94TtibozxmH+IAz4XuH85qv+a0em+QVn8lB4z2gVEnirzizLvDxBkBTmOcEeA/9BHphhUr8z8AAAAASUVORK5CYII=" />%</td>
+<td>2.2-2.8x</td>
+<td>거의 원본 품질</td>
+<td>✅ 균형</td>
+</tr>
+<tr>
+<td><strong>Q5_K_M</strong></td>
+<td>5</td>
+<td>9.1 GB</td>
+<td>&lt;5%</td>
+<td>2.5-3.2x</td>
+<td>좋은 품질</td>
+<td>✅ 권장</td>
+</tr>
+<tr>
+<td><strong>Q4_K_M</strong></td>
+<td>4</td>
+<td>7.9 GB</td>
+<td>5-15%</td>
+<td>3.0-4.0x</td>
+<td><strong>최고 인기</strong></td>
+<td>✅✅ 최우선</td>
+</tr>
+<tr>
+<td><strong>Q4_K_S</strong></td>
+<td>4</td>
+<td>7.5 GB</td>
+<td>10-20%</td>
+<td>3.0-4.0x</td>
+<td>공격적 압축</td>
+<td>△</td>
+</tr>
+<tr>
+<td><strong>Q3_K_M</strong></td>
+<td>3</td>
+<td>6.3 GB</td>
+<td>15-30%</td>
+<td>3.5-4.5x</td>
+<td>제한된 하드웨어</td>
+<td>△</td>
+</tr>
+<tr>
+<td><strong>Q2_K</strong></td>
+<td>2</td>
+<td>5.4 GB</td>
+<td>30%+</td>
+<td>4.0-5.0x</td>
+<td>실험적</td>
+<td>❌</td>
+</tr>
+</tbody>
+</table>
+<h3 id="64-%EC%96%91%EC%9E%90%ED%99%94-%EC%84%A0%ED%83%9D-%EA%B0%80%EC%9D%B4%EB%93%9C">6.4 양자화 선택 가이드</h3>
+<h4 id="%EC%97%B0%EA%B5%AC-%EB%B0%8F-%EA%B0%9C%EB%B0%9C">연구 및 개발</h4>
+<ul>
+<li><strong>권장</strong>: FP16 또는 Q8_0</li>
+<li><strong>이유</strong>: 최고 품질 유지, 정확한 평가</li>
+<li><strong>트레이드오프</strong>: 높은 리소스 사용</li>
+</ul>
+<h4 id="%ED%94%84%EB%A1%9C%EB%8D%95%EC%85%98-%EB%B0%B0%ED%8F%AC-%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C">프로덕션 배포 (클라우드)</h4>
+<ul>
+<li><strong>권장</strong>: Q5_K_M 또는 Q4_K_M</li>
+<li><strong>이유</strong>: 품질과 비용 효율성 균형</li>
+<li><strong>트레이드오프</strong>: 약간의 품질 감소, 큰 비용 절감</li>
+</ul>
+<h4 id="%EC%86%8C%EB%B9%84%EC%9E%90-%ED%95%98%EB%93%9C%EC%9B%A8%EC%96%B4-%EB%B0%B0%ED%8F%AC">소비자 하드웨어 배포</h4>
+<ul>
+<li><strong>권장</strong>: Q4_K_M 또는 Q3_K_M</li>
+<li><strong>이유</strong>: 제한된 하드웨어에서 실행 가능</li>
+<li><strong>트레이드오프</strong>: 눈에 띄는 품질 감소, 넓은 접근성</li>
+</ul>
+<h4 id="%EB%AA%A8%EB%B0%94%EC%9D%BC-%EB%B0%8F-%EC%97%A3%EC%A7%80-%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98">모바일 및 엣지 애플리케이션</h4>
+<ul>
+<li><strong>권장</strong>: INT8 또는 Q4_K_S</li>
+<li><strong>이유</strong>: 리소스 제약 환경 최적화</li>
+<li><strong>트레이드오프</strong>: 품질 감소, 전력 및 메모리 효율성</li>
+</ul>
+<h3 id="65-%EC%96%91%EC%9E%90%ED%99%94-%ED%8C%8C%EC%9D%BC%EB%AA%85-%EC%98%88%EC%8B%9C">6.5 양자화 파일명 예시</h3>
+<pre class="hljs"><code><div>llama-3-8b-q4_k_m.gguf               # Llama 3 8B, Q4_K_M
+mistral-7b-instruct-q5_k_m.gguf      # Mistral 7B, Q5_K_M
+phi-3-mini-q8_0.gguf                 # Phi-3 Mini, Q8_0
+deepseek-r1-q4_k_m.gguf              # DeepSeek-R1, Q4_K_M
+</div></code></pre>
+<h3 id="66-comfyui%EC%99%80-%EC%96%91%EC%9E%90%ED%99%94">6.6 ComfyUI와 양자화</h3>
+<p><strong>현재 상태 (2026년 2월):</strong></p>
+<ul>
+<li>ComfyUI는 주로 <strong>디퓨전 모델</strong> (이미지/비디오 생성) 중심</li>
+<li>GGUF 양자화는 <strong>LLM</strong> (대규모 언어 모델)에 주로 사용</li>
+<li>ComfyUI에서 직접적인 GGUF 지원은 제한적</li>
+</ul>
+<p><strong>간접적 사용:</strong></p>
+<ul>
+<li>LLM 기반 프롬프트 생성기를 외부에서 실행 (ollama, llama.cpp)</li>
+<li>생성된 프롬프트를 ComfyUI로 전달</li>
+</ul>
+<p><strong>디퓨전 모델 양자화:</strong></p>
+<ul>
+<li>FP16, BF16, FP8: 주로 텍스트 인코더 (T5) 양자화</li>
+<li>UNet/Transformer: 일반적으로 FP16 또는 BF16 유지</li>
+</ul>
+<hr>
+<h2 id="7-%EC%A3%BC%EC%9A%94-%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98">7. 주요 생성 모델 아키텍처</h2>
+<h3 id="71-stable-diffusion-%EC%8B%9C%EB%A6%AC%EC%A6%88">7.1 Stable Diffusion 시리즈</h3>
+<h4 id="stable-diffusion-1x2x">Stable Diffusion 1.x/2.x</h4>
+<ul>
+<li><strong>아키텍처</strong>: U-Net 기반 잠재 디퓨전 모델</li>
+<li><strong>파라미터</strong>: 약 0.98B (SD 1.5)</li>
+<li><strong>해상도</strong>: 512×512</li>
+<li><strong>텍스트 인코더</strong>: CLIP-L (768차원)</li>
+<li><strong>VAE</strong>: 8배 압축</li>
+<li><strong>특징</strong>:
+<ul>
+<li>가볍고 빠름</li>
+<li>소비자 GPU에서 실행 가능</li>
+</ul>
+</li>
+<li><strong>한계</strong>:
+<ul>
+<li>낮은 해상도</li>
+<li>제한된 프롬프트 이해</li>
+</ul>
+</li>
+</ul>
+<h4 id="stable-diffusion-xl-sdxl">Stable Diffusion XL (SDXL)</h4>
+<ul>
+<li><strong>파라미터</strong>: 약 3.5B</li>
+<li><strong>해상도</strong>: 1024×1024 네이티브</li>
+<li><strong>텍스트 인코더</strong>: CLIP-L + CLIP-G</li>
+<li><strong>VAE</strong>: 개선된 SDXL VAE</li>
+<li><strong>특징</strong>:
+<ul>
+<li>더 나은 디테일과 품질</li>
+<li>두 개의 CLIP 모델 조합</li>
+<li>향상된 색상 정확도</li>
+</ul>
+</li>
+<li><strong>VRAM 요구량</strong>: ~8GB (FP16)</li>
+</ul>
+<h4 id="stable-diffusion-3-sd3">Stable Diffusion 3 (SD3)</h4>
+<ul>
+<li><strong>아키텍처</strong>: MMDiT (Multimodal Diffusion Transformer)</li>
+<li><strong>Full name</strong>: Multimodal Diffusion Transformer</li>
+<li><strong>파라미터 범위</strong>: 800M ~ 8B (여러 변형)</li>
+<li><strong>해상도</strong>: 1024×1024 이상</li>
+<li><strong>텍스트 인코더</strong>: CLIP-L + CLIP-G + T5-XXL</li>
+<li><strong>학습 방법</strong>: Rectified Flow (RF)</li>
+</ul>
+<p><strong>주요 개선사항:</strong></p>
+<ol>
+<li>
+<p><strong>MMDiT 아키텍처</strong>:</p>
+<ul>
+<li>이미지와 언어에 <strong>별도의 가중치 세트</strong> 사용</li>
+<li>두 모달리티가 독립적으로 작동하면서 상호 참조</li>
+<li>트랜스포머 기반 (U-Net 대체)</li>
+</ul>
+</li>
+<li>
+<p><strong>Rectified Flow (RF)</strong>:</p>
+<ul>
+<li>데이터와 노이즈를 <strong>선형 경로</strong>로 연결</li>
+<li>확률적 샘플링 → 결정론적 벡터 필드</li>
+<li>더 적은 샘플링 스텝으로 고품질 생성</li>
+<li>재가중 RF: 경로 중간 부분에 더 많은 가중치</li>
+</ul>
+</li>
+<li>
+<p><strong>유연한 텍스트 인코더</strong>:</p>
+<ul>
+<li>T5-XXL 제거 가능 (메모리 절감)</li>
+<li>시각적 미학 유지 (win rate 50%)</li>
+<li>타이포그래피 성능 약간 저하 (win rate 38%)</li>
+</ul>
+</li>
+</ol>
+<p><strong>성능:</strong></p>
+<ul>
+<li>8B 모델: RTX 4090 (24GB VRAM)에서 34초 (1024×1024, 50 스텝)</li>
+<li>DALL·E 3, Midjourney v6, Ideogram v1 능가</li>
+</ul>
+<p><strong>장점:</strong></p>
+<ul>
+<li>✅ 최고 수준의 텍스트 이해</li>
+<li>✅ 정확한 철자 (텍스트 렌더링)</li>
+<li>✅ 복잡한 프롬프트 준수</li>
+<li>✅ 확장성 (여러 크기 모델)</li>
+</ul>
+<p><strong>단점:</strong></p>
+<ul>
+<li>❌ 높은 VRAM 요구량</li>
+<li>❌ 느린 생성 속도</li>
+</ul>
+<h3 id="72-flux-%EC%8B%9C%EB%A6%AC%EC%A6%88">7.2 Flux 시리즈</h3>
+<h4 id="721-flux1">7.2.1 Flux.1</h4>
+<h5 id="%EA%B0%9C%EC%9A%94">개요</h5>
+<ul>
+<li><strong>개발</strong>: Black Forest Labs (Stable Diffusion 원개발팀)</li>
+<li><strong>파라미터</strong>: 12B (120억)</li>
+<li><strong>비교</strong>: SDXL 3.5B의 약 3.4배</li>
+<li><strong>학습 방법</strong>: Rectified Flow (RF)</li>
+</ul>
+<h5 id="%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98-%ED%8A%B9%EC%A7%95">아키텍처 특징</h5>
+<p><strong>1. 하이브리드 아키텍처</strong></p>
+<ul>
+<li><strong>Multimodal Transformer Blocks</strong>: 이미지와 텍스트 처리</li>
+<li><strong>Parallel Diffusion Transformer Blocks</strong>: 병렬 어텐션 레이어</li>
+</ul>
+<p><strong>2. 핵심 컴포넌트</strong></p>
+<p><strong>Double-Stream Blocks:</strong></p>
+<ul>
+<li><strong>두 개의 독립적인 스트림</strong>: 잠재(이미지) 스트림, 프롬프트(텍스트) 스트림</li>
+<li><strong>계산 방식</strong>: 순차적 (어텐션 → MLP)</li>
+<li><strong>가중치</strong>: 각 스트림마다 별도</li>
+<li><strong>정규화</strong>: Adaptive Layer Normalization (AdaLN)</li>
+<li><strong>특징</strong>: SD3의 MMDiT 디자인과 유사</li>
+</ul>
+<p><strong>Single-Stream Blocks:</strong></p>
+<ul>
+<li><strong>하나의 통합 스트림</strong>: 이미지와 텍스트 결합</li>
+<li><strong>계산 방식</strong>: 병렬 (어텐션 || MLP)</li>
+<li><strong>가중치</strong>: 공유</li>
+<li><strong>특징</strong>:
+<ul>
+<li>경량화</li>
+<li>효율적 용량 확장</li>
+<li>Flux 고유 혁신</li>
+</ul>
+</li>
+</ul>
+<p><strong>3. Flow Matching</strong></p>
+<ul>
+<li><strong>방식</strong>: 결정론적 ODE (Ordinary Differential Equation)</li>
+<li><strong>샘플러</strong>: FlowMatchEulerDiscreteScheduler</li>
+<li><strong>장점</strong>:
+<ul>
+<li>확률적 노이즈 스케줄 불필요</li>
+<li>더 빠르고 안정적인 생성</li>
+<li>복잡도 감소</li>
+</ul>
+</li>
+</ul>
+<p><strong>4. Rotary Positional Embeddings (RoPE)</strong></p>
+<ul>
+<li><strong>목적</strong>: 위치 정보 인코딩</li>
+<li><strong>장점</strong>: 더 나은 공간 관계 이해</li>
+</ul>
+<p><strong>5. 병렬 어텐션 레이어</strong></p>
+<ul>
+<li><strong>동시 처리</strong>: 여러 어텐션 헤드 병렬 실행</li>
+<li><strong>효율성</strong>: 속도 향상</li>
+</ul>
+<h5 id="%ED%85%8D%EC%8A%A4%ED%8A%B8-%EC%9D%B8%EC%BD%94%EB%8D%94">텍스트 인코더</h5>
+<ul>
+<li><strong>구성</strong>: CLIP-L (768차원) + T5-XXL (4096차원)</li>
+<li><strong>차이점</strong>: CLIP-G 제외 (SD3 대비 간소화)</li>
+</ul>
+<h5 id="%EA%B0%80%EC%9D%B4%EB%8D%98%EC%8A%A4-%EB%A9%94%EC%BB%A4%EB%8B%88%EC%A6%98">가이던스 메커니즘</h5>
+<ul>
+<li><strong>Flux Dev</strong>: 가이던스 임베딩 사용</li>
+<li><strong>Flux Schnell</strong>: 가이던스 스케일 불필요 (0으로 설정)</li>
+</ul>
+<h5 id="flux1-%EB%B3%80%ED%98%95">Flux.1 변형</h5>
+<p><strong>Flux.1 Pro</strong></p>
+<ul>
+<li><strong>상용</strong>: 최고 품질, API 접근</li>
+<li><strong>해상도</strong>: 최대 2K</li>
+<li><strong>속도</strong>: 느림</li>
+</ul>
+<p><strong>Flux.1 Dev</strong></p>
+<ul>
+<li><strong>오픈소스</strong>: 비상업적 사용</li>
+<li><strong>품질</strong>: 높음</li>
+<li><strong>추론 스텝</strong>: 20-50 스텝</li>
+<li><strong>VRAM</strong>: ~16-20GB (FP16)</li>
+</ul>
+<p><strong>Flux.1 Schnell (빠름)</strong></p>
+<ul>
+<li><strong>오픈소스</strong>: 상업적 사용 가능</li>
+<li><strong>최적화</strong>: 속도 우선</li>
+<li><strong>추론 스텝</strong>: 3-6 스텝 (매우 빠름)</li>
+<li><strong>VRAM</strong>: ~12-16GB (FP16)</li>
+<li><strong>품질</strong>: Dev보다 약간 낮음</li>
+</ul>
+<p><strong>Flux.1.1 Pro Ultra (2026)</strong></p>
+<ul>
+<li><strong>해상도</strong>: 최대 4 메가픽셀</li>
+<li><strong>특징</strong>: 초고해상도 생성</li>
+</ul>
+<h5 id="%EC%9E%A5%EC%A0%90">장점</h5>
+<ul>
+<li>✅ 매우 높은 품질</li>
+<li>✅ 정확한 프롬프트 준수</li>
+<li>✅ 텍스트 렌더링 우수</li>
+<li>✅ 자연스러운 이미지</li>
+<li>✅ 복잡한 구도 처리</li>
+</ul>
+<h5 id="%EB%8B%A8%EC%A0%90">단점</h5>
+<ul>
+<li>❌ 높은 VRAM 요구량</li>
+<li>❌ 느린 생성 속도 (Dev, Pro)</li>
+<li>❌ 큰 모델 크기</li>
+</ul>
+<hr>
+<h4 id="722-flux2">7.2.2 Flux.2</h4>
+<h5 id="%EA%B0%9C%EC%9A%94">개요</h5>
+<ul>
+<li><strong>개발</strong>: Black Forest Labs</li>
+<li><strong>출시</strong>: 2025년 11월</li>
+<li><strong>파라미터</strong>: 32B (320억)</li>
+<li><strong>Full name</strong>: Flux 2.0 Latent Flow Matching Transformer</li>
+<li><strong>비교</strong>: Flux.1 (12B)의 약 2.67배 규모</li>
+</ul>
+<h5 id="%ED%95%B5%EC%8B%AC-%ED%98%81%EC%8B%A0-%EC%99%84%EC%A0%84%ED%9E%88-%EC%83%88%EB%A1%9C%EC%9A%B4-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98">핵심 혁신: 완전히 새로운 아키텍처</h5>
+<p><strong>1. Mistral-3 24B Vision-Language Model 통합</strong></p>
+<ul>
+<li><strong>Full name</strong>: Mistral-Small-3.2-24B-Instruct-2506</li>
+<li><strong>역할</strong>: 텍스트와 이미지를 이해하는 인코더</li>
+<li><strong>장점</strong>:
+<ul>
+<li>실세계 지식 (world knowledge) 이해</li>
+<li>공간 관계 파악</li>
+<li>물리적 속성 이해</li>
+<li>문맥적 의미 파악</li>
+</ul>
+</li>
+<li><strong>결과</strong>: &quot;환각(hallucination)&quot; 문제 극적 감소</li>
+</ul>
+<p><strong>2. Latent Flow Matching Architecture</strong></p>
+<p>기존 디퓨전 vs Flow Matching:</p>
+<pre class="hljs"><code><div>기존 디퓨전 모델:
+노이즈 → 반복적 디노이징 → 이미지 (많은 스텝 필요)
+
+Flux 2 Flow Matching:
+텍스트 설명 → 직접 매핑 → 잠재 공간 → 이미지 (적은 스텝)
+</div></code></pre>
+<p><strong>장점</strong>:</p>
+<ul>
+<li>✅ <strong>빠른 수렴</strong>: 고품질 출력을 위한 샘플링 스텝 감소</li>
+<li>✅ <strong>향상된 프롬프트 준수</strong>: 복잡한 지시사항 정확한 해석</li>
+<li>✅ <strong>일관성 개선</strong>: 시드 제어로 재현 가능한 결과</li>
+<li>✅ <strong>높은 충실도</strong>: 해상도 전반에 걸친 디테일 보존</li>
+</ul>
+<p><strong>3. 혁신적 잠재 공간 (Latent Space)</strong></p>
+<ul>
+<li><strong>재학습</strong>: 잠재 공간을 처음부터 다시 학습</li>
+<li><strong>목표</strong>: &quot;Learnability-Quality-Compression&quot; 트릴레마 해결</li>
+<li><strong>결과</strong>:
+<ul>
+<li>더 나은 학습 가능성 (learnability)</li>
+<li>더 높은 이미지 품질</li>
+<li>더 나은 압축 효율성</li>
+</ul>
+</li>
+</ul>
+<p><strong>4. MM-DiT + Parallel DiT 개선</strong></p>
+<p>구조 변화:</p>
+<ul>
+<li><strong>Double-Stream Blocks</strong>: 8개 (Flux.1: 19개)</li>
+<li><strong>Single-Stream Blocks</strong>: 48개 (Flux.1: 38개)</li>
+<li><strong>파라미터 분포</strong>:
+<ul>
+<li>Flux.1: ~54% double-stream, ~46% single-stream</li>
+<li>Flux.2: ~24% double-stream, ~73% single-stream</li>
+</ul>
+</li>
+</ul>
+<p><strong>최적화</strong>:</p>
+<ul>
+<li>시간 및 가이던스 정보를 모든 블록에서 공유</li>
+<li>편향(bias) 파라미터 제거 → 경량화</li>
+<li>QKV 프로젝션과 FF 입력 프로젝션 융합 → 완전 병렬 트랜스포머</li>
+</ul>
+<p><strong>5. 단일 텍스트 인코더</strong></p>
+<ul>
+<li><strong>Flux.1</strong>: CLIP-L + T5-XXL (2개)</li>
+<li><strong>Flux.2</strong>: Mistral Small 3.1 (1개)</li>
+<li><strong>장점</strong>:
+<ul>
+<li>프롬프트 임베딩 계산 크게 단순화</li>
+<li>최대 시퀀스 길이: 512 토큰</li>
+<li>더 나은 언어 이해</li>
+</ul>
+</li>
+</ul>
+<h5 id="%EA%B8%B0%EC%88%A0-%EC%82%AC%EC%96%91">기술 사양</h5>
+<pre class="hljs"><code><div>파라미터: 32B (320억)
+최대 해상도: 4 메가픽셀 (4MP)
+텍스트 입력 토큰: 최대 32,000
+생성 속도: 10초 미만 (고사양 GPU)
+종횡비: 모든 비율 지원
+제어 시스템: JSON 기반
+</div></code></pre>
+<h5 id="flux2-%EB%B3%80%ED%98%95">Flux.2 변형</h5>
+<p><strong>Flux.2 [Pro]</strong></p>
+<ul>
+<li><strong>상용</strong>: 최고 품질 상업용 엔드포인트</li>
+<li><strong>최적화</strong>: 최대 충실도 및 제어 필요한 프로덕션 워크플로우</li>
+<li><strong>접근</strong>: BFL API, BFL Playground</li>
+<li><strong>가격</strong>: 유료</li>
+</ul>
+<p><strong>Flux.2 [Flex]</strong></p>
+<ul>
+<li><strong>가변 스텝</strong>: 6~50 스텝 사이 조절 가능</li>
+<li><strong>트레이드오프</strong>: 디테일과 속도 균형</li>
+<li><strong>용도</strong>: 사용 사례에 따라 품질-속도 조절</li>
+<li><strong>접근</strong>: BFL API</li>
+</ul>
+<p><strong>Flux.2 [Max]</strong></p>
+<ul>
+<li><strong>최고 품질</strong>: 절대적 품질 우선</li>
+<li><strong>용도</strong>: 프로페셔널 작업</li>
+<li><strong>접근</strong>: BFL Playground, API</li>
+<li><strong>가격</strong>: 유료 (프리미엄)</li>
+</ul>
+<p><strong>Flux.2 [Dev]</strong></p>
+<ul>
+<li><strong>오픈 웨이트</strong>: 비상업적 사용 가능</li>
+<li><strong>효율성</strong>: 비용 효과적</li>
+<li><strong>용도</strong>:
+<ul>
+<li>개발자 파이프라인 테스트</li>
+<li>대량 컨셉 생성</li>
+<li>레이아웃 테스트</li>
+</ul>
+</li>
+<li><strong>비용</strong>: 3 크레딧/이미지 (Scenario 기준)</li>
+<li><strong>특수 기능</strong>: &quot;Go Fast&quot; 토글 (최적화된 속도)</li>
+<li><strong>VRAM</strong>: ~20-24GB (FP16)</li>
+</ul>
+<h5 id="%EC%A3%BC%EC%9A%94-%EA%B0%9C%EC%84%A0%EC%82%AC%ED%95%AD">주요 개선사항</h5>
+<p><strong>1. 포토리얼리즘</strong></p>
+<ul>
+<li>물리적으로 그럴듯한 이미지</li>
+<li>정확한 조명 및 그림자</li>
+<li>현실적인 재질 속성</li>
+<li>일관된 공간 논리</li>
+</ul>
+<p><strong>2. 텍스트 렌더링</strong></p>
+<ul>
+<li>이미지 내 정확한 철자</li>
+<li>복잡한 타이포그래피 처리</li>
+<li>다중 줄 텍스트 레이아웃</li>
+</ul>
+<p><strong>3. 프롬프트 준수</strong></p>
+<ul>
+<li>복잡하고 구조화된 지시사항 신뢰성 있게 실행</li>
+<li>다중 파트 프롬프트 처리</li>
+<li>구성적 제약 존중</li>
+<li>지정된 레이아웃 유지</li>
+</ul>
+<p><strong>4. World Knowledge</strong></p>
+<ul>
+<li>현실적 물리 및 조명 동작</li>
+<li>일관된 공간 논리</li>
+<li>예상되는 재질 속성</li>
+<li>자연스러운 환경 조명</li>
+</ul>
+<p><strong>5. 다중 참조 제어</strong></p>
+<ul>
+<li><strong>최대 10개 이미지</strong> 참조 입력</li>
+<li>정확한 색상 매칭</li>
+<li>4MP 해상도 편집</li>
+<li>JSON 기반 제어 시스템</li>
+</ul>
+<h5 id="%EC%84%B1%EB%8A%A5-%EB%B2%A4%EC%B9%98%EB%A7%88%ED%81%AC">성능 벤치마크</h5>
+<ul>
+<li><strong>LM Arena 순위</strong>: 최상위권</li>
+<li><strong>프롬프트 준수</strong>: DALL·E 3, Midjourney v6 능가</li>
+<li><strong>텍스트 렌더링</strong>: 업계 최고 수준</li>
+<li><strong>생성 속도</strong>: RTX 4090에서 10초 미만 (1024×1024)</li>
+</ul>
+<h5 id="%EC%9E%A5%EC%A0%90">장점</h5>
+<ul>
+<li>✅ 최고 수준의 포토리얼리즘</li>
+<li>✅ 뛰어난 프롬프트 이해</li>
+<li>✅ 정확한 텍스트 렌더링</li>
+<li>✅ World knowledge 기반 생성</li>
+<li>✅ 다중 참조 제어</li>
+<li>✅ LoRA 파인튜닝 지원 우수</li>
+<li>✅ 프롬프트 엔지니어링 복잡도 감소</li>
+</ul>
+<h5 id="%EB%8B%A8%EC%A0%90">단점</h5>
+<ul>
+<li>❌ 매우 높은 VRAM 요구량 (20-24GB)</li>
+<li>❌ 대용량 모델 크기</li>
+<li>❌ Flux.1보다 느린 생성 속도 (Dev 기준)</li>
+<li>❌ Pro/Max 버전은 유료</li>
+</ul>
+<h5 id="flux1-vs-flux2-%EB%B9%84%EA%B5%90">Flux.1 vs Flux.2 비교</h5>
+<table>
+<thead>
+<tr>
+<th>특성</th>
+<th>Flux.1</th>
+<th>Flux.2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>파라미터</strong></td>
+<td>12B</td>
+<td>32B</td>
+</tr>
+<tr>
+<td><strong>아키텍처</strong></td>
+<td>디퓨전 기반</td>
+<td>Flow Matching</td>
+</tr>
+<tr>
+<td><strong>텍스트 인코더</strong></td>
+<td>CLIP-L + T5-XXL (2개)</td>
+<td>Mistral Small 3.1 (1개)</td>
+</tr>
+<tr>
+<td><strong>Double-Stream</strong></td>
+<td>19 블록</td>
+<td>8 블록</td>
+</tr>
+<tr>
+<td><strong>Single-Stream</strong></td>
+<td>38 블록</td>
+<td>48 블록</td>
+</tr>
+<tr>
+<td><strong>최대 해상도</strong></td>
+<td>1024×1024+</td>
+<td>4MP (4 메가픽셀)</td>
+</tr>
+<tr>
+<td><strong>텍스트 토큰</strong></td>
+<td>512</td>
+<td>32,000</td>
+</tr>
+<tr>
+<td><strong>참조 이미지</strong></td>
+<td>제한적</td>
+<td>최대 10개</td>
+</tr>
+<tr>
+<td><strong>World Knowledge</strong></td>
+<td>제한적</td>
+<td>Mistral-3 24B 통합</td>
+</tr>
+<tr>
+<td><strong>VRAM (Dev)</strong></td>
+<td>16-20GB</td>
+<td>20-24GB</td>
+</tr>
+</tbody>
+</table>
+<h5 id="comfyui%EC%97%90%EC%84%9C-flux2-%EC%82%AC%EC%9A%A9">ComfyUI에서 Flux.2 사용</h5>
+<p><strong>필수 노드:</strong></p>
+<pre class="hljs"><code><div>Load Checkpoint (Flux.2 Dev)
+    ↓
+CLIP Text Encode (Mistral Small 3.1)
+    ↓
+KSampler (FlowMatchEulerDiscrete)
+    ↓
+VAE Decode
+    ↓
+Save Image
+</div></code></pre>
+<p><strong>권장 설정:</strong></p>
+<ul>
+<li><strong>샘플러</strong>: FlowMatchEulerDiscrete</li>
+<li><strong>스텝</strong>: 10-30 (Flux.1보다 적어도 됨)</li>
+<li><strong>CFG Scale</strong>: 0 또는 낮은 값 (모델에 따라)</li>
+<li><strong>해상도</strong>: 1024×1024 ~ 2048×2048</li>
+</ul>
+<hr>
+<h3 id="73-qwen-image">7.3 Qwen Image</h3>
+<h4 id="%EA%B0%9C%EC%9A%94">개요</h4>
+<ul>
+<li><strong>Full name</strong>: Qwen Image Generation Foundation Model</li>
+<li><strong>개발</strong>: Alibaba (알리바바)</li>
+<li><strong>출시</strong>: 2026년 2월</li>
+<li><strong>파라미터</strong>: 20B (200억) - Dense 모델</li>
+<li><strong>아키텍처</strong>: MMDiT (Multimodal Diffusion Transformer)</li>
+</ul>
+<h4 id="%ED%95%B5%EC%8B%AC-%ED%98%81%EC%8B%A0">핵심 혁신</h4>
+<h5 id="1-%EB%B3%B5%EC%9E%A1%ED%95%9C-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EB%A0%8C%EB%8D%94%EB%A7%81%EC%9D%98-%ED%98%81%EB%AA%85">1. 복잡한 텍스트 렌더링의 혁명</h5>
+<p><strong>Qwen Image의 차별점:</strong></p>
+<ul>
+<li>텍스트를 단순한 픽셀 집합이 아닌 <strong>전문적 처리 대상</strong>으로 취급</li>
+<li>이중 인코딩 (dual encoding)</li>
+<li>점진적 학습 (progressive training)</li>
+<li>아키텍처 최적화</li>
+</ul>
+<p><strong>성과:</strong></p>
+<ul>
+<li>문자 오해석 감소</li>
+<li>문맥적 정확성 보장</li>
+<li>비교 불가능한 정확도</li>
+</ul>
+<h5 id="2-%EB%8B%A4%EA%B5%AD%EC%96%B4-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EC%A7%80%EC%9B%90-%EC%84%B8%EA%B3%84-%EC%B5%9C%EA%B3%A0">2. 다국어 텍스트 지원 (세계 최고)</h5>
+<p><strong>지원 언어:</strong></p>
+<ul>
+<li><strong>알파벳 언어</strong>: 영어, 스페인어, 프랑스어, 독일어 등</li>
+<li><strong>표의문자 언어</strong>: 중국어 (간체/번체), 일본어, 한국어 등</li>
+</ul>
+<p><strong>텍스트 렌더링 능력:</strong></p>
+<pre class="hljs"><code><div>단일 행 텍스트 ✅
+다중 행 레이아웃 ✅
+단락 수준 의미론 ✅
+세밀한 시각적 디테일 ✅
+복잡한 타이포그래피 ✅
+</div></code></pre>
+<p><strong>예시 사용 사례:</strong></p>
+<ul>
+<li>영화 포스터 제목 + 다중 행 자막</li>
+<li>PPT 슬라이드 정확한 레이아웃</li>
+<li>책 표지 디자인</li>
+<li>인포그래픽 제작</li>
+<li>광고 배너 생성</li>
+</ul>
+<h5 id="3-%ED%8F%AC%EA%B4%84%EC%A0%81-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81">3. 포괄적 데이터 엔지니어링</h5>
+<p><strong>훈련 데이터셋:</strong></p>
+<ul>
+<li><strong>LongText-Bench</strong>: 긴 텍스트 처리</li>
+<li><strong>ChineseWord</strong>: 중국어 텍스트 전문</li>
+<li><strong>TextCraft</strong>: 텍스트 렌더링 특화</li>
+<li>다양한 스타일 및 레이아웃 데이터</li>
+</ul>
+<p><strong>학습 전략:</strong></p>
+<ul>
+<li>Progressive learning (점진적 학습)</li>
+<li>Multi-task training (다중 작업 학습)</li>
+<li>Scalable infrastructure optimization (확장 가능 인프라)</li>
+</ul>
+<h4 id="%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5">주요 기능</h4>
+<h5 id="1-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%83%9D%EC%84%B1">1. 이미지 생성</h5>
+<p><strong>능력:</strong></p>
+<ul>
+<li>복잡한 텍스트 프롬프트로 고품질 이미지 생성</li>
+<li>스타일적으로 다양한 출력</li>
+<li>포토리얼리스틱부터 예술적 스타일까지</li>
+<li>애니메이션, 인포그래픽, 예술 작품 등</li>
+</ul>
+<p><strong>강점:</strong></p>
+<ul>
+<li>복잡한 언어 구조 깊은 이해</li>
+<li>시각적으로 매력적인 출력</li>
+<li>의미적으로 정확한 결과</li>
+</ul>
+<h5 id="2-%EC%9D%B4%EB%AF%B8%EC%A7%80-%ED%8E%B8%EC%A7%91-context-aware">2. 이미지 편집 (Context-Aware)</h5>
+<p><strong>편집 기능:</strong></p>
+<ul>
+<li>스타일 전환 (Style Transfer)</li>
+<li>텍스트 편집 (Text Editing)</li>
+<li>배경 교체 (Background Replacement)</li>
+<li>객체 추가 (Object Addition)</li>
+<li>객체 제거 (Object Removal)</li>
+<li>객체 대체 (Object Substitution)</li>
+<li>포즈 조작 (Pose Manipulation)</li>
+</ul>
+<p><strong>특징:</strong></p>
+<ul>
+<li>의미 무결성 (semantic integrity) 보존</li>
+<li>시각적 사실성 (visual realism) 유지</li>
+<li>일관된 편집 결과</li>
+</ul>
+<h5 id="3-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%9D%B4%ED%95%B4-%EB%B0%8F-%EB%B6%84%EC%84%9D">3. 이미지 이해 및 분석</h5>
+<p><strong>분석 작업:</strong></p>
+<ul>
+<li><strong>객체 검출</strong>: 바운딩 박스 생성
+<ul>
+<li>예: &quot;지하철 장면에서 허스키 개 찾기&quot;</li>
+</ul>
+</li>
+<li><strong>의미론적 분할</strong> (Semantic Segmentation)</li>
+<li><strong>깊이 추정</strong> (Depth Estimation)</li>
+<li><strong>엣지 검출</strong> (Canny Edge Detection)</li>
+<li><strong>초해상도</strong> (Super-Resolution)</li>
+<li><strong>새로운 시점 합성</strong> (Novel View Synthesis)</li>
+</ul>
+<p><strong>응용 분야:</strong></p>
+<ul>
+<li>자동화</li>
+<li>전자상거래 태깅</li>
+<li>시각적 분석</li>
+<li>콘텐츠 이해</li>
+</ul>
+<h5 id="4-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%8C%80-%EC%9D%B4%EB%AF%B8%EC%A7%80-image-to-image">4. 이미지 대 이미지 (Image-to-Image)</h5>
+<p><strong>기능:</strong></p>
+<ul>
+<li>참조 이미지에서 피사체 또는 윤곽 특징 추출</li>
+<li>2차 편집으로 유연한 요구 충족</li>
+<li>다양한 변형 생성</li>
+</ul>
+<h5 id="5-%EC%8B%A4%EC%8B%9C%EA%B0%84-%EB%93%9C%EB%A1%9C%EC%9E%89-%EC%BA%94%EB%B2%84%EC%8A%A4">5. 실시간 드로잉 캔버스</h5>
+<p><strong>혁신적 워크플로우:</strong></p>
+<ul>
+<li>스케치하거나 파라미터 조정 시 <strong>동시에</strong> 미리보기 생성</li>
+<li>전통적 &quot;그리기-대기-수정&quot; 워크플로우 탈피</li>
+<li>다중 이미지 융합 지원</li>
+<li>AI가 원근 및 조명 자동 조정</li>
+</ul>
+<h5 id="6-%EB%8B%A4%EC%A4%91-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%9C%B5%ED%95%A9">6. 다중 이미지 융합</h5>
+<ul>
+<li>여러 스케치를 동일 캔버스에 오버레이</li>
+<li>AI가 원근감 통합</li>
+<li>조명 일관성 자동 조절</li>
+</ul>
+<h4 id="%EA%B8%B0%EC%88%A0-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98">기술 아키텍처</h4>
+<h5 id="multimodal-diffusion-transformer-mmdit">Multimodal Diffusion Transformer (MMDiT)</h5>
+<p><strong>구성:</strong></p>
+<pre class="hljs"><code><div>텍스트 입력 + 이미지 입력
+    ↓
+MMDiT (디퓨전 + 트랜스포머 융합)
+    ↓
+점진적 개선 (Progressive Refinement)
+    ↓
+고품질 이미지 출력
+</div></code></pre>
+<p><strong>특징:</strong></p>
+<ul>
+<li>텍스트와 이미지 입력을 효율적으로 처리</li>
+<li>디퓨전을 통한 점진적 디노이징</li>
+<li>트랜스포머 논리로 요소 간 복잡한 관계 처리</li>
+</ul>
+<h5 id="%ED%9A%A8%EC%9C%A8%EC%84%B1-%EC%B5%9C%EC%A0%81%ED%99%94">효율성 최적화</h5>
+<ul>
+<li><strong>최소 VRAM</strong>: 4GB (FP8 양자화 + 오프로딩 사용)</li>
+<li><strong>소비자 하드웨어</strong>: 일반 GPU에서 실행 가능</li>
+<li><strong>실용적 설계</strong>: 실세계 사용 최적화</li>
+</ul>
+<h4 id="%EB%B2%A4%EC%B9%98%EB%A7%88%ED%81%AC-%EC%84%B1%EB%8A%A5">벤치마크 성능</h4>
+<p><strong>이미지 생성:</strong></p>
+<ul>
+<li><strong>GenEval</strong>: 최고 수준</li>
+<li><strong>DPG-Bench</strong>: 최고 수준</li>
+<li><strong>OneIG-Bench</strong>: 최고 수준</li>
+</ul>
+<p><strong>이미지 편집:</strong></p>
+<ul>
+<li><strong>GEdit</strong>: 최고 수준</li>
+<li><strong>ImgEdit</strong>: 최고 수준</li>
+<li><strong>GSO</strong>: 최고 수준</li>
+</ul>
+<p><strong>텍스트 렌더링:</strong></p>
+<ul>
+<li><strong>LongText-Bench</strong>: 기존 모델 능가</li>
+<li><strong>ChineseWord</strong>: 기존 모델 능가</li>
+<li><strong>TextCraft</strong>: 기존 모델 능가</li>
+</ul>
+<h4 id="%EC%82%AC%EC%9A%A9-%EC%9B%8C%ED%81%AC%ED%94%8C%EB%A1%9C%EC%9A%B0">사용 워크플로우</h4>
+<p><strong>기본 생성:</strong></p>
+<pre class="hljs"><code><div>1. 입력 프롬프트
+   - 영어 또는 중국어로 상세한 설명
+   - 텍스트 내용 포함 가능
+
+2. 종횡비 선택
+   - 정사각형, 세로, 가로, 커스텀
+
+3. 생성 및 대기
+   - Qwen-Image 20B MMDiT 모델 실행
+   - 네이티브 텍스트 렌더링으로 고품질 이미지 생성
+</div></code></pre>
+<h4 id="%EC%9E%A5%EC%A0%90">장점</h4>
+<ul>
+<li>✅ 세계 최고 수준의 텍스트 렌더링 (특히 다국어)</li>
+<li>✅ 중국어/한글 등 표의문자 완벽 지원</li>
+<li>✅ 포괄적 이미지 편집 기능</li>
+<li>✅ 이미지 이해 및 분석 능력</li>
+<li>✅ 실시간 드로잉 캔버스</li>
+<li>✅ 낮은 VRAM 요구사항 (4GB부터 가능)</li>
+<li>✅ 오픈소스 (Hugging Face, GitHub, ModelScope)</li>
+<li>✅ 다양한 스타일 지원</li>
+</ul>
+<h4 id="%EB%8B%A8%EC%A0%90">단점</h4>
+<ul>
+<li>❌ 상대적으로 최근 출시 (2026년 2월)</li>
+<li>❌ 영어권 이외 지역에서 더 강점 (서양 스타일은 다른 모델과 비슷)</li>
+<li>❌ ComfyUI 네이티브 지원 아직 제한적 (커스텀 노드 필요 가능)</li>
+</ul>
+<h4 id="qwen-image-%EC%82%AC%EC%9A%A9-%EC%82%AC%EB%A1%80">Qwen Image 사용 사례</h4>
+<p><strong>1. 다국어 포스터 제작</strong></p>
+<pre class="hljs"><code><div>프롬프트: &quot;영화 포스터, 제목 '想象力释放' (중국어), 
+          부제 'Imagination Unleashed' (영어),
+          SF 스타일, 네온 조명&quot;
+→ 정확한 다국어 텍스트 렌더링
+</div></code></pre>
+<p><strong>2. 인포그래픽 생성</strong></p>
+<pre class="hljs"><code><div>프롬프트: &quot;데이터 시각화 인포그래픽, 제목 '2026 AI 트렌드',
+          한글 레이블, 차트 포함, 전문적 디자인&quot;
+→ 정확한 한글 텍스트 + 레이아웃
+</div></code></pre>
+<p><strong>3. 광고 배너</strong></p>
+<pre class="hljs"><code><div>프롬프트: &quot;온라인 쇼핑 배너, 프로모션 텍스트 '50% 할인',
+          제품 이미지, 현대적 디자인&quot;
+→ 정확한 텍스트 + 시각적 매력
+</div></code></pre>
+<h4 id="%EB%B9%84%EA%B5%90-qwen-image-vs-%EB%8B%A4%EB%A5%B8-%EB%AA%A8%EB%8D%B8">비교: Qwen Image vs 다른 모델</h4>
+<table>
+<thead>
+<tr>
+<th>특성</th>
+<th>Qwen Image</th>
+<th>SDXL</th>
+<th>Flux.2</th>
+<th>Midjourney</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>파라미터</strong></td>
+<td>20B</td>
+<td>3.5B</td>
+<td>32B</td>
+<td>비공개</td>
+</tr>
+<tr>
+<td><strong>다국어 텍스트</strong></td>
+<td>✅✅ 최고</td>
+<td>❌ 약함</td>
+<td>✅ 좋음</td>
+<td>❌ 약함</td>
+</tr>
+<tr>
+<td><strong>중국어/한글</strong></td>
+<td>✅✅ 완벽</td>
+<td>❌ 불가</td>
+<td>△ 제한적</td>
+<td>❌ 불가</td>
+</tr>
+<tr>
+<td><strong>텍스트 렌더링</strong></td>
+<td>✅✅ 최고</td>
+<td>❌ 약함</td>
+<td>✅✅ 우수</td>
+<td>✅ 좋음</td>
+</tr>
+<tr>
+<td><strong>이미지 편집</strong></td>
+<td>✅✅ 포괄적</td>
+<td>✅ 기본</td>
+<td>✅ 우수</td>
+<td>✅ 제한적</td>
+</tr>
+<tr>
+<td><strong>이미지 분석</strong></td>
+<td>✅✅ 포함</td>
+<td>❌ 없음</td>
+<td>❌ 없음</td>
+<td>❌ 없음</td>
+</tr>
+<tr>
+<td><strong>오픈소스</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>△ Dev만</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>최소 VRAM</strong></td>
+<td>4GB</td>
+<td>8GB</td>
+<td>20GB</td>
+<td>N/A (클라우드)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="74-%EB%B9%84%EB%94%94%EC%98%A4-%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-2026">7.4 비디오 생성 모델 (2026)</h3>
+<h4 id="741-wan22">7.4.1 Wan2.2</h4>
+<ul>
+<li><strong>Full name</strong>: Wan Video Generation Model 2.2</li>
+<li><strong>개발</strong>: 오픈소스 커뮤니티</li>
+<li><strong>출시</strong>: 2025년</li>
+<li><strong>지위</strong>: <strong>최고의 오픈소스 비디오 생성 모델</strong></li>
+<li><strong>아키텍처</strong>: Mixture-of-Experts (MoE) 디퓨전 모델
+<ul>
+<li><strong>High-Noise Expert</strong>: 초기 단계, 전체 레이아웃 집중</li>
+<li><strong>Low-Noise Expert</strong>: 후기 단계, 비디오 디테일 정제</li>
+</ul>
+</li>
+<li><strong>파라미터</strong>:
+<ul>
+<li>T2V-1.3B: 1.3B 파라미터</li>
+<li>A14B: 14B 파라미터</li>
+</ul>
+</li>
+<li><strong>학습 데이터</strong>:
+<ul>
+<li>15억 개 비디오</li>
+<li>100억 개 이미지</li>
+</ul>
+</li>
+<li><strong>성능</strong>: VBench 점수 84.7%+</li>
+<li><strong>특징</strong>:
+<ul>
+<li>복잡한 다이내믹스 처리</li>
+<li>공간 관계 이해</li>
+<li>다중 객체 상호작용</li>
+<li><strong>중국어 및 영어 텍스트 생성</strong> (최초)</li>
+</ul>
+</li>
+<li><strong>VRAM 요구량</strong>:
+<ul>
+<li>1.3B 모델: 8.19 GB (거의 모든 소비자 GPU 호환)</li>
+</ul>
+</li>
+<li><strong>생성 시간</strong>: RTX 4090에서 5초 480P 비디오 약 4분</li>
+</ul>
+<p><strong>가격</strong>: 완전 무료, 오픈소스 (GitHub, Hugging Face)</p>
+<p><strong>지원 모드</strong>:</p>
+<ul>
+<li>Text-to-Video (1.3B, 14B)</li>
+<li>해상도: 480P, 720P</li>
+</ul>
+<h4 id="742-ltx-2">7.4.2 LTX-2</h4>
+<ul>
+<li><strong>개발</strong>: Lightricks</li>
+<li><strong>출시</strong>: 2026년 1월</li>
+<li><strong>지위</strong>: 최초 오픈소스 4K 오디오+비디오 통합 모델</li>
+<li><strong>파라미터</strong>: 19B (비디오 14B, 오디오 5B)</li>
+<li><strong>특징</strong>:
+<ul>
+<li>네이티브 4K 출력</li>
+<li>동기화된 표현적 사운드</li>
+<li>로컬 배포 가능</li>
+</ul>
+</li>
+</ul>
+<h4 id="743-hunyuanvideo-15">7.4.3 HunyuanVideo 1.5</h4>
+<ul>
+<li><strong>개발</strong>: Tencent (텐센트)</li>
+<li><strong>특징</strong>:
+<ul>
+<li>오픈소스</li>
+<li>소비자 하드웨어 최적화</li>
+<li>완전한 커스터마이징 제어</li>
+</ul>
+</li>
+</ul>
+<h4 id="744-kling-26">7.4.4 Kling 2.6</h4>
+<ul>
+<li><strong>개발</strong>: Kuaishou (중국 콰이쇼우)</li>
+<li><strong>출시</strong>: 2025년 12월</li>
+<li><strong>핵심 혁신</strong>: <strong>동시 오디오-비주얼 생성</strong></li>
+<li><strong>아키텍처</strong>:
+<ul>
+<li>디퓨전 기반 트랜스포머 (DiT)</li>
+<li>3D Variational Autoencoder (VAE) 네트워크</li>
+</ul>
+</li>
+<li><strong>해상도</strong>: 최대 1080p</li>
+<li><strong>프레임레이트</strong>: 30fps</li>
+<li><strong>길이</strong>: 최대 2분</li>
+<li><strong>특징</strong>:
+<ul>
+<li>자연스러운 보이스오버</li>
+<li>음향 효과</li>
+<li>주변 분위기 사운드</li>
+<li>단일 패스 생성 (비디오+오디오 동시)</li>
+</ul>
+</li>
+<li><strong>성과</strong>: 1000만+ 비디오 생성</li>
+</ul>
+<p><strong>가격</strong>:</p>
+<ul>
+<li>일반 모드: 1,000 크레딧 (오디오 없음), 1,500 크레딧 (오디오 포함)</li>
+<li>720p/1080p 동일 가격</li>
+</ul>
+<h4 id="745-veo-31">7.4.5 Veo 3.1</h4>
+<ul>
+<li><strong>개발</strong>: Google DeepMind</li>
+<li><strong>출시</strong>: 2025년</li>
+<li><strong>특징</strong>:
+<ul>
+<li>네이티브 오디오 생성</li>
+<li>고품질 물리 시뮬레이션</li>
+<li>신속한 반복 생성</li>
+</ul>
+</li>
+</ul>
+<p><strong>가격</strong>:</p>
+<ul>
+<li>일반 모드: 2,000 크레딧 (오디오 없음), 2,500 크레딧 (오디오 포함)</li>
+</ul>
+<h4 id="746-sora-2">7.4.6 Sora 2</h4>
+<ul>
+<li><strong>개발</strong>: OpenAI</li>
+<li><strong>특징</strong>:
+<ul>
+<li>시네마틱 품질</li>
+<li>동기화된 오디오</li>
+<li>정교한 물리 시뮬레이션</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="75-%EC%98%A4%EB%94%94%EC%98%A4-%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8">7.5 오디오 생성 모델</h3>
+<p>생성형 AI는 이미지와 비디오를 넘어 오디오 영역으로 확장되고 있습니다. 2026년 현재, 텍스트 프롬프트로 음악, 음향 효과, 보이스를 생성할 수 있는 모델들이 등장했습니다.</p>
+<hr>
+<h4 id="751-ace-step-v10">7.5.1 ACE-Step v1.0</h4>
+<h5 id="%EA%B0%9C%EC%9A%94">개요</h5>
+<ul>
+<li><strong>Full name</strong>: A Step Towards Music Generation Foundation Model</li>
+<li><strong>개발</strong>: ACE Studio + StepFun (협력 개발)</li>
+<li><strong>출시</strong>: 2025년 초</li>
+<li><strong>라이선스</strong>: Apache 2.0 (오픈소스)</li>
+<li><strong>파라미터</strong>: 3.5B (35억)</li>
+<li><strong>목적</strong>: AI 음악 생성의 속도, 일관성, 제어 가능성 한계 극복</li>
+</ul>
+<h5 id="%ED%95%B5%EC%8B%AC-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98">핵심 아키텍처</h5>
+<p><strong>통합 아키텍처 (Holistic Architecture)</strong></p>
+<pre class="hljs"><code><div>디퓨전 기반 생성
+    +
+Deep Compression AutoEncoder (DCAE) from Sana
+    +
+경량 Linear Transformer
+</div></code></pre>
+<p><strong>구성 요소:</strong></p>
+<ul>
+<li><strong>디퓨전 모델</strong>: 음악 생성 기반</li>
+<li><strong>DCAE (Deep Compression AutoEncoder)</strong>:
+<ul>
+<li>Sana 프로젝트에서 가져온 압축 인코더</li>
+<li>미세한 음향 디테일 보존</li>
+<li>고압축률 달성</li>
+</ul>
+</li>
+<li><strong>Linear Transformer</strong>:
+<ul>
+<li>경량 설계</li>
+<li>장거리 구조적 일관성 유지</li>
+</ul>
+</li>
+</ul>
+<p><strong>REPA (Semantic Representation Alignment)</strong></p>
+<ul>
+<li><strong>Full name</strong>: Representation Alignment using MERT and m-hubert</li>
+<li><strong>목적</strong>: 의미 표현 정렬</li>
+<li><strong>방법</strong>:
+<ul>
+<li><strong>MERT</strong>: Music Understanding Model</li>
+<li><strong>m-hubert</strong>: Multilingual HuBERT</li>
+<li>학습 중 의미 표현 정렬</li>
+</ul>
+</li>
+<li><strong>효과</strong>:
+<ul>
+<li>빠른 수렴</li>
+<li>텍스트-음악 정렬 개선</li>
+<li>출력 일관성 향상</li>
+</ul>
+</li>
+</ul>
+<h5 id="%EC%A3%BC%EC%9A%94-%ED%8A%B9%EC%A7%95">주요 특징</h5>
+<p><strong>1. 초고속 생성</strong></p>
+<ul>
+<li><strong>A100 GPU</strong>: 4분 음악을 20초에 생성</li>
+<li><strong>RTX 4090</strong>: Real-Time Factor (RTF) 34.48x</li>
+<li><strong>RTX 3090</strong>: Real-Time Factor (RTF) 12.76x</li>
+<li><strong>비교</strong>: LLM 기반 모델 대비 <strong>15배 빠름</strong></li>
+</ul>
+<p><strong>2. 긴 음악 생성</strong></p>
+<ul>
+<li><strong>최대 길이</strong>: 4분</li>
+<li><strong>품질</strong>: 전체 길이에 걸쳐 일관성 유지</li>
+<li><strong>구조</strong>: 멜로디, 하모니, 리듬 메트릭에서 우수</li>
+</ul>
+<p><strong>3. 다국어 지원</strong></p>
+<ul>
+<li><strong>지원 언어</strong>: 19개 언어</li>
+<li>텍스트 프롬프트 다국어 입력</li>
+<li>가사 다국어 생성</li>
+</ul>
+<p><strong>4. 음악 제어</strong>
+입력 방식:</p>
+<ul>
+<li>태그 (tags)</li>
+<li>장르 (genres)</li>
+<li>장면 설명 (scene descriptions)</li>
+<li>가사 (lyrics)</li>
+</ul>
+<p><strong>5. 고급 제어 기능</strong></p>
+<p><strong>Variations Generation (변형 생성)</strong></p>
+<ul>
+<li><strong>방법</strong>:
+<ul>
+<li>Flow-matching 모델로 초기 노이즈 생성</li>
+<li>trigFlow 공식으로 추가 가우시안 노이즈 추가</li>
+</ul>
+</li>
+<li><strong>제어</strong>:
+<ul>
+<li>노이즈 혼합 비율 조절</li>
+<li>변형 정도 제어 가능</li>
+</ul>
+</li>
+</ul>
+<p><strong>Repainting (재페인팅)</strong></p>
+<ul>
+<li><strong>목적</strong>: 특정 오디오 섹션 재생성</li>
+<li><strong>방법</strong>:
+<ul>
+<li>노이즈 추가</li>
+<li>ODE 프로세스 중 마스크 제약 적용</li>
+</ul>
+</li>
+<li><strong>용도</strong>:
+<ul>
+<li>국지적 편집</li>
+<li>섹션 내 변형</li>
+</ul>
+</li>
+</ul>
+<p><strong>Lyric Editing (가사 편집)</strong></p>
+<ul>
+<li><strong>기술</strong>: Flow-edit 기술</li>
+<li><strong>특징</strong>:
+<ul>
+<li>국지적 가사 수정</li>
+<li>원본 멜로디 보존</li>
+<li>보컬 음색 보존</li>
+<li>반주 보존</li>
+</ul>
+</li>
+</ul>
+<h5 id="%EC%9D%8C%EC%95%85%EC%A0%81-%ED%8A%B9%EC%A7%95">음악적 특징</h5>
+<p><strong>1. 악기 스타일</strong></p>
+<ul>
+<li>다양한 장르 및 스타일의 악기 음악 생성</li>
+<li>각 악기에 적절한 음색 및 표현력</li>
+<li>복잡한 편곡 가능 (다중 악기)</li>
+<li>음악적 일관성 유지</li>
+</ul>
+<p><strong>2. 보컬 기법</strong></p>
+<ul>
+<li>다양한 보컬 스타일 및 기법</li>
+<li>여러 보컬 표현 지원</li>
+<li>다양한 창법 및 스타일</li>
+</ul>
+<h5 id="%EC%84%B1%EB%8A%A5-%EB%A9%94%ED%8A%B8%EB%A6%AD">성능 메트릭</h5>
+<ul>
+<li><strong>음악 일관성</strong>: 최고 수준</li>
+<li><strong>가사 정렬</strong>: LLM 기반 모델 능가</li>
+<li><strong>멜로디 품질</strong>: 우수</li>
+<li><strong>하모니</strong>: 우수</li>
+<li><strong>리듬</strong>: 우수</li>
+</ul>
+<h5 id="%EC%A7%80%EC%9B%90-%EA%B8%B0%EB%8A%A5">지원 기능</h5>
+<ul>
+<li><strong>Lyric2Vocal</strong>: 가사에서 보컬 생성</li>
+<li><strong>Text2Samples</strong>: 악기 샘플 생성</li>
+<li><strong>Music Remixing</strong>: 음악 리믹스</li>
+<li><strong>Style Transfer</strong>: 스타일 전환</li>
+<li><strong>Audio Extension</strong>: 기존 오디오 확장</li>
+<li><strong>Singing2Accompaniment</strong>: (예정) 노래에서 반주 생성</li>
+</ul>
+<hr>
+<h4 id="752-ace-step-v15-2026%EB%85%84-%EC%B5%9C%EC%8B%A0">7.5.2 ACE-Step v1.5 (2026년 최신)</h4>
+<h5 id="%EA%B0%9C%EC%9A%94">개요</h5>
+<ul>
+<li><strong>출시</strong>: 2026년 1월</li>
+<li><strong>파라미터</strong>: 미공개 (v1.0 개선판)</li>
+<li><strong>목표</strong>: 상업급 품질을 소비자 하드웨어로</li>
+</ul>
+<h5 id="%ED%9A%8D%EA%B8%B0%EC%A0%81-%EA%B0%9C%EC%84%A0%EC%82%AC%ED%95%AD">획기적 개선사항</h5>
+<p><strong>1. 상업급 품질</strong></p>
+<ul>
+<li><strong>평가</strong>: 음악 일관성 점수 <strong>4.72</strong></li>
+<li><strong>비교</strong>: 대부분의 상업 음악 모델을 능가</li>
+<li><strong>품질</strong>: 전문가 수준</li>
+</ul>
+<p><strong>2. 극한의 속도</strong></p>
+<ul>
+<li><strong>RTX 5090</strong>: 4분 곡을 <strong>~1초</strong> 생성</li>
+<li><strong>RTX 3090</strong>: 4분 곡을 <strong>10초 이하</strong> 생성</li>
+<li><strong>A100</strong>: 4분 곡을 <strong>2초 이하</strong> 생성</li>
+<li><strong>이전 버전 대비</strong>: 10-20배 빠름</li>
+</ul>
+<p><strong>3. 소비자 하드웨어 최적화</strong></p>
+<ul>
+<li><strong>최소 VRAM</strong>: 4GB 미만</li>
+<li><strong>로컬 실행</strong>: 가능</li>
+<li><strong>접근성</strong>: 대중화</li>
+</ul>
+<p><strong>4. 50+ 언어 지원</strong></p>
+<ul>
+<li><strong>강력한 지원</strong>: 영어, 중국어, 일본어, 한국어, 스페인어, 독일어, 프랑스어, 포르투갈어, 이탈리아어, 러시아어 등</li>
+<li><strong>총 지원</strong>: 50개 이상 언어</li>
+<li><strong>프롬프트 준수</strong>: 엄격한 프롬프트 준수</li>
+</ul>
+<p><strong>5. LoRA 파인튜닝</strong></p>
+<ul>
+<li><strong>지원</strong>: ComfyUI에서 경량 개인화</li>
+<li><strong>학습</strong>: 몇 곡만으로 스타일 캡처 가능</li>
+<li><strong>용도</strong>: 개인 스타일 학습</li>
+</ul>
+<h5 id="%ED%98%81%EC%8B%A0%EC%A0%81-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98">혁신적 아키텍처</h5>
+<p><strong>Hybrid Reasoning-Diffusion Architecture (하이브리드 추론-디퓨전 아키텍처)</strong></p>
+<p><strong>1. Language Model as Composer Agent (작곡가 에이전트로서의 언어 모델)</strong></p>
+<ul>
+<li><strong>역할</strong>: 고수준 플래너 (high-level planner)</li>
+<li><strong>기능</strong>:
+<ul>
+<li>모호한 사용자 프롬프트를 정확한 구조 청사진으로 재구성</li>
+<li>가사 포매팅</li>
+<li>지속시간 계산</li>
+<li>쿼리 확장</li>
+</ul>
+</li>
+<li><strong>Chain-of-Thought Planning</strong>:
+<ul>
+<li>메타데이터, 가사, 캡션을 Chain-of-Thought 추론으로 합성</li>
+<li>디퓨전 프로세스 가이드</li>
+<li>더 일관된 장편 작곡</li>
+</ul>
+</li>
+</ul>
+<p><strong>2. Diffusion Transformer as Acoustic Renderer (음향 렌더러로서의 디퓨전 트랜스포머)</strong></p>
+<ul>
+<li><strong>역할</strong>: 전문 음향 렌더러</li>
+<li><strong>집중</strong>: 음향 풍부함 및 악기 분리</li>
+<li><strong>자유</strong>: 의미적 모호성에서 해방</li>
+</ul>
+<p><strong>3. 증류 알고리즘 (Distillation Algorithm)</strong></p>
+<ul>
+<li><strong>압축</strong>: 50 스텝 → 4-8 스텝</li>
+<li><strong>속도</strong>: 100배 이상 빨라짐</li>
+<li><strong>품질</strong>: 신호 대 잡음비 성능 향상</li>
+</ul>
+<p><strong>4. 통합 Omni-Task 프레임워크</strong>
+단순 텍스트-음악 합성을 넘어:</p>
+<ul>
+<li>Cover Generation (커버 생성)</li>
+<li>Seamless Repainting (매끄러운 재페인팅)</li>
+<li>Track Extraction (트랙 추출)</li>
+<li>Vocal-to-BGM Conversion (보컬-배경음악 변환)</li>
+</ul>
+<p><strong>5. 순수 파형 도메인 1D VAE</strong></p>
+<ul>
+<li><strong>이전</strong>: 2D Mel-spectrogram (위상 손실, 고주파 해상도 부족)</li>
+<li><strong>현재</strong>: 순수 파형 도메인 1D VAE</li>
+<li><strong>압축</strong>: 48kHz 스테레오를 64차원 잠재 공간 (25Hz)으로 압축</li>
+<li><strong>압축률</strong>: 1920배</li>
+<li><strong>품질</strong>: 거의 무손실 지각 품질</li>
+</ul>
+<p><strong>6. Intrinsic Reinforcement Learning (내재적 강화 학습)</strong></p>
+<ul>
+<li><strong>방법</strong>: 모델 내부 메커니즘만 사용</li>
+<li><strong>장점</strong>: 외부 보상 모델 또는 인간 선호도 편향 제거</li>
+<li><strong>결과</strong>: 순수한 정렬</li>
+</ul>
+<h5 id="%ED%99%95%EC%9E%A5%EC%84%B1">확장성</h5>
+<ul>
+<li><strong>짧은 루프</strong>: 지원</li>
+<li><strong>긴 작곡</strong>: 최대 10분까지 확장 가능</li>
+</ul>
+<h5 id="%EC%84%B1%EB%8A%A5-%EB%B9%84%EA%B5%90">성능 비교</h5>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>4분 곡 생성 시간 (A100)</th>
+<th>4분 곡 생성 시간 (RTX 3090)</th>
+<th>최소 VRAM</th>
+<th>품질 점수</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ACE-Step v1.0</strong></td>
+<td>20초</td>
+<td>~50초</td>
+<td>~8GB</td>
+<td>4.5</td>
+</tr>
+<tr>
+<td><strong>ACE-Step v1.5</strong></td>
+<td>&lt;2초</td>
+<td>&lt;10초</td>
+<td>&lt;4GB</td>
+<td>4.72</td>
+</tr>
+<tr>
+<td><strong>Suno v3</strong></td>
+<td>~60초 (API)</td>
+<td>N/A (클라우드)</td>
+<td>N/A</td>
+<td>4.6</td>
+</tr>
+<tr>
+<td><strong>Udio</strong></td>
+<td>~50초 (API)</td>
+<td>N/A (클라우드)</td>
+<td>N/A</td>
+<td>4.5</td>
+</tr>
+<tr>
+<td><strong>LLM-based (예: Yue)</strong></td>
+<td>300초+</td>
+<td>N/A</td>
+<td>높음</td>
+<td>4.3</td>
+</tr>
+</tbody>
+</table>
+<h5 id="comfyui-%ED%86%B5%ED%95%A9-v15">ComfyUI 통합 (v1.5)</h5>
+<ul>
+<li><strong>네이티브 워크플로우</strong>: ComfyUI에서 직접 실행 가능</li>
+<li><strong>노드 지원</strong>:
+<ul>
+<li>ACE-Step 로더</li>
+<li>텍스트 프롬프트 입력</li>
+<li>가사 입력</li>
+<li>변형 생성</li>
+<li>재페인팅</li>
+<li>가사 편집</li>
+</ul>
+</li>
+<li><strong>LoRA 파인튜닝</strong>: ComfyUI에서 경량 학습 가능</li>
+</ul>
+<h5 id="%EC%82%AC%EC%9A%A9-%EC%98%88%EC%8B%9C">사용 예시</h5>
+<p><strong>기본 음악 생성:</strong></p>
+<pre class="hljs"><code><div>프롬프트: &quot;Upbeat electronic dance music, 128 BPM, energetic synths, 
+          driving bass, festival vibes&quot;
+→ 4분 EDM 트랙 생성 (1-2초)
+</div></code></pre>
+<p><strong>가사 포함 생성:</strong></p>
+<pre class="hljs"><code><div>가사: &quot;Walking down the street, feeling the beat...&quot;
+장르: &quot;Pop rock&quot;
+→ 가사 정렬된 팝록 곡
+</div></code></pre>
+<p><strong>커버 생성:</strong></p>
+<pre class="hljs"><code><div>원본 곡 업로드 + 스타일: &quot;Jazz arrangement&quot;
+→ 재즈 스타일 커버 생성
+</div></code></pre>
+<h5 id="%EC%9E%A5%EC%A0%90">장점</h5>
+<ul>
+<li>✅ 상업급 품질 (4.72 점수)</li>
+<li>✅ 극한의 속도 (1-10초, 4분 곡)</li>
+<li>✅ 소비자 하드웨어 (&lt;4GB VRAM)</li>
+<li>✅ 50+ 언어 지원</li>
+<li>✅ LoRA 파인튜닝</li>
+<li>✅ 오픈소스 (Apache 2.0)</li>
+<li>✅ 다목적 (합성, 편집, 커버, 추출)</li>
+<li>✅ ComfyUI 네이티브 지원</li>
+</ul>
+<h5 id="%EB%8B%A8%EC%A0%90">단점</h5>
+<ul>
+<li>❌ 상대적으로 최신 (2026년 1월)</li>
+<li>❌ 복잡한 오케스트라 편곡은 제한적</li>
+<li>❌ 보컬 품질은 전문 보컬 모델보다 약간 낮음</li>
+</ul>
+<hr>
+<h4 id="753-stable-audio-20">7.5.3 Stable Audio 2.0</h4>
+<h5 id="%EA%B0%9C%EC%9A%94">개요</h5>
+<ul>
+<li><strong>개발</strong>: Stability AI</li>
+<li><strong>출시</strong>: 2024년 4월</li>
+<li><strong>해상도</strong>: 44.1kHz 스테레오</li>
+<li><strong>최대 길이</strong>: 3분 10초</li>
+<li><strong>구조</strong>: 인트로, 전개, 아웃트로 포함</li>
+</ul>
+<h5 id="%ED%95%B5%EC%8B%AC-%EA%B8%B0%EB%8A%A5">핵심 기능</h5>
+<p><strong>1. 전체 길이 트랙 생성</strong></p>
+<ul>
+<li><strong>길이</strong>: 최대 3분 10초</li>
+<li><strong>구조</strong>:
+<ul>
+<li>Intro (인트로)</li>
+<li>Development (전개)</li>
+<li>Outro (아웃트로)</li>
+</ul>
+</li>
+<li><strong>품질</strong>: 일관된 음악 구조</li>
+<li><strong>출력</strong>: 스테레오 사운드 이펙트</li>
+</ul>
+<p><strong>2. Audio-to-Audio 생성</strong></p>
+<ul>
+<li><strong>업로드</strong>: 오디오 샘플 업로드</li>
+<li><strong>변환</strong>: 자연어 프롬프트로 변환</li>
+<li><strong>제약</strong>: 저작권 없는 자료만 (고급 콘텐츠 인식)</li>
+<li><strong>용도</strong>: 아이디어를 완전히 제작된 샘플로</li>
+</ul>
+<p><strong>3. Variations and Sound Effects</strong></p>
+<ul>
+<li><strong>사운드 이펙트</strong>: 키보드 타이핑, 군중 함성, 도시 소음 등</li>
+<li><strong>변형</strong>: 다양한 버전 생성</li>
+<li><strong>품질</strong>: 전문가 수준</li>
+</ul>
+<p><strong>4. Style Transfer (스타일 전환)</strong></p>
+<ul>
+<li><strong>기능</strong>: 생성되거나 업로드된 오디오의 스타일 수정</li>
+<li><strong>조정</strong>: 프로젝트 특정 스타일 및 톤에 맞춤</li>
+<li><strong>통합</strong>: 생성 프로세스 내 원활한 수정</li>
+</ul>
+<h5 id="%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98">아키텍처</h5>
+<p><strong>1. 고압축 Autoencoder</strong></p>
+<ul>
+<li><strong>역할</strong>: 원본 오디오 파형을 훨씬 짧은 표현으로 압축</li>
+<li><strong>목적</strong>: 장시간 규모 성능 개선</li>
+<li><strong>결과</strong>: 더 효율적인 처리</li>
+</ul>
+<p><strong>2. Diffusion Transformer (DiT)</strong></p>
+<ul>
+<li><strong>유사</strong>: Stable Diffusion 3에 사용된 DiT</li>
+<li><strong>이전</strong>: U-Net 대체</li>
+<li><strong>장점</strong>:
+<ul>
+<li>긴 시퀀스 데이터 조작에 더 능숙</li>
+<li>대규모 구조 인식 및 재현</li>
+<li>고품질 음악 작곡에 필수적인 구조</li>
+</ul>
+</li>
+</ul>
+<p><strong>조합 효과:</strong></p>
+<ul>
+<li>전체 트랙의 일관된 구조 생성</li>
+<li>장시간 규모의 음악적 논리 유지</li>
+</ul>
+<h5 id="%ED%95%99%EC%8A%B5-%EB%8D%B0%EC%9D%B4%ED%84%B0">학습 데이터</h5>
+<ul>
+<li><strong>독점 라이선스</strong>: AudioSparx 음악 라이브러리</li>
+<li><strong>옵트아웃</strong>: 크리에이터 옵트아웃 요청 존중</li>
+<li><strong>보상</strong>: 공정한 크리에이터 보상 보장</li>
+</ul>
+<h5 id="%EC%A0%91%EA%B7%BC">접근</h5>
+<ul>
+<li><strong>웹사이트</strong>: stableaudio.com (무료 체험)</li>
+<li><strong>API</strong>: Stable Audio API</li>
+<li><strong>가격</strong>: 프리미엄 및 무료 티어</li>
+</ul>
+<h5 id="%EB%B0%B0%EA%B2%BD">배경</h5>
+<ul>
+<li><strong>Stable Audio 1.0</strong> (2023년 9월): 첫 번째 상업적 실행 가능 AI 음악 도구</li>
+<li><strong>수상</strong>: TIME's Best Inventions of 2023</li>
+</ul>
+<hr>
+<h4 id="754-stable-audio-open">7.5.4 Stable Audio Open</h4>
+<h5 id="%EA%B0%9C%EC%9A%94">개요</h5>
+<ul>
+<li><strong>출시</strong>: 2024년 6월</li>
+<li><strong>라이선스</strong>: 오픈소스 (비상업적 연구용)</li>
+<li><strong>최적화</strong>: 짧은 오디오 샘플, 사운드 이펙트, 제작 요소</li>
+<li><strong>최대 길이</strong>: 47초</li>
+</ul>
+<h5 id="%EB%AA%A9%EC%A0%81">목적</h5>
+<ul>
+<li>사운드 디자이너, 음악가, 개발자를 위한 오픈 모델</li>
+<li>드럼 비트, 악기 리프, 앰비언트 사운드, 폴리 녹음 생성</li>
+<li>책임 있는 개발 우선</li>
+</ul>
+<h5 id="%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98">아키텍처</h5>
+<p><strong>3가지 구성 요소:</strong></p>
+<ol>
+<li><strong>Autoencoder</strong>: 파형 압축</li>
+<li><strong>T5 기반 텍스트 임베딩</strong>: 조건화</li>
+<li><strong>Transformer 기반 Diffusion Model</strong>: Autoencoder의 잠재 공간에서 작동</li>
+</ol>
+<h5 id="%ED%95%99%EC%8A%B5-%EB%8D%B0%EC%9D%B4%ED%84%B0">학습 데이터</h5>
+<ul>
+<li><strong>FreeSound</strong>: 472,618 오디오 녹음</li>
+<li><strong>Free Music Archive</strong>: 13,874 오디오</li>
+<li><strong>총</strong>: 486,492 오디오 녹음</li>
+<li><strong>라이선스</strong>: CC0, CC BY, CC Sampling+ (저작권 음악 제외)</li>
+</ul>
+<h5 id="%ED%8A%B9%EC%A7%95">특징</h5>
+<ul>
+<li><strong>해상도</strong>: 44.1kHz 스테레오</li>
+<li><strong>파인튜닝</strong>: 커스텀 오디오 데이터로 파인튜닝 가능
+<ul>
+<li>예: 드러머가 자신의 드럼 녹음으로 파인튜닝</li>
+</ul>
+</li>
+<li><strong>도구</strong>: stable-audio-tools 라이브러리</li>
+<li><strong>모델 가중치</strong>: Hugging Face에서 다운로드 가능</li>
+</ul>
+<h5 id="%EC%9A%A9%EB%8F%84">용도</h5>
+<ul>
+<li>드럼 루프</li>
+<li>폴리 (Foley) 사운드</li>
+<li>악기 리프</li>
+<li>앰비언트 텍스처</li>
+<li>짧은 음악 클립</li>
+</ul>
+<h5 id="%EC%A0%9C%ED%95%9C%EC%82%AC%ED%95%AD">제한사항</h5>
+<ul>
+<li>❌ 전체 곡 생성 최적화되지 않음</li>
+<li>❌ 멜로디 또는 보컬 최적화되지 않음</li>
+<li>❌ 짧은 샘플 전문</li>
+</ul>
+<hr>
+<h4 id="755-stable-audio-open-small-2025%EB%85%84-11%EC%9B%94">7.5.5 Stable Audio Open Small (2025년 11월)</h4>
+<h5 id="%EA%B0%9C%EC%9A%94">개요</h5>
+<ul>
+<li><strong>개발</strong>: Stability AI + Arm (협력)</li>
+<li><strong>출시</strong>: 2025년 11월</li>
+<li><strong>파라미터</strong>: 341M (3억 4100만)</li>
+<li><strong>비교</strong>: Stable Audio Open (1.1B)의 약 1/3</li>
+<li><strong>최적화</strong>: Arm CPU에서 실행</li>
+</ul>
+<h5 id="%ED%9A%8D%EA%B8%B0%EC%A0%81-%ED%8A%B9%EC%A7%95">획기적 특징</h5>
+<p><strong>1. 온디바이스 실행 (스마트폰)</strong></p>
+<ul>
+<li><strong>플랫폼</strong>: Arm CPU (전 세계 스마트폰 99%)</li>
+<li><strong>속도</strong>: 스마트폰에서 11초 오디오를 8초 이하에 생성</li>
+<li><strong>오프라인</strong>: 클라우드 없이 작동</li>
+<li><strong>KleidiAI</strong>: Arm의 KleidiAI 라이브러리로 최적화</li>
+</ul>
+<p><strong>2. 최고 속도</strong></p>
+<ul>
+<li><strong>주장</strong>: 시장에서 가장 빠른 스테레오 텍스트-오디오 모델</li>
+<li><strong>생성 속도</strong>: 실시간보다 빠름</li>
+<li><strong>파인튜닝</strong>: 더 빠른 파인튜닝</li>
+</ul>
+<p><strong>3. 경량 및 효율성</strong></p>
+<ul>
+<li><strong>Arm CPU</strong>: 완전히 Arm CPU에서 실행</li>
+<li><strong>하드웨어 요구사항</strong>: 최소</li>
+<li><strong>전력 효율</strong>: 낮은 전력 소비</li>
+<li><strong>비용 절감</strong>: 계산 시간 비용 감소</li>
+</ul>
+<p><strong>4. 엣지 최적화</strong></p>
+<ul>
+<li><strong>KleidiAI</strong>: Arm의 라이브러리로 엣지 효율성 극대화</li>
+<li><strong>모바일 워크플로우</strong>: 실시간 생성 및 응답성</li>
+<li><strong>배포</strong>: Arm 기반 스마트폰 및 엣지 디바이스에 완벽</li>
+</ul>
+<h5 id="%EC%9A%A9%EB%8F%84">용도</h5>
+<ul>
+<li>드럼 루프</li>
+<li>폴리 사운드</li>
+<li>악기 리프</li>
+<li>앰비언트 텍스처</li>
+<li>짧은 사운드 이펙트</li>
+</ul>
+<h5 id="%EC%A0%91%EA%B7%BC">접근</h5>
+<ul>
+<li><strong>라이선스</strong>: Stability AI Community License (상업/비상업 무료)</li>
+<li><strong>모델</strong>: Hugging Face</li>
+<li><strong>코드</strong>: GitHub</li>
+<li><strong>논문</strong>: arXiv</li>
+<li><strong>학습 경로</strong>: Arm Learning Path</li>
+</ul>
+<h5 id="%EC%A0%9C%ED%95%9C%EC%82%AC%ED%95%AD">제한사항</h5>
+<ul>
+<li><strong>언어</strong>: 영어만 지원</li>
+<li><strong>보컬</strong>: 현실적인 보컬 생성 불가</li>
+<li><strong>고품질 곡</strong>: 고품질 전체 곡 생성 불가</li>
+<li><strong>음악 스타일</strong>: 서양 편향 (학습 데이터 특성)</li>
+</ul>
+<hr>
+<h4 id="756-%EC%98%A4%EB%94%94%EC%98%A4-%EC%83%9D%EC%84%B1-%EB%AA%A8%EB%8D%B8-%EB%B9%84%EA%B5%90%ED%91%9C">7.5.6 오디오 생성 모델 비교표</h4>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>파라미터</th>
+<th>최대 길이</th>
+<th>해상도</th>
+<th>속도 (4분 기준)</th>
+<th>주요 강점</th>
+<th>라이선스</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ACE-Step v1.0</strong></td>
+<td>3.5B</td>
+<td>4분</td>
+<td>48kHz</td>
+<td>20초 (A100)</td>
+<td>균형잡힌 품질과 속도</td>
+<td>Apache 2.0</td>
+</tr>
+<tr>
+<td><strong>ACE-Step v1.5</strong></td>
+<td>미공개</td>
+<td>10분</td>
+<td>48kHz</td>
+<td>1-2초 (A100)</td>
+<td>최고 속도 + 상업급 품질</td>
+<td>Apache 2.0</td>
+</tr>
+<tr>
+<td><strong>Stable Audio 2.0</strong></td>
+<td>미공개</td>
+<td>3분 10초</td>
+<td>44.1kHz</td>
+<td>~60초 (API)</td>
+<td>전체 트랙 구조</td>
+<td>상업 (유료)</td>
+</tr>
+<tr>
+<td><strong>Stable Audio Open</strong></td>
+<td>미공개</td>
+<td>47초</td>
+<td>44.1kHz</td>
+<td>빠름</td>
+<td>오픈소스, 파인튜닝</td>
+<td>비상업</td>
+</tr>
+<tr>
+<td><strong>Stable Audio Open Small</strong></td>
+<td>341M</td>
+<td>11초</td>
+<td>44.1kHz</td>
+<td>8초 (스마트폰)</td>
+<td>온디바이스, 초경량</td>
+<td>상업/비상업</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h4 id="757-comfyui%EC%97%90%EC%84%9C-%EC%98%A4%EB%94%94%EC%98%A4-%EC%83%9D%EC%84%B1-%EC%82%AC%EC%9A%A9">7.5.7 ComfyUI에서 오디오 생성 사용</h4>
+<p><strong>기본 워크플로우 (ACE-Step):</strong></p>
+<pre class="hljs"><code><div>Text Prompt Input
+    ↓
+ACE-Step Loader
+    ↓
+Generate Audio
+    ↓
+Save Audio (WAV/MP3)
+</div></code></pre>
+<p><strong>고급 워크플로우 (편집 포함):</strong></p>
+<pre class="hljs"><code><div>Load Audio (선택사항)
+    ↓
+Text Prompt + Lyrics
+    ↓
+ACE-Step Generator
+    ↓
+Repainting / Lyric Editing (선택사항)
+    ↓
+Save Audio
+</div></code></pre>
+<p><strong>Stable Audio 통합:</strong></p>
+<ul>
+<li>현재 주로 웹 인터페이스 및 API</li>
+<li>ComfyUI 커스텀 노드 가능 (커뮤니티 개발 중)</li>
+</ul>
+<hr>
+<h4 id="758-%EC%8B%A4%EC%8A%B5-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4-%EC%98%A4%EB%94%94%EC%98%A4">7.5.8 실습 프로젝트 아이디어 (오디오)</h4>
+<p><strong>초급:</strong></p>
+<ol>
+<li><strong>기본 음악 생성</strong>: 간단한 프롬프트로 짧은 곡 생성</li>
+<li><strong>사운드 이펙트</strong>: 특정 사운드 이펙트 생성 (예: 발소리, 문 닫는 소리)</li>
+<li><strong>장르 실험</strong>: 다양한 장르 프롬프트 테스트</li>
+</ol>
+<p><strong>중급:</strong></p>
+<ol>
+<li><strong>가사 포함 곡</strong>: 커스텀 가사로 완전한 곡 생성</li>
+<li><strong>스타일 전환</strong>: 기존 음악을 다른 스타일로 변환</li>
+<li><strong>루프 생성</strong>: 반복 가능한 드럼/베이스 루프</li>
+</ol>
+<p><strong>고급:</strong></p>
+<ol>
+<li><strong>LoRA 파인튜닝</strong>: 자신의 음악 스타일 학습</li>
+<li><strong>커버 생성</strong>: 기존 곡의 AI 커버 버전</li>
+<li><strong>다중 트랙 작곡</strong>: 여러 악기 트랙 생성 및 믹싱</li>
+</ol>
+<hr>
+<h3 id="76-%EB%AA%A8%EB%8D%B8-%EB%B9%84%EA%B5%90-%ED%91%9C">7.6 모델 비교 표</h3>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>파라미터</th>
+<th>해상도</th>
+<th>텍스트 인코더</th>
+<th>아키텍처</th>
+<th>특징</th>
+<th>VRAM (FP16)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SD 1.5</strong></td>
+<td>0.98B</td>
+<td>512²</td>
+<td>CLIP-L</td>
+<td>U-Net</td>
+<td>가볍고 빠름</td>
+<td>~4GB</td>
+</tr>
+<tr>
+<td><strong>SDXL</strong></td>
+<td>3.5B</td>
+<td>1024²</td>
+<td>CLIP-L+G</td>
+<td>U-Net</td>
+<td>더 나은 품질</td>
+<td>~8GB</td>
+</tr>
+<tr>
+<td><strong>SD3</strong></td>
+<td>0.8-8B</td>
+<td>1024²+</td>
+<td>CLIP-L+G+T5</td>
+<td>MMDiT</td>
+<td>최고 텍스트 이해</td>
+<td>~12-24GB</td>
+</tr>
+<tr>
+<td><strong>Flux.1 Dev</strong></td>
+<td>12B</td>
+<td>1024²+</td>
+<td>CLIP-L+T5</td>
+<td>Hybrid DiT</td>
+<td>최고 품질</td>
+<td>~16-20GB</td>
+</tr>
+<tr>
+<td><strong>Flux.1 Schnell</strong></td>
+<td>12B</td>
+<td>1024²+</td>
+<td>CLIP-L+T5</td>
+<td>Hybrid DiT</td>
+<td>초고속 (3-6 스텝)</td>
+<td>~12-16GB</td>
+</tr>
+<tr>
+<td><strong>Flux.2 Dev</strong></td>
+<td>32B</td>
+<td>4MP</td>
+<td>Mistral 3.1</td>
+<td>Flow Matching</td>
+<td>World knowledge</td>
+<td>~20-24GB</td>
+</tr>
+<tr>
+<td><strong>Qwen Image</strong></td>
+<td>20B</td>
+<td>다양</td>
+<td>MMDiT</td>
+<td>MMDiT</td>
+<td>다국어 텍스트 최고</td>
+<td>~4GB+</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="8-lora%EC%99%80-%ED%8C%8C%EC%9D%B8%ED%8A%9C%EB%8B%9D">8. LoRA와 파인튜닝</h2>
+<h3 id="81-lora-%EA%B0%9C%EB%85%90">8.1 LoRA 개념</h3>
+<h4 id="full-name">Full Name</h4>
+<p><strong>LoRA</strong>: Low-Rank Adaptation</p>
+<h4 id="%EA%B0%9C%EB%85%90">개념</h4>
+<p>LoRA는 대규모 사전학습 모델을 효율적으로 파인튜닝하는 기법입니다. 전체 모델 가중치를 업데이트하는 대신, <strong>저랭크(low-rank) 행렬 분해</strong>를 사용하여 훨씬 적은 파라미터만 학습합니다.</p>
+<h4 id="%EC%88%98%EC%8B%9D">수식</h4>
+<pre class="hljs"><code><div>W' = W₀ + ΔW = W₀ + β · B · A
+
+여기서:
+- W₀: 원본 고정 가중치 (frozen)
+- ΔW: 학습 가능한 업데이트 (B·A 저랭크 분해)
+- A: 랭크 r의 다운 프로젝션 행렬 (d × r)
+- B: 랭크 r의 업 프로젝션 행렬 (r × d)
+- β: 스케일링 팩터 (보통 α/r, α는 하이퍼파라미터)
+- r: 랭크 (일반적으로 4, 8, 16, 32, 64)
+</div></code></pre>
+<h4 id="%EC%98%88%EC%8B%9C">예시</h4>
+<pre class="hljs"><code><div>원본 가중치: 1024 × 1024 = 1,048,576 파라미터
+LoRA (rank=8):
+  - A: 1024 × 8 = 8,192 파라미터
+  - B: 8 × 1024 = 8,192 파라미터
+  - 총: 16,384 파라미터 (약 1/64로 감소)
+</div></code></pre>
+<h3 id="82-lora-%EC%9E%A5%EC%A0%90">8.2 LoRA 장점</h3>
+<h4 id="1-%EB%A9%94%EB%AA%A8%EB%A6%AC-%ED%9A%A8%EC%9C%A8%EC%84%B1">1. 메모리 효율성</h4>
+<ul>
+<li>전체 파인튜닝 대비 수백 배 적은 파라미터</li>
+<li>소비자 GPU에서 파인튜닝 가능</li>
+</ul>
+<h4 id="2-%EB%B9%A0%EB%A5%B8-%ED%95%99%EC%8A%B5">2. 빠른 학습</h4>
+<ul>
+<li>더 적은 파라미터 → 더 빠른 수렴</li>
+<li>적은 데이터로도 효과적</li>
+</ul>
+<h4 id="3-%EB%AA%A8%EB%93%88%EC%84%B1">3. 모듈성</h4>
+<ul>
+<li>여러 LoRA 어댑터 생성 가능</li>
+<li>베이스 모델에 동적으로 병합</li>
+</ul>
+<h4 id="4-%EC%A0%80%EC%9E%A5-%EA%B3%B5%EA%B0%84">4. 저장 공간</h4>
+<ul>
+<li>LoRA 파일: 일반적으로 10-200MB</li>
+<li>전체 모델: 수 GB</li>
+<li>여러 스타일/개념을 작은 파일로 저장</li>
+</ul>
+<h4 id="5-%EC%A1%B0%ED%95%A9-%EA%B0%80%EB%8A%A5">5. 조합 가능</h4>
+<ul>
+<li>여러 LoRA를 동시에 적용 가능</li>
+<li>가중치 조절로 영향력 제어</li>
+</ul>
+<h3 id="83-lora-%EC%82%AC%EC%9A%A9-%EC%82%AC%EB%A1%80">8.3 LoRA 사용 사례</h3>
+<h4 id="%EC%8A%A4%ED%83%80%EC%9D%BC-%ED%95%99%EC%8A%B5">스타일 학습</h4>
+<ul>
+<li>특정 예술 스타일 (애니메이션, 유화, 수채화 등)</li>
+<li>작가의 독특한 화풍</li>
+</ul>
+<h4 id="%EC%BA%90%EB%A6%AD%ED%84%B0%EA%B0%9D%EC%B2%B4-%ED%95%99%EC%8A%B5">캐릭터/객체 학습</h4>
+<ul>
+<li>특정 인물, 캐릭터, 마스코트</li>
+<li>제품, 로고, 브랜딩 요소</li>
+</ul>
+<h4 id="%EA%B0%9C%EB%85%90-%ED%95%99%EC%8A%B5">개념 학습</h4>
+<ul>
+<li>추상적 개념 (예: &quot;드림코어&quot;, &quot;사이버펑크&quot;)</li>
+<li>특정 조명, 분위기</li>
+</ul>
+<h4 id="%EB%8F%84%EB%A9%94%EC%9D%B8-%ED%8A%B9%ED%99%94">도메인 특화</h4>
+<ul>
+<li>의료 영상</li>
+<li>건축 렌더링</li>
+<li>패션 디자인</li>
+</ul>
+<h3 id="84-lora-%ED%8C%8C%EC%9D%B8%ED%8A%9C%EB%8B%9D-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4">8.4 LoRA 파인튜닝 프로세스</h3>
+<h4 id="1-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%A4%80%EB%B9%84">1. 데이터 준비</h4>
+<ul>
+<li><strong>이미지 수집</strong>: 5-50장 (스타일) 또는 15-100장 (캐릭터)</li>
+<li><strong>캡셔닝</strong>: 각 이미지에 상세한 텍스트 설명</li>
+<li><strong>전처리</strong>: 크기 조정, 크롭, 정규화</li>
+</ul>
+<h4 id="2-%ED%95%99%EC%8A%B5-%EC%84%A4%EC%A0%95">2. 학습 설정</h4>
+<ul>
+<li><strong>베이스 모델</strong>: SD1.5, SDXL, Flux 등</li>
+<li><strong>랭크 (r)</strong>: 4-64 (높을수록 표현력 증가, 메모리 증가)</li>
+<li><strong>Alpha (α)</strong>: 보통 랭크와 동일</li>
+<li><strong>학습률</strong>: 1e-4 ~ 1e-5</li>
+<li><strong>학습 스텝</strong>: 500-5000</li>
+</ul>
+<h4 id="3-%ED%95%99%EC%8A%B5-%EC%8B%A4%ED%96%89">3. 학습 실행</h4>
+<ul>
+<li><strong>방법</strong>: DreamBooth, Textual Inversion, 또는 일반 LoRA</li>
+<li><strong>정규화</strong>: Prior preservation loss (선택사항)</li>
+<li><strong>모니터링</strong>: 과적합 방지</li>
+</ul>
+<h4 id="4-lora-%EC%A0%80%EC%9E%A5">4. LoRA 저장</h4>
+<ul>
+<li><strong>파일 형식</strong>: .safetensors (권장) 또는 .pt</li>
+<li><strong>크기</strong>: 일반적으로 10-200MB</li>
+<li><strong>위치</strong>: <code>models/loras/</code></li>
+</ul>
+<h3 id="85-lora-%EB%B3%91%ED%95%A9">8.5 LoRA 병합</h3>
+<h4 id="%EA%B0%80%EC%A4%91%EC%B9%98-%ED%95%A9%EC%82%B0-%EB%B0%A9%EC%8B%9D">가중치 합산 방식</h4>
+<pre class="hljs"><code><div>W_merged = W₀ + β₁·B₁·A₁ + β₂·B₂·A₂ + ...
+
+예시:
+- 베이스 모델 (100%)
+- + LoRA 1 (스타일) × 0.7
+- + LoRA 2 (캐릭터) × 1.0
+- + LoRA 3 (조명) × 0.5
+</div></code></pre>
+<h4 id="comfyui%EC%97%90%EC%84%9C-lora-%EC%82%AC%EC%9A%A9">ComfyUI에서 LoRA 사용</h4>
+<ol>
+<li><strong>Load LoRA 노드</strong> 추가</li>
+<li><strong>LoRA 파일</strong> 선택</li>
+<li><strong>강도 조절</strong>: 0.0-2.0 (일반적으로 0.7-1.0)</li>
+<li><strong>모델 및 CLIP에 연결</strong></li>
+</ol>
+<h3 id="86-lora-%EB%B3%80%ED%98%95">8.6 LoRA 변형</h3>
+<h4 id="adalora">AdaLoRA</h4>
+<ul>
+<li><strong>Full name</strong>: Adaptive Low-Rank Adaptation</li>
+<li><strong>특징</strong>: 학습 중 랭크 동적 조절</li>
+<li><strong>장점</strong>: 더 효율적인 파라미터 사용</li>
+</ul>
+<h4 id="loha-locon">LoHa (Locon)</h4>
+<ul>
+<li><strong>Full name</strong>: Low-Rank Hadamard Adaptation</li>
+<li><strong>방법</strong>: Hadamard product 사용</li>
+<li><strong>특징</strong>: 더 복잡한 변환 가능</li>
+</ul>
+<h4 id="lycoris">LyCORIS</h4>
+<ul>
+<li><strong>Full name</strong>: Lora beYond Conventional methods, Other Rank adaptation Implementations for Stable diffusion</li>
+<li><strong>특징</strong>: LoRA의 일반화된 형태</li>
+</ul>
+<h3 id="87-lora-%ED%8C%8C%EC%9D%BC%EB%AA%85-%EC%98%88%EC%8B%9C">8.7 LoRA 파일명 예시</h3>
+<pre class="hljs"><code><div>anime_style_lora_sdxl_v1.safetensors          # SDXL 애니메이션 스타일
+character_john_flux_r32.safetensors           # Flux 캐릭터, 랭크 32
+cyberpunk_lighting_sd15_v2.safetensors        # SD1.5 사이버펑크 조명
+</div></code></pre>
+<h3 id="88-%EC%8B%A4%EB%AC%B4-%ED%8C%81">8.8 실무 팁</h3>
+<h4 id="%EC%B5%9C%EC%A0%81-%EB%9E%AD%ED%81%AC-%EC%84%A0%ED%83%9D">최적 랭크 선택</h4>
+<ul>
+<li><strong>스타일 LoRA</strong>: rank=8-16 (충분)</li>
+<li><strong>캐릭터 LoRA</strong>: rank=16-32 (디테일 중요)</li>
+<li><strong>복잡한 개념</strong>: rank=32-64 (높은 표현력)</li>
+</ul>
+<h4 id="%EA%B3%BC%EC%A0%81%ED%95%A9-%EB%B0%A9%EC%A7%80">과적합 방지</h4>
+<ul>
+<li>충분한 이미지 다양성</li>
+<li>정규화 기법 사용</li>
+<li>조기 종료 (early stopping)</li>
+</ul>
+<h4 id="%ED%92%88%EC%A7%88-%EA%B2%80%EC%A6%9D">품질 검증</h4>
+<ul>
+<li>다양한 프롬프트로 테스트</li>
+<li>강도 조절 실험 (0.5-1.5)</li>
+<li>다른 LoRA와 조합 테스트</li>
+</ul>
+<hr>
+<h2 id="9-%EC%8B%A4%EC%8A%B5-%ED%8C%81%EA%B3%BC-%EC%9B%8C%ED%81%AC%ED%94%8C%EB%A1%9C%EC%9A%B0-%EA%B5%AC%EC%84%B1">9. 실습 팁과 워크플로우 구성</h2>
+<h3 id="91-comfyui-%EC%9B%8C%ED%81%AC%ED%94%8C%EB%A1%9C%EC%9A%B0-%EA%B8%B0%EB%B3%B8-%EA%B5%AC%EC%A1%B0">9.1 ComfyUI 워크플로우 기본 구조</h3>
+<h4 id="text-to-image-%EA%B8%B0%EB%B3%B8-%EC%9B%8C%ED%81%AC%ED%94%8C%EB%A1%9C%EC%9A%B0">Text-to-Image 기본 워크플로우</h4>
+<pre class="hljs"><code><div>Load Checkpoint
+    ↓
+CLIP Text Encode (Positive Prompt)
+    ↓
+CLIP Text Encode (Negative Prompt)
+    ↓
+Empty Latent Image (크기 설정)
+    ↓
+KSampler (샘플링)
+    ↓
+VAE Decode
+    ↓
+Save Image
+</div></code></pre>
+<h4 id="image-to-image-%EC%9B%8C%ED%81%AC%ED%94%8C%EB%A1%9C%EC%9A%B0">Image-to-Image 워크플로우</h4>
+<pre class="hljs"><code><div>Load Checkpoint
+    ↓
+Load Image
+    ↓
+VAE Encode → Latent
+    ↓
+CLIP Text Encode (프롬프트)
+    ↓
+KSampler (denoise &lt; 1.0)
+    ↓
+VAE Decode
+    ↓
+Save Image
+</div></code></pre>
+<h4 id="lora-%EC%A0%81%EC%9A%A9-%EC%9B%8C%ED%81%AC%ED%94%8C%EB%A1%9C%EC%9A%B0">LoRA 적용 워크플로우</h4>
+<pre class="hljs"><code><div>Load Checkpoint
+    ↓
+Load LoRA (강도 조절)
+    ↓
+CLIP Text Encode
+    ↓
+Empty Latent Image
+    ↓
+KSampler
+    ↓
+VAE Decode
+    ↓
+Save Image
+</div></code></pre>
+<h3 id="92-ksampler-%ED%8C%8C%EB%9D%BC%EB%AF%B8%ED%84%B0-%EC%9D%B4%ED%95%B4">9.2 KSampler 파라미터 이해</h3>
+<h4 id="steps-%EC%83%98%ED%94%8C%EB%A7%81-%EC%8A%A4%ED%85%9D">Steps (샘플링 스텝)</h4>
+<ul>
+<li><strong>SD1.5/2.x</strong>: 20-50 스텝</li>
+<li><strong>SDXL</strong>: 20-40 스텝</li>
+<li><strong>SD3</strong>: 20-30 스텝</li>
+<li><strong>Flux Dev</strong>: 20-50 스텝</li>
+<li><strong>Flux Schnell</strong>: 3-6 스텝 (초고속)</li>
+<li><strong>원칙</strong>: 더 많은 스텝 = 더 정제된 이미지, 더 긴 시간</li>
+</ul>
+<h4 id="cfg-scale-classifier-free-guidance">CFG Scale (Classifier-Free Guidance)</h4>
+<ul>
+<li><strong>범위</strong>: 1.0-20.0</li>
+<li><strong>일반적</strong>: 7.0-8.0</li>
+<li><strong>낮음 (1-5)</strong>: 창의적, 덜 제약적, 프롬프트 이탈 가능</li>
+<li><strong>중간 (7-10)</strong>: 균형잡힌 준수도</li>
+<li><strong>높음 (15-20)</strong>: 엄격한 프롬프트 준수, 과포화 위험</li>
+<li><strong>특수</strong>: Flux Schnell, SD3 Turbo는 0으로 설정</li>
+</ul>
+<h4 id="sampler-%EC%83%98%ED%94%8C%EB%9F%AC">Sampler (샘플러)</h4>
+<ul>
+<li><strong>Euler a</strong>: 빠르고 창의적</li>
+<li><strong>DPM++ 2M Karras</strong>: 고품질, 안정적 (권장)</li>
+<li><strong>DPM++ SDE Karras</strong>: 디테일 높음, 느림</li>
+<li><strong>DDIM</strong>: 재현 가능, 결정론적</li>
+<li><strong>UniPC</strong>: 매우 빠름</li>
+<li><strong>FlowMatchEulerDiscrete</strong>: Flux 전용</li>
+</ul>
+<h4 id="scheduler-%EC%8A%A4%EC%BC%80%EC%A4%84%EB%9F%AC">Scheduler (스케줄러)</h4>
+<ul>
+<li><strong>Karras</strong>: 일반적 추천</li>
+<li><strong>Exponential</strong>: 부드러운 전환</li>
+<li><strong>Simple</strong>: 기본</li>
+</ul>
+<h4 id="denoise-%EB%85%B8%EC%9D%B4%EC%A6%88-%EC%A0%9C%EA%B1%B0-%EA%B0%95%EB%8F%84">Denoise (노이즈 제거 강도)</h4>
+<ul>
+<li><strong>1.0</strong>: 완전히 새로운 이미지 생성 (Text-to-Image)</li>
+<li><strong>0.5-0.8</strong>: 원본 유지하면서 변형 (Image-to-Image)</li>
+<li><strong>0.3-0.5</strong>: 약간의 수정</li>
+<li><strong>0.1-0.3</strong>: 매우 미세한 조정</li>
+</ul>
+<h3 id="93-%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8-%EC%9E%91%EC%84%B1-%EA%B0%80%EC%9D%B4%EB%93%9C">9.3 프롬프트 작성 가이드</h3>
+<h4 id="%ED%9A%A8%EA%B3%BC%EC%A0%81%EC%9D%B8-%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8-%EA%B5%AC%EC%A1%B0">효과적인 프롬프트 구조</h4>
+<pre class="hljs"><code><div>[주제] + [스타일] + [디테일] + [품질 태그] + [기술 설정]
+
+예시:
+&quot;A majestic lion, digital painting, volumetric lighting, 
+golden hour, highly detailed fur, 8k, trending on artstation, 
+sharp focus&quot;
+</div></code></pre>
+<h4 id="%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8-%EC%9A%94%EC%86%8C">프롬프트 요소</h4>
+<h5 id="1-%EC%A3%BC%EC%A0%9C-subject">1. 주제 (Subject)</h5>
+<ul>
+<li>명확하고 구체적으로</li>
+<li>예: &quot;a young woman with red hair&quot; (❌ &quot;a person&quot;)</li>
+</ul>
+<h5 id="2-%EC%8A%A4%ED%83%80%EC%9D%BC-style">2. 스타일 (Style)</h5>
+<ul>
+<li>예술 스타일, 매체</li>
+<li>예: &quot;oil painting&quot;, &quot;anime style&quot;, &quot;photorealistic&quot;, &quot;3D render&quot;</li>
+</ul>
+<h5 id="3-%EC%A1%B0%EB%AA%85-lighting">3. 조명 (Lighting)</h5>
+<ul>
+<li>예: &quot;soft lighting&quot;, &quot;dramatic shadows&quot;, &quot;golden hour&quot;, &quot;studio lighting&quot;</li>
+</ul>
+<h5 id="4-%EA%B5%AC%EB%8F%84-composition">4. 구도 (Composition)</h5>
+<ul>
+<li>예: &quot;close-up portrait&quot;, &quot;wide angle&quot;, &quot;bird's eye view&quot;</li>
+</ul>
+<h5 id="5-%ED%92%88%EC%A7%88-%ED%83%9C%EA%B7%B8-quality-tags">5. 품질 태그 (Quality Tags)</h5>
+<ul>
+<li>예: &quot;highly detailed&quot;, &quot;8k&quot;, &quot;masterpiece&quot;, &quot;sharp focus&quot;</li>
+</ul>
+<h5 id="6-%EC%95%84%ED%8B%B0%EC%8A%A4%ED%8A%B8-%EC%B0%B8%EC%A1%B0-%EC%84%A0%ED%83%9D%EC%82%AC%ED%95%AD">6. 아티스트 참조 (선택사항)</h5>
+<ul>
+<li>예: &quot;by Greg Rutkowski&quot;, &quot;in the style of Studio Ghibli&quot;</li>
+</ul>
+<h4 id="%EB%84%A4%EA%B1%B0%ED%8B%B0%EB%B8%8C-%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8-negative-prompt">네거티브 프롬프트 (Negative Prompt)</h4>
+<p>원하지 않는 요소를 제외합니다:</p>
+<pre class="hljs"><code><div>&quot;blurry, low quality, distorted, deformed, ugly, bad anatomy, 
+watermark, text, logo, cropped, out of frame&quot;
+</div></code></pre>
+<h3 id="94-%ED%95%B4%EC%83%81%EB%8F%84-%EB%B0%8F-%EC%A2%85%ED%9A%A1%EB%B9%84-%EA%B0%80%EC%9D%B4%EB%93%9C">9.4 해상도 및 종횡비 가이드</h3>
+<h4 id="stable-diffusion-152x">Stable Diffusion 1.5/2.x</h4>
+<ul>
+<li><strong>최적</strong>: 512×512</li>
+<li><strong>지원</strong>: 512×768, 768×512 (약간 품질 저하 가능)</li>
+</ul>
+<h4 id="sdxl">SDXL</h4>
+<ul>
+<li><strong>최적</strong>: 1024×1024</li>
+<li><strong>지원</strong>:
+<ul>
+<li>1024×1536 (세로)</li>
+<li>1536×1024 (가로)</li>
+<li>1280×960</li>
+<li>960×1280</li>
+</ul>
+</li>
+</ul>
+<h4 id="sd3--flux">SD3 / Flux</h4>
+<ul>
+<li><strong>최적</strong>: 1024×1024 이상</li>
+<li><strong>유연성</strong>: 다양한 종횡비 지원</li>
+</ul>
+<h4 id="%EC%A2%85%ED%9A%A1%EB%B9%84-%EA%B6%8C%EC%9E%A5">종횡비 권장</h4>
+<ul>
+<li><strong>1:1</strong> (정사각형): 1024×1024</li>
+<li><strong>4:3</strong> (가로): 1024×768</li>
+<li><strong>3:4</strong> (세로): 768×1024</li>
+<li><strong>16:9</strong> (와이드): 1024×576</li>
+<li><strong>9:16</strong> (세로 와이드): 576×1024</li>
+</ul>
+<h3 id="95-vram-%EC%B5%9C%EC%A0%81%ED%99%94-%EC%A0%84%EB%9E%B5">9.5 VRAM 최적화 전략</h3>
+<h4 id="%EC%A0%80%EC%82%AC%EC%96%91-gpu-6-8gb-vram">저사양 GPU (6-8GB VRAM)</h4>
+<ol>
+<li><strong>모델 선택</strong>: SD1.5, SDXL (FP16) 사용</li>
+<li><strong>해상도 낮추기</strong>: 512×512 또는 768×768</li>
+<li><strong>배치 크기</strong>: 1로 설정</li>
+<li><strong>VAE Tiling</strong>: 큰 이미지 분할 처리</li>
+<li><strong>텍스트 인코더 오프로딩</strong>: T5-XXL 제외 또는 FP8 사용</li>
+</ol>
+<h4 id="%EC%A4%91%EA%B8%89-gpu-10-12gb-vram">중급 GPU (10-12GB VRAM)</h4>
+<ol>
+<li><strong>모델 선택</strong>: SDXL, SD3 (작은 변형)</li>
+<li><strong>해상도</strong>: 1024×1024 가능</li>
+<li><strong>LoRA</strong>: 여러 개 동시 사용 가능</li>
+</ol>
+<h4 id="%EA%B3%A0%EA%B8%89-gpu-16-24gb-vram">고급 GPU (16-24GB VRAM)</h4>
+<ol>
+<li><strong>모델 선택</strong>: SD3, Flux Dev, 모든 모델</li>
+<li><strong>해상도</strong>: 1024×1024 이상</li>
+<li><strong>배치 생성</strong>: 동시에 여러 이미지 가능</li>
+</ol>
+<h3 id="96-%ED%92%88%EC%A7%88-%ED%96%A5%EC%83%81-%EA%B8%B0%EB%B2%95">9.6 품질 향상 기법</h3>
+<h4 id="1-hires-fix-%EA%B3%A0%ED%95%B4%EC%83%81%EB%8F%84-%EC%88%98%EC%A0%95">1. Hires Fix (고해상도 수정)</h4>
+<ul>
+<li><strong>방법</strong>: 낮은 해상도로 생성 후 업스케일 + 재샘플링</li>
+<li><strong>효과</strong>: 디테일 향상, artifact 감소</li>
+<li><strong>설정</strong>: 업스케일 2x, denoise 0.4-0.6</li>
+</ul>
+<h4 id="2-controlnet">2. ControlNet</h4>
+<ul>
+<li><strong>목적</strong>: 포즈, 깊이, 엣지 등으로 제어</li>
+<li><strong>종류</strong>:
+<ul>
+<li>Canny: 엣지 검출</li>
+<li>Depth: 깊이 맵</li>
+<li>OpenPose: 포즈 제어</li>
+<li>Scribble: 스케치 기반</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-inpainting-%EC%9D%B8%ED%8E%98%EC%9D%B8%ED%8C%85">3. Inpainting (인페인팅)</h4>
+<ul>
+<li><strong>목적</strong>: 이미지 일부 수정</li>
+<li><strong>프로세스</strong>:
+<ol>
+<li>마스크 생성 (수정할 영역)</li>
+<li>프롬프트 작성</li>
+<li>Inpainting 모델 사용</li>
+<li>denoise 0.6-1.0</li>
+</ol>
+</li>
+</ul>
+<h4 id="4-img2img-refinement">4. Img2Img Refinement</h4>
+<ul>
+<li><strong>목적</strong>: 기존 이미지 개선</li>
+<li><strong>설정</strong>: denoise 0.3-0.5</li>
+</ul>
+<h3 id="97-%EB%B9%84%EB%94%94%EC%98%A4-%EC%83%9D%EC%84%B1-%EC%9B%8C%ED%81%AC%ED%94%8C%EB%A1%9C%EC%9A%B0-2026">9.7 비디오 생성 워크플로우 (2026)</h3>
+<h4 id="%EA%B8%B0%EB%B3%B8-text-to-video">기본 Text-to-Video</h4>
+<pre class="hljs"><code><div>Load Video Model (Kling/Wan/Veo)
+    ↓
+Text Prompt
+    ↓
+Video Generation Node
+    ↓
+Save Video
+</div></code></pre>
+<h4 id="image-to-video">Image-to-Video</h4>
+<pre class="hljs"><code><div>Load Image
+    ↓
+Load Video Model
+    ↓
+Image-to-Video Node (첫 프레임 또는 참조)
+    ↓
+Save Video
+</div></code></pre>
+<h4 id="element-video-kling-16">Element Video (Kling 1.6)</h4>
+<ul>
+<li><strong>최대 4개 이미지 업로드</strong></li>
+<li><strong>각 이미지에 대한 설명</strong></li>
+<li><strong>모든 요소를 포함하는 비디오 생성</strong></li>
+</ul>
+<h3 id="98-%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85">9.8 트러블슈팅</h3>
+<h4 id="%EB%AC%B8%EC%A0%9C-1-%EA%B2%80%EC%9D%80-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%83%9D%EC%84%B1">문제 1: 검은 이미지 생성</h4>
+<p><strong>원인</strong>: VAE 오류, VRAM 부족
+<strong>해결</strong>:</p>
+<ul>
+<li>다른 VAE 시도</li>
+<li>해상도 낮추기</li>
+<li>FP16 → FP32 VAE</li>
+</ul>
+<h4 id="%EB%AC%B8%EC%A0%9C-2-%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8%EA%B0%80-%EB%AC%B4%EC%8B%9C%EB%90%A8">문제 2: 프롬프트가 무시됨</h4>
+<p><strong>원인</strong>: CFG Scale 너무 낮음, 잘못된 인코더
+<strong>해결</strong>:</p>
+<ul>
+<li>CFG Scale 7-8로 설정</li>
+<li>텍스트 인코더 확인 (CLIP, T5 로드 확인)</li>
+</ul>
+<h4 id="%EB%AC%B8%EC%A0%9C-3-%EA%B3%BC%ED%8F%AC%ED%99%94%EC%9D%B4%EC%83%81%ED%95%9C-%EC%83%89%EC%83%81">문제 3: 과포화/이상한 색상</h4>
+<p><strong>원인</strong>: CFG Scale 너무 높음
+<strong>해결</strong>:</p>
+<ul>
+<li>CFG Scale 7-10으로 낮추기</li>
+</ul>
+<h4 id="%EB%AC%B8%EC%A0%9C-4-out-of-memory-oom">문제 4: Out of Memory (OOM)</h4>
+<p><strong>원인</strong>: VRAM 초과
+<strong>해결</strong>:</p>
+<ul>
+<li>해상도 낮추기</li>
+<li>배치 크기 1로</li>
+<li>FP16 모델 사용</li>
+<li>텍스트 인코더 오프로딩</li>
+</ul>
+<h4 id="%EB%AC%B8%EC%A0%9C-5-%EB%8A%90%EB%A6%B0-%EC%83%9D%EC%84%B1-%EC%86%8D%EB%8F%84">문제 5: 느린 생성 속도</h4>
+<p><strong>원인</strong>: CPU 병목, 비효율적 샘플러
+<strong>해결</strong>:</p>
+<ul>
+<li>DPM++ 2M Karras 샘플러 사용</li>
+<li>스텝 수 감소</li>
+<li>Flux Schnell 사용 (3-6 스텝)</li>
+</ul>
+<h3 id="99-%EC%8B%A4%EC%8A%B5-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%95%84%EC%9D%B4%EB%94%94%EC%96%B4">9.9 실습 프로젝트 아이디어</h3>
+<h4 id="%EC%B4%88%EA%B8%89">초급</h4>
+<ol>
+<li><strong>기본 이미지 생성</strong>: 다양한 프롬프트로 실험</li>
+<li><strong>스타일 변형</strong>: 같은 주제, 다른 스타일</li>
+<li><strong>LoRA 적용</strong>: 애니메이션 스타일 LoRA 사용</li>
+</ol>
+<h4 id="%EC%A4%91%EA%B8%89">중급</h4>
+<ol>
+<li><strong>캐릭터 일관성</strong>: LoRA로 특정 캐릭터 학습 및 생성</li>
+<li><strong>Image-to-Image 변환</strong>: 사진을 예술 작품으로</li>
+<li><strong>Inpainting</strong>: 이미지 일부 수정</li>
+</ol>
+<h4 id="%EA%B3%A0%EA%B8%89">고급</h4>
+<ol>
+<li><strong>커스텀 LoRA 학습</strong>: 자신만의 스타일/캐릭터</li>
+<li><strong>ControlNet 활용</strong>: 포즈, 깊이 제어 이미지 생성</li>
+<li><strong>비디오 생성</strong>: 텍스트 또는 이미지로 짧은 비디오 제작</li>
+<li><strong>오디오-비디오 통합</strong>: Kling 2.6으로 사운드 포함 비디오</li>
+</ol>
+<hr>
+<h2 id="10-%EC%B0%B8%EA%B3%A0-%EC%9E%90%EB%A3%8C-%EB%B0%8F-%EC%BB%A4%EB%AE%A4%EB%8B%88%ED%8B%B0">10. 참고 자료 및 커뮤니티</h2>
+<h3 id="101-%EA%B3%B5%EC%8B%9D-%EB%AC%B8%EC%84%9C">10.1 공식 문서</h3>
+<ul>
+<li><strong>ComfyUI</strong>: https://github.com/comfyanonymous/ComfyUI</li>
+<li><strong>ComfyUI 문서</strong>: https://docs.comfy.org/</li>
+<li><strong>Stable Diffusion</strong>: https://stability.ai/</li>
+<li><strong>Hugging Face</strong>: https://huggingface.co/</li>
+</ul>
+<h3 id="102-%EB%AA%A8%EB%8D%B8-%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C">10.2 모델 다운로드</h3>
+<ul>
+<li><strong>Civitai</strong>: https://civitai.com/ (LoRA, 체크포인트)</li>
+<li><strong>Hugging Face Models</strong>: https://huggingface.co/models</li>
+<li><strong>Stability AI</strong>: https://huggingface.co/stabilityai</li>
+</ul>
+<h3 id="103-%EC%BB%A4%EB%AE%A4%EB%8B%88%ED%8B%B0">10.3 커뮤니티</h3>
+<ul>
+<li><strong>Reddit</strong>: r/StableDiffusion, r/comfyui</li>
+<li><strong>Discord</strong>: ComfyUI 공식 Discord</li>
+<li><strong>GitHub</strong>: ComfyUI Issues 및 Custom Nodes</li>
+</ul>
+<h3 id="104-%ED%95%99%EC%8A%B5-%EB%A6%AC%EC%86%8C%EC%8A%A4">10.4 학습 리소스</h3>
+<ul>
+<li><strong>YouTube</strong>: ComfyUI 튜토리얼</li>
+<li><strong>Medium/Blog</strong>: AI 아트 가이드</li>
+<li><strong>Civitai</strong>: 프롬프트 및 설정 공유</li>
+</ul>
+<hr>
+<h2 id="11-%EC%9A%A9%EC%96%B4-%EC%83%89%EC%9D%B8-glossary">11. 용어 색인 (Glossary)</h2>
+<h3 id="a-c">A-C</h3>
+<ul>
+<li><strong>ACE-Step</strong>: A Step Towards Music Generation Foundation Model</li>
+<li><strong>AdaLN</strong>: Adaptive Layer Normalization</li>
+<li><strong>API</strong>: Application Programming Interface</li>
+<li><strong>BF16</strong>: Brain Floating Point 16</li>
+<li><strong>CLIP</strong>: Contrastive Language-Image Pre-training</li>
+<li><strong>CLIP-G</strong>: CLIP Giant (1.4B parameters)</li>
+<li><strong>CLIP-H</strong>: CLIP Huge (632M parameters)</li>
+<li><strong>CLIP-L</strong>: CLIP Large (427M parameters)</li>
+<li><strong>CFG</strong>: Classifier-Free Guidance</li>
+</ul>
+<h3 id="d-g">D-G</h3>
+<ul>
+<li><strong>DCAE</strong>: Deep Compression AutoEncoder</li>
+<li><strong>DiT</strong>: Diffusion Transformer</li>
+<li><strong>FP8</strong>: 8-bit Floating Point</li>
+<li><strong>FP16</strong>: 16-bit Floating Point (Half Precision)</li>
+<li><strong>FP32</strong>: 32-bit Floating Point (Single Precision)</li>
+<li><strong>FP64</strong>: 64-bit Floating Point (Double Precision)</li>
+<li><strong>GGUF</strong>: GPT-Generated Unified Format</li>
+<li><strong>GPU</strong>: Graphics Processing Unit</li>
+</ul>
+<h3 id="h-m">H-M</h3>
+<ul>
+<li><strong>INT8</strong>: 8-bit Integer</li>
+<li><strong>LLM</strong>: Large Language Model</li>
+<li><strong>LoRA</strong>: Low-Rank Adaptation</li>
+<li><strong>MERT</strong>: Music Understanding Model</li>
+<li><strong>MMDiT</strong>: Multimodal Diffusion Transformer</li>
+<li><strong>MoE</strong>: Mixture of Experts</li>
+</ul>
+<h3 id="n-s">N-S</h3>
+<ul>
+<li><strong>ODE</strong>: Ordinary Differential Equation</li>
+<li><strong>REPA</strong>: Representation Alignment using MERT and m-hubert</li>
+<li><strong>RF</strong>: Rectified Flow</li>
+<li><strong>RoPE</strong>: Rotary Positional Embeddings</li>
+<li><strong>SD</strong>: Stable Diffusion</li>
+<li><strong>SDXL</strong>: Stable Diffusion XL</li>
+<li><strong>SD3</strong>: Stable Diffusion 3</li>
+</ul>
+<h3 id="t-z">T-Z</h3>
+<ul>
+<li><strong>T5</strong>: Text-To-Text Transfer Transformer</li>
+<li><strong>T5-XXL</strong>: T5 Extra Extra Large (11B parameters)</li>
+<li><strong>TF32</strong>: TensorFloat-32</li>
+<li><strong>UMT5</strong>: Universal Multilingual T5</li>
+<li><strong>UMT5-XXL</strong>: Universal Multilingual T5 - Extra Extra Large</li>
+<li><strong>UNet</strong>: U-shaped Network</li>
+<li><strong>VAE</strong>: Variational Autoencoder</li>
+<li><strong>VRAM</strong>: Video Random Access Memory</li>
+</ul>
+<h3 id="%EC%96%91%EC%9E%90%ED%99%94-%EA%B4%80%EB%A0%A8">양자화 관련</h3>
+<ul>
+<li><strong>Q2_K</strong>: 2-bit K-quantization</li>
+<li><strong>Q3_K_M</strong>: 3-bit K-quantization, Medium</li>
+<li><strong>Q4_K_M</strong>: 4-bit K-quantization, Medium (most popular)</li>
+<li><strong>Q4_K_S</strong>: 4-bit K-quantization, Small</li>
+<li><strong>Q5_K_M</strong>: 5-bit K-quantization, Medium</li>
+<li><strong>Q6_K</strong>: 6-bit K-quantization</li>
+<li><strong>Q8_0</strong>: 8-bit Linear Quantization</li>
+</ul>
+<hr>
+<h2 id="%EB%A7%88%EB%AC%B4%EB%A6%AC">마무리</h2>
+<p>이 강의노트는 ComfyUI와 오픈소스 생성형 AI 모델을 활용한 콘텐츠 생성의 핵심 개념을 다룹니다. 2026년 2월 기준 최신 정보를 반영하였으며, 지속적으로 발전하는 분야이므로 공식 문서와 커뮤니티를 통해 최신 정보를 확인하시기 바랍니다.</p>
+<p><strong>실습 시작 전 체크리스트:</strong></p>
+<ul>
+<li><input type="checkbox" id="checkbox0"><label for="checkbox0">ComfyUI 최신 버전 설치</label></li>
+<li><input type="checkbox" id="checkbox1"><label for="checkbox1">필요한 모델 다운로드 (체크포인트, VAE, 텍스트 인코더)</label></li>
+<li><input type="checkbox" id="checkbox2"><label for="checkbox2">GPU 드라이버 최신 업데이트</label></li>
+<li><input type="checkbox" id="checkbox3"><label for="checkbox3">충분한 저장 공간 확보 (모델 파일 크기 고려)</label></li>
+<li><input type="checkbox" id="checkbox4"><label for="checkbox4">기본 워크플로우 이해 및 실습</label></li>
+</ul>
+<p><strong>학습 목표:</strong></p>
+<ul>
+<li>✅ 수치 정밀도의 차이와 선택 기준 이해</li>
+<li>✅ 모델 파일 형식의 특징과 사용법 숙지</li>
+<li>✅ 텍스트 인코더의 역할과 조합 전략 파악</li>
+<li>✅ VAE의 작동 원리 이해</li>
+<li>✅ 양자화 기법과 실용적 선택 능력</li>
+<li>✅ 주요 생성 모델의 아키텍처 이해</li>
+<li>✅ LoRA 파인튜닝 기초 습득</li>
+<li>✅ ComfyUI 워크플로우 구성 능력</li>
+</ul>
+<p><strong>다음 단계:</strong></p>
+<ol>
+<li>기본 Text-to-Image 워크플로우 실습</li>
+<li>다양한 샘플러와 파라미터 실험</li>
+<li>LoRA 적용 및 조합 실습</li>
+<li>Image-to-Image 및 Inpainting 워크플로우</li>
+<li>(선택) 비디오 생성 실습</li>
+<li>(선택) 오디오 생성 실습</li>
+</ol>
+
+</body>
+</html>
