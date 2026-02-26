@@ -16,4 +16,4 @@
 * [3차 특강 PDF-1부](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG3/IEEE_Busan_AI_Research_3rd_Talk-Normal1.pdf)
 * [3차 특강 PDF-2부](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG3/IEEE_Busan_AI_Research_3rd_Talk-Normal2.pdf)
 * [3차 특강 PDF-3부](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG3/IEEE_Busan_AI_Research_3rd_Talk-Normal3.pdf)
-* [3차 특강 행사 사진](https://github.com/dongupak/IEEE_Busan_AI_RG/2026_RG3/pics/)
+* [3차 특강 행사 사진](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG3/pics/)
