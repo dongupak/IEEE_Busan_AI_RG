@@ -9,6 +9,6 @@
 양자화 모델을 통한 하드웨어 최적화 기법과 멀티모달 콘텐츠를 하나의 워크플로우로 통합하는 실전 노하우를 확인할 수 있습니다. 인공지능 연구, 차세대 콘텐츠 제작, 그리고 에이전틱(Agentic) 워크플로우 설계에 관심 있는 교수님과 연구원분들께 실질적인 기술적 영감을 제공할 이번 특강에 여러분을 초대합니다.
 
 #### 강의 자료(PDF)
-* [4차 특강 발표자료](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG2/Generative_AI_Orchestration.pdf.pdf)
-* [4차 특강 PDF](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG4/생성형 AI 오케스트레이션_ComfyUI와 오픈소스 모델을 활용한 콘텐츠 생성 실습.pdf)
+* [4차 특강 발표자료](https://github.com/dongupak/IEEE_Busan_AI_RG/blob/main/2026_RG4/Generative_AI_Orchestration.pdf)
+* [4차 특강 PDF](https://github.com/dongupak/IEEE_Busan_AI_RG/blob/main/2026_RG4/%EC%83%9D%EC%84%B1%ED%98%95%20AI%20%EC%98%A4%EC%BC%80%EC%8A%A4%ED%8A%B8%EB%A0%88%EC%9D%B4%EC%85%98_ComfyUI%EC%99%80%20%EC%98%A4%ED%94%88%EC%86%8C%EC%8A%A4%20%EB%AA%A8%EB%8D%B8%EC%9D%84%20%ED%99%9C%EC%9A%A9%ED%95%9C%20%EC%BD%98%ED%85%90%EC%B8%A0%20%EC%83%9D%EC%84%B1%20%EC%8B%A4%EC%8A%B5.pdf)
 * [4차 특강 행사 사진](https://github.com/dongupak/IEEE_Busan_AI_RG/2026_RG4/pics/)
