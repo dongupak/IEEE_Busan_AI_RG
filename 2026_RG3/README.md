@@ -13,5 +13,7 @@
 데이터 과학, Agentic AI 연구, 금융 범죄 예방에 관심 있는 모든 분들께 실질적인 인사이트와 영감을 제공할 이번 특강에 여러분을 초대합니다.
 
 #### 강의 자료(PDF)
-* [3차 특강 PDF](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG3/IEEE_Busan_AI_Research_3rd_Talk-Normal.pdf)
+* [3차 특강 PDF-1부](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG3/IEEE_Busan_AI_Research_3rd_Talk-Normal1.pdf)
+* [3차 특강 PDF-2부](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG3/IEEE_Busan_AI_Research_3rd_Talk-Normal2.pdf)
+* [3차 특강 PDF-3부](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG3/IEEE_Busan_AI_Research_3rd_Talk-Normal3.pdf)
 * [3차 특강 행사 사진](https://github.com/dongupak/IEEE_Busan_AI_RG/2026_RG3/pics/)
