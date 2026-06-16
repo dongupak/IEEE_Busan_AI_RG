@@ -20,4 +20,5 @@ Intelligence의 π 모델 등 최신 로봇 행동 지능 모델의 작동 원�
 
 #### 강의 자료(PDF)
 * [2차 특강 PDF](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG2/20260129-IEEE-BUSAN(손영성박사).pdf)
-* [2차 특강 행사 사진](https://github.com/dongupak/IEEE_Busan_AI_RG/2026_RG2/pics/)
+* [2차 특강 행사 사진]([https://github.com/dongupak/IEEE_Busan_AI_RG/2026_RG2/pics/](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG2/pics))
+  
