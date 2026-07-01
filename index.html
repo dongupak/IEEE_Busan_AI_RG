@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IEEE Busan Section AI 연구회 특강 자료</title>
+<meta name="description" content="IEEE Busan Section AI 연구회 특강 발표 자료 및 행사 사진 모음">
+<style>
+  :root{
+    --navy:#0b2a4a;
+    --blue:#1a5fb4;
+    --accent:#00629b;      /* IEEE blue */
+    --bg:#f4f6f9;
+    --card:#ffffff;
+    --text:#1c2733;
+    --muted:#5a6b7b;
+    --line:#e2e8f0;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:"Malgun Gothic","맑은 고딕",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    color:var(--text);
+    background:var(--bg);
+    line-height:1.7;
+  }
+  a{color:var(--accent);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  /* Header */
+  header.hero{
+    background:linear-gradient(135deg,var(--navy) 0%,var(--accent) 100%);
+    color:#fff;
+    padding:56px 20px 48px;
+    text-align:center;
+  }
+  header.hero .badge{
+    display:inline-block;
+    font-size:.8rem;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    background:rgba(255,255,255,.15);
+    padding:6px 14px;
+    border-radius:999px;
+    margin-bottom:18px;
+  }
+  header.hero h1{
+    margin:0 0 10px;
+    font-size:clamp(1.6rem,4vw,2.6rem);
+    font-weight:800;
+    letter-spacing:-.01em;
+  }
+  header.hero p{
+    margin:0 auto;
+    max-width:680px;
+    color:rgba(255,255,255,.85);
+    font-size:1.05rem;
+  }
+
+  /* Nav */
+  nav.toc{
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.toc .inner{
+    max-width:1080px;margin:0 auto;
+    display:flex;gap:8px;flex-wrap:wrap;
+    padding:12px 20px;justify-content:center;
+  }
+  nav.toc a{
+    font-size:.9rem;font-weight:600;color:var(--muted);
+    padding:6px 14px;border-radius:999px;border:1px solid var(--line);
+    background:#fff;transition:.2s;
+  }
+  nav.toc a:hover{color:#fff;background:var(--accent);border-color:var(--accent);text-decoration:none;}
+
+  main{max-width:1080px;margin:0 auto;padding:40px 20px 60px;}
+
+  /* Lecture card */
+  .lecture{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:28px 30px;
+    margin-bottom:34px;
+    box-shadow:0 4px 18px rgba(11,42,74,.05);
+    scroll-margin-top:70px;
+  }
+  .lecture .tag{
+    display:inline-block;
+    background:var(--accent);color:#fff;
+    font-size:.8rem;font-weight:700;
+    padding:4px 12px;border-radius:8px;margin-bottom:14px;
+  }
+  .lecture h2{
+    margin:0 0 6px;font-size:1.4rem;color:var(--navy);line-height:1.4;
+  }
+  .lecture .sub{color:var(--muted);font-size:1rem;margin:0 0 18px;font-weight:600;}
+  .meta{
+    display:grid;grid-template-columns:auto 1fr;gap:6px 14px;
+    margin:0 0 18px;font-size:.96rem;
+  }
+  .meta dt{color:var(--muted);font-weight:700;white-space:nowrap;}
+  .meta dd{margin:0;}
+  .desc{
+    color:#2c3947;font-size:.97rem;
+    background:#f8fafc;border-left:3px solid var(--accent);
+    padding:14px 18px;border-radius:0 8px 8px 0;margin:0 0 20px;
+    white-space:pre-line;
+  }
+  .files{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;}
+  .files a{
+    display:inline-flex;align-items:center;gap:6px;
+    background:#eef4fb;color:var(--accent);font-weight:600;font-size:.9rem;
+    padding:8px 14px;border-radius:8px;border:1px solid #d7e6f5;transition:.2s;
+  }
+  .files a:hover{background:var(--accent);color:#fff;text-decoration:none;}
+
+  /* Gallery */
+  .gallery-title{font-size:.9rem;font-weight:700;color:var(--muted);margin:0 0 10px;}
+  .gallery{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+    gap:10px;
+  }
+  .gallery img{
+    width:100%;height:120px;object-fit:cover;
+    border-radius:8px;cursor:pointer;border:1px solid var(--line);
+    transition:transform .2s,box-shadow .2s;background:#eee;
+  }
+  .gallery img:hover{transform:scale(1.03);box-shadow:0 6px 16px rgba(0,0,0,.18);}
+
+  /* Lightbox */
+  .lightbox{
+    position:fixed;inset:0;background:rgba(0,0,0,.9);
+    display:none;align-items:center;justify-content:center;z-index:100;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:92vw;max-height:88vh;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.5);}
+  .lightbox .close{
+    position:absolute;top:20px;right:28px;color:#fff;font-size:2.2rem;
+    cursor:pointer;line-height:1;user-select:none;
+  }
+  .lightbox .nav{
+    position:absolute;top:50%;transform:translateY(-50%);
+    color:#fff;font-size:3rem;cursor:pointer;padding:0 20px;user-select:none;opacity:.7;
+  }
+  .lightbox .nav:hover{opacity:1;}
+  .lightbox .prev{left:0;}
+  .lightbox .next{right:0;}
+
+  footer{
+    text-align:center;color:var(--muted);font-size:.9rem;
+    padding:30px 20px 50px;border-top:1px solid var(--line);
+  }
+  footer a{font-weight:600;}
+  @media(max-width:520px){
+    .lecture{padding:22px 18px;}
+    .meta{grid-template-columns:1fr;gap:2px 0;}
+    .meta dt{margin-top:8px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <span class="badge">IEEE Busan Section</span>
+  <h1>AI 연구회 특강 자료 모음</h1>
+  <p>IEEE Busan Section AI 연구회 특강의 발표 자료와 행사 사진을 한곳에서 볼 수 있습니다.</p>
+</header>
+
+<nav class="toc">
+  <div class="inner">
+    <a href="#rg1">1차 특강</a>
+    <a href="#rg2">2차 특강</a>
+    <a href="#rg3">3차 특강</a>
+    <a href="#rg4">4차 특강</a>
+  </div>
+</nav>
+
+<main id="content"><!-- rendered by JS --></main>
+
+<footer>
+  <p>© 2026 IEEE Busan Section AI 연구회 ·
+  <a href="https://github.com/dongupak/IEEE_Busan_AI_RG" target="_blank" rel="noopener">GitHub 저장소</a></p>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <span class="close" id="lbClose">&times;</span>
+  <span class="nav prev" id="lbPrev">&#10094;</span>
+  <img id="lbImg" src="" alt="">
+  <span class="nav next" id="lbNext">&#10095;</span>
+</div>
+
+<script>
+/* ---- 특강 데이터 ---- */
+const lectures = [
+  {
+    id:"rg1", tag:"2026년 AI 연구회 1차 특강",
+    title:"트랜스포머 기반 언어모델의 발전 동향과 서비스 지향 응용시스템 설계",
+    date:"2026년 1월 15일 (목) 오후 3:00 – 5:00",
+    place:"부산동의대학교 학술정보교육실 (중앙도서관 1층, 소극장)",
+    speaker:"한국해양대학교 데이터사이언스학과 이정훈 교수",
+    desc:"오늘날 인공지능 기술에서 가장 주목받고 있는 트랜스포머(Transformer)는 2017년 구글이 발표한 딥러닝 모델 구조로, '어텐션(Attention)' 메커니즘을 핵심으로 하여 텍스트 같은 순차 데이터를 처리하며, 문장 내 단어들의 관계를 파악해 맥락을 학습하는 혁신적인 기술입니다. 이 모델은 이전의 순환신경망 모델의 한계였던 긴 시퀀스 처리 문제를 해결하고 병렬 연산을 통해 효율성을 높였으며, BERT, ChatGPT와 같은 대규모 언어 모델(LLM)과 생성형 AI의 기반이 되는 중요한 모델입니다. 이 기술은 현재 자연어 처리(NLP)뿐만 아니라 이미지, 음성 등 다양한 AI 분야의 발전을 이끌고 있습니다. 본 강연을 통해 최신 트랜스포머 기반 언어모델의 발전에 대해 살펴보고, 다양한 응용 시스템 설계 기법에 대해 폭넓게 알아보겠습니다.",
+    files:[
+      {label:"📄 발표 자료 (PDF)", href:"2026_RG1/트랜스포머기반언어모델(이정훈교수)_2026.pdf"}
+    ],
+    dir:"2026_RG1/pics/",
+    pics:[
+      "KakaoTalk_20260116_102942321.jpg",
+      "KakaoTalk_20260116_102942321_01.jpg",
+      "KakaoTalk_20260116_102942321_02.jpg",
+      "KakaoTalk_20260116_102942321_03.jpg",
+      "KakaoTalk_20260116_102942321_04.jpg",
+      "KakaoTalk_20260116_102942321_05.jpg",
+      "KakaoTalk_20260116_102942321_06.jpg",
+      "KakaoTalk_20260116_102942321_07.jpg"
+    ]
+  },
+  {
+    id:"rg2", tag:"2026년 AI 연구회 2차 특강",
+    title:"휴머노이드 로봇 기술 동향과 피지컬 AI 발전 방향",
+    date:"2026년 1월 29일 (목) 오후 3:00 – 5:50",
+    place:"부산대학교 IT관(102동) 406호",
+    speaker:"한국전자통신연구원(ETRI) 손영성 박사 (책임연구원)",
+    bio:"한국전자통신연구원 책임연구원 / UST 겸임교수 / 한국정보과학회 학회지 편집위원 / AI프렌즈학회 이사 · AI로봇 연구회 위원장 · 산업 AI 연구회 위원 / 로봇 LAM 연구 수행",
+    desc:"본 특강은 휴머노이드 로봇의 최신 기술 동향과 Physical AI의 발전 방향을 종합적으로 다룬다. 로봇의 역사적 기원부터 후쿠시마 원전 사고와 DARPA Robotics Challenge를 계기로 촉발된 기술 발전의 흐름을 살펴보며, Tesla Optimus, Figure AI, Boston Dynamics Atlas, Agility Robotics Digit 등 현재 주목받는 주요 휴머노이드 로봇들의 특징과 산업 적용 사례를 소개한다. 이어서 로봇 지능의 핵심 개념인 Physical AI와 Embodied AI의 차이를 설명하고, 로봇이 환경을 인식하고 스스로 판단하여 행동하는 과정을 개괄한다. 특히 모방 학습과 강화 학습의 중요성을 AGILE-X, Stanford Mobile ALOHA 등 실제 사례를 통해 살펴보며, Figure AI의 Helix 모델(System 1/2 구조)과 Physical Intelligence의 π 모델 등 최신 로봇 행동 지능 모델의 작동 원리를 분석한다. 또한 자율주행차 산업과 비교한 휴머노이드 로봇 산업의 성장 전망, 데이터 표준화 및 학습 데이터 확보 등 현재의 기술적 과제, 그리고 향후 10년간 예상되는 사회적 영향에 대해 간단히 논의한다.",
+    files:[
+      {label:"📄 발표 자료 (PDF)", href:"2026_RG2/20260129-IEEE-BUSAN(손영성박사).pdf"},
+      {label:"🖼️ 세미나 포스터", href:"2026_RG2/포스터.jpg"},
+      {label:"📑 세미나 안내 (PPTX)", href:"2026_RG2/2차세미나안내.pptx"}
+    ],
+    dir:"2026_RG2/pics/",
+    pics:[
+      "이미지-20260129-060103-9fdf0a18.jpeg",
+      "이미지-20260129-060210-8421950a.jpeg",
+      "이미지-20260129-060252-92bb1d5b.jpeg",
+      "이미지-20260129-060302-785dbc5e.jpeg",
+      "이미지-20260129-060508-00690245.jpeg",
+      "이미지-20260129-060518-31e6deb3.jpeg",
+      "이미지-20260129-060521-7cf0fe8a.jpeg",
+      "이미지-20260129-060531-44d2f077.jpeg",
+      "이미지-20260130-080701-1cca5a87.jpeg",
+      "이미지-20260130-080701-5d48953c.jpeg",
+      "이미지-20260130-080701-8ec3c83c.jpeg",
+      "이미지-20260130-080701-c5fb841f.jpeg",
+      "이미지-20260130-080701-fa3e5bf2.jpeg",
+      "이미지-20260130-080816-6d9dfb9f.jpeg",
+      "이미지-20260130-080816-7a799ef6.jpeg"
+    ]
+  },
+  {
+    id:"rg3", tag:"2026년 AI 연구회 3차 특강",
+    title:"데이터의 흐름에서 범죄의 인과를 읽다",
+    subtitle:"부제 : 시계열 이상 탐지 기술 동향과 에이전틱 AI 기반 보이스 피싱 탐지",
+    date:"2026년 2월 12일 (목) 오후 3:00 – 5:50",
+    place:"동명대학교 본관(1호관) 106호",
+    speaker:"한국전자통신연구원(ETRI) 김성수 박사",
+    desc:"매일 수많은 데이터가 생성되고 흐르는 디지털 세상에서, 정상과 비정상을 구분하는 능력은 더 이상 선택이 아닌 필수입니다. 특히 보이스 피싱과 같은 지능형 금융범죄가 진화하면서, 전통적인 탐지 방식은 한계에 봉착했습니다.\n이번 특강에서는 시계열 데이터 분석의 기초부터 최신 AI 기술까지, 이상 탐지 기술의 전체 스펙트럼을 체계적으로 살펴봅니다. 전통적인 머신러닝과 딥러닝 기법이 어떻게 패턴을 학습하는지, 그리고 대규모 언어모델(LLM)이 이상 탐지 패러다임을 어떻게 혁신하고 있는지 확인할 수 있습니다.\n더 나아가 스스로 판단하고 행동하는 에이전틱 AI(Agentic AI)와 논리적 추론과 신경망을 결합한 뉴로-심볼릭 AI(Neuro-Symbolic AI)의 개념을 통해, AI가 단순한 패턴 인식을 넘어 범죄의 인과관계를 이해하는 단계로 진화하는 과정을 이해하게 됩니다.\n보이스 피싱 탐지 연구 사례를 통해 이론이 현실 문제 해결에 어떻게 적용되는지 생생하게 확인하고, AGI(Artificial General Intelligence)를 향한 AI의 미래 방향성까지 조망하는 시간을 가질 예정입니다.",
+    files:[
+      {label:"📄 발표 자료 1부 (PDF)", href:"2026_RG3/IEEE_Busan_AI_Research_3rd_Talk-Normal1.pdf"},
+      {label:"📄 발표 자료 2부 (PDF)", href:"2026_RG3/IEEE_Busan_AI_Research_3rd_Talk-Normal2.pdf"}
+    ],
+    dir:"2026_RG3/pics/",
+    pics:[
+      "KakaoTalk_Photo_2026-02-18-13-52-48 001.jpeg",
+      "KakaoTalk_Photo_2026-02-18-13-52-48 002.jpeg",
+      "KakaoTalk_Photo_2026-02-18-13-52-49 003.jpeg"
+    ]
+  },
+  {
+    id:"rg4", tag:"2026년 AI 연구회 4차 특강",
+    title:"생성형 AI 오케스트레이션: ComfyUI와 오픈소스 모델을 활용한 콘텐츠 생성 실습",
+    date:"2026년 2월 25일 (수) 오후 3:00 – 5:50",
+    place:"동서대학교 뉴밀레니엄관(13번, 본관) 3층 333호",
+    speaker:"동서대학교 소프트웨어학과 이상걸 교수",
+    desc:"상상이 현실로 구현되는 생성형 AI의 시대, 이제 개별 모델을 사용하는 단계를 넘어 여러 AI를 조화롭게 지휘하는 '오케스트레이션' 능력이 핵심 경쟁력이 되었습니다. 텍스트가 이미지가 되고, 이미지가 다시 생동감 넘치는 비디오와 음악으로 이어지는 창작의 흐름은 콘텐츠 제작의 패러다임을 완전히 바꾸고 있습니다.\n이번 특강에서는 노드 기반의 비주얼 프로그래밍 도구인 ComfyUI를 활용하여 최신 오픈소스 AI 모델들을 체계적으로 다룹니다. 단순히 툴을 익히는 것을 넘어, 고해상도 이미지 생성(Flux 등)부터 고품질 비디오 제작(CogVideoX & HunyuanVideo), 그리고 전문적인 음악 생성(Stable Audio 등)까지 아우르는 전체 파이프라인을 직접 설계하고 실습합니다.\n양자화 모델을 통한 하드웨어 최적화 기법과 멀티모달 콘텐츠를 하나의 워크플로우로 통합하는 실전 노하우를 확인할 수 있습니다. 인공지능 연구, 차세대 콘텐츠 제작, 그리고 에이전틱(Agentic) 워크플로우 설계에 관심 있는 교수님과 연구원분들께 실질적인 기술적 영감을 제공할 이번 특강에 여러분을 초대합니다.",
+    files:[
+      {label:"📄 발표 자료 (PDF)", href:"2026_RG4/Generative_AI_Orchestration.pdf"},
+      {label:"📄 실습 자료 (PDF)", href:"2026_RG4/생성형 AI 오케스트레이션_ComfyUI와 오픈소스 모델을 활용한 콘텐츠 생성 실습.pdf"}
+    ],
+    dir:"2026_RG4/pics/",
+    pics:[
+      "이미지-20260225-062927-bf80496d.jpeg",
+      "이미지-20260225-073344-167eca8f.jpeg",
+      "이미지-20260225-073355-024a02df.jpeg",
+      "이미지-20260225-075924-d5a0c0cf.jpeg"
+    ]
+  }
+];
+
+/* ---- 렌더링 ---- */
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const enc = p => encodeURI(p);
+
+const main = document.getElementById("content");
+const allImages = [];
+
+main.innerHTML = lectures.map(L => {
+  const meta = [
+    ["일시", L.date],
+    ["장소", L.place],
+    ["강사", L.speaker],
+    L.bio ? ["약력", L.bio] : null
+  ].filter(Boolean).map(([k,v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("");
+
+  const files = L.files.map(f =>
+    `<a href="${enc(f.href)}" target="_blank" rel="noopener">${f.label}</a>`
+  ).join("");
+
+  const gallery = L.pics.map(name => {
+    const src = enc(L.dir + name);
+    const idx = allImages.push(src) - 1;
+    return `<img loading="lazy" src="${src}" alt="${esc(L.tag)} 행사 사진" data-idx="${idx}">`;
+  }).join("");
+
+  return `
+  <section class="lecture" id="${L.id}">
+    <span class="tag">${esc(L.tag)}</span>
+    <h2>${esc(L.title)}</h2>
+    ${L.subtitle ? `<p class="sub">${esc(L.subtitle)}</p>` : ""}
+    <dl class="meta">${meta}</dl>
+    <div class="desc">${esc(L.desc)}</div>
+    <div class="files">${files}</div>
+    <p class="gallery-title">📷 행사 사진 (클릭하면 크게 보기)</p>
+    <div class="gallery">${gallery}</div>
+  </section>`;
+}).join("");
+
+/* ---- 라이트박스 ---- */
+const lb = document.getElementById("lightbox");
+const lbImg = document.getElementById("lbImg");
+let cur = 0;
+function show(i){
+  cur = (i + allImages.length) % allImages.length;
+  lbImg.src = allImages[cur];
+  lb.classList.add("open");
+}
+main.addEventListener("click", e => {
+  if(e.target.tagName === "IMG" && e.target.dataset.idx !== undefined){
+    show(+e.target.dataset.idx);
+  }
+});
+document.getElementById("lbClose").onclick = () => lb.classList.remove("open");
+document.getElementById("lbPrev").onclick  = e => { e.stopPropagation(); show(cur-1); };
+document.getElementById("lbNext").onclick  = e => { e.stopPropagation(); show(cur+1); };
+lb.addEventListener("click", e => { if(e.target === lb) lb.classList.remove("open"); });
+document.addEventListener("keydown", e => {
+  if(!lb.classList.contains("open")) return;
+  if(e.key === "Escape") lb.classList.remove("open");
+  if(e.key === "ArrowLeft") show(cur-1);
+  if(e.key === "ArrowRight") show(cur+1);
+});
+</script>
+</body>
+</html>
