@@ -1,6 +1,8 @@
 # IEEE Busan 섹션, AI 연구회 자료 모음
 IEEE Busan Section의 AI 연구회 특강 자료 저장소
 
+https://dongupak.github.io/dongupak/IEEE_Busan_AI_RG
+
 #### 2026년 AI 연구회 1차 특강
 * 일시 : 2026년 1월 15일 목요일 오후 3:00 - 5:00
 * 강사 : 한국해양대학교 데이터사이언스학과 이정훈교수
