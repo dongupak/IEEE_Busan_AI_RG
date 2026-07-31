@@ -264,12 +264,12 @@
       <small>연구회 특강 자료</small>
     </a>
     <nav class="menu" id="menu">
-      <a href="#rg1">1차 특강</a>
-      <a href="#rg2">2차 특강</a>
-      <a href="#rg3">3차 특강</a>
-      <a href="#rg4">4차 특강</a>
-      <a href="#rg5">5차 특강</a>
       <a href="#rg6">6차 특강</a>
+      <a href="#rg5">5차 특강</a>
+      <a href="#rg4">4차 특강</a>
+      <a href="#rg3">3차 특강</a>
+      <a href="#rg2">2차 특강</a>
+      <a href="#rg1">1차 특강</a>
       <a href="#insights">인사이트</a>
       <a class="gh" href="https://github.com/dongupak/IEEE_Busan_AI_RG" target="_blank" rel="noopener">GitHub ↗</a>
       <button class="burger" id="burger" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
@@ -279,12 +279,12 @@
 
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer">
-  <a href="#rg1">1차 특강</a>
-  <a href="#rg2">2차 특강</a>
-  <a href="#rg3">3차 특강</a>
-  <a href="#rg4">4차 특강</a>
-  <a href="#rg5">5차 특강</a>
   <a href="#rg6">6차 특강</a>
+  <a href="#rg5">5차 특강</a>
+  <a href="#rg4">4차 특강</a>
+  <a href="#rg3">3차 특강</a>
+  <a href="#rg2">2차 특강</a>
+  <a href="#rg1">1차 특강</a>
   <a href="#insights">인사이트</a>
   <a href="https://github.com/dongupak/IEEE_Busan_AI_RG" target="_blank" rel="noopener">GitHub 저장소 ↗</a>
 </aside>
@@ -297,7 +297,7 @@
     <h1 class="reveal">AI 연구회<br><span class="accent">특강</span> 자료 모음</h1>
     <p class="lead reveal">IEEE Busan Section AI 연구회 특강의 발표 자료와 행사 사진을 한곳에서 만나보세요. 트랜스포머·휴머노이드 로봇·이상 탐지·생성형 AI·기업의 AX·미래 제조 혁신까지, 2026년 특강의 모든 기록입니다.</p>
     <div class="cta reveal">
-      <a class="btn btn-dark" href="#rg1">특강 자료 보기</a>
+      <a class="btn btn-dark" href="#rg6">특강 자료 보기</a>
       <a class="btn btn-ghost" href="https://github.com/dongupak/IEEE_Busan_AI_RG" target="_blank" rel="noopener">GitHub에서 보기</a>
     </div>
     <div class="stats reveal">
@@ -515,7 +515,7 @@ const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>
 const enc = p => (/^https?:/i.test(p) ? p : encodeURI(p));
 const allImages = [];
 
-document.getElementById("lectureRoot").innerHTML = lectures.map(L => {
+document.getElementById("lectureRoot").innerHTML = [...lectures].reverse().map(L => {
   const meta = [
     ["일시", L.date],
     ["장소", L.place],
