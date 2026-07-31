@@ -207,6 +207,50 @@
     .burger{display:flex;}
     nav.menu .gh{display:none;}
   }
+
+  /* ===== Insights / 통계 섹션 ===== */
+  .insights{background:var(--bg);padding:78px 0;border-top:1px solid var(--line);scroll-margin-top:calc(var(--header-h) + 20px);}
+  .ins-head{max-width:760px;margin:0 0 40px;}
+  .ins-head .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;}
+  .ins-head .eyebrow::before{content:"";width:26px;height:2px;background:var(--accent);}
+  .ins-head h2{margin:0 0 12px;font-size:clamp(1.7rem,4vw,2.6rem);font-weight:800;letter-spacing:-.025em;line-height:1.12;}
+  .ins-head h2 .accent{color:var(--accent);}
+  .ins-head p{margin:0;color:var(--ink-2);font-size:1rem;}
+
+  .kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px;}
+  @media(max-width:720px){.kpi{grid-template-columns:repeat(2,1fr);}}
+  .kpi .box{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;}
+  .kpi .box .n{font-size:clamp(1.9rem,4vw,2.7rem);font-weight:800;letter-spacing:-.02em;line-height:1;}
+  .kpi .box .n .accent{color:var(--accent);}
+  .kpi .box .t{margin-top:9px;font-size:.84rem;font-weight:600;color:var(--muted);}
+
+  .panels{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px;}
+  @media(max-width:960px){.panels{grid-template-columns:1fr;}}
+  .panel{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:26px;}
+  .panel.wide{margin-top:16px;}
+  .panel h3{margin:0 0 4px;font-size:1.1rem;font-weight:800;letter-spacing:-.01em;}
+  .panel .cap{margin:0 0 20px;font-size:.82rem;color:var(--muted);font-weight:500;}
+
+  .bar{margin-bottom:15px;}
+  .bar:last-child{margin-bottom:0;}
+  .bar .lin{display:flex;justify-content:space-between;align-items:baseline;font-size:.9rem;font-weight:600;margin-bottom:6px;gap:10px;}
+  .bar .lin .nm{color:var(--ink-2);}
+  .bar .lin .v{color:var(--muted);font-weight:700;font-size:.84rem;white-space:nowrap;}
+  .bar .track{height:9px;border-radius:999px;background:var(--bg-2);overflow:hidden;}
+  .bar .fill{height:100%;border-radius:999px;background:var(--accent);transform-origin:left;
+    transform:scaleX(0);transition:transform 1s var(--ease);}
+  .in .bar .fill{transform:scaleX(1);}
+  .fill.c-uni{background:var(--accent);}
+  .fill.c-lab{background:var(--cyan);}
+  .fill.c-com{background:var(--mint);}
+  .fill.c-etc{background:#c9c9c9;}
+
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:18px;font-size:.78rem;color:var(--muted);font-weight:600;}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .legend i{width:10px;height:10px;border-radius:3px;display:inline-block;}
+  .note{margin:18px 0 0;font-size:.82rem;color:var(--muted);line-height:1.6;}
+  .note b{color:var(--ink-2);font-weight:700;}
 </style>
 </head>
 <body>
@@ -226,6 +270,7 @@
       <a href="#rg4">4차 특강</a>
       <a href="#rg5">5차 특강</a>
       <a href="#rg6">6차 특강</a>
+      <a href="#insights">인사이트</a>
       <a class="gh" href="https://github.com/dongupak/IEEE_Busan_AI_RG" target="_blank" rel="noopener">GitHub ↗</a>
       <button class="burger" id="burger" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
     </nav>
@@ -240,6 +285,7 @@
   <a href="#rg4">4차 특강</a>
   <a href="#rg5">5차 특강</a>
   <a href="#rg6">6차 특강</a>
+  <a href="#insights">인사이트</a>
   <a href="https://github.com/dongupak/IEEE_Busan_AI_RG" target="_blank" rel="noopener">GitHub 저장소 ↗</a>
 </aside>
 
@@ -269,6 +315,84 @@
 <main id="content" class="lectures section-white">
   <div class="wrap" id="lectureRoot"><!-- rendered by JS --></div>
 </main>
+
+<section class="insights" id="insights">
+  <div class="wrap">
+    <div class="ins-head reveal">
+      <span class="eyebrow">Insights · 데이터로 보는 연구회</span>
+      <h2>6회의 특강, <span class="accent">숫자</span>로 돌아보기</h2>
+      <p>1~6차 특강의 강연자 구성, 개최 장소, 그리고 참가 등록 데이터를 분석했습니다. 강연자는 대학·기업·연구소로 분류하고, 참가자 174건의 등록을 소속 기관별로 집계했습니다.</p>
+    </div>
+
+    <div class="kpi reveal">
+      <div class="box"><div class="n">1<span class="accent">74</span></div><div class="t">누적 참가 등록</div></div>
+      <div class="box"><div class="n">91</div><div class="t">고유 참가자</div></div>
+      <div class="box"><div class="n">29</div><div class="t">참여 소속 기관</div></div>
+      <div class="box"><div class="n">4</div><div class="t">주최 대학</div></div>
+    </div>
+
+    <div class="panels">
+      <!-- 강연자 분류 -->
+      <div class="panel reveal">
+        <h3>강연자 분류</h3>
+        <p class="cap">전체 6회 · 대학 2 · 연구소 3 · 기업 1</p>
+        <div class="bar"><div class="lin"><span class="nm">연구소</span><span class="v">3회 · 50%</span></div><div class="track"><div class="fill c-lab" style="width:50%"></div></div></div>
+        <div class="bar"><div class="lin"><span class="nm">대학</span><span class="v">2회 · 33%</span></div><div class="track"><div class="fill c-uni" style="width:33.3%"></div></div></div>
+        <div class="bar"><div class="lin"><span class="nm">기업</span><span class="v">1회 · 17%</span></div><div class="track"><div class="fill c-com" style="width:16.7%"></div></div></div>
+        <p class="note">
+          <b>대학</b> — 이정훈(한국해양대)·이상걸(동서대)<br>
+          <b>연구소</b> — 손영성·김성수·유대승(ETRI)<br>
+          <b>기업</b> — 이준영(야놀자)
+        </p>
+      </div>
+
+      <!-- Venue 분석 -->
+      <div class="panel reveal">
+        <h3>Venue 분석</h3>
+        <p class="cap">개최 장소 기준 · 주최 4개 대학</p>
+        <div class="bar"><div class="lin"><span class="nm">부산대학교</span><span class="v">3회 · 50%</span></div><div class="track"><div class="fill c-uni" style="width:50%"></div></div></div>
+        <div class="bar"><div class="lin"><span class="nm">동의대학교</span><span class="v">1회 · 17%</span></div><div class="track"><div class="fill c-uni" style="width:16.7%"></div></div></div>
+        <div class="bar"><div class="lin"><span class="nm">동명대학교</span><span class="v">1회 · 17%</span></div><div class="track"><div class="fill c-uni" style="width:16.7%"></div></div></div>
+        <div class="bar"><div class="lin"><span class="nm">동서대학교</span><span class="v">1회 · 17%</span></div><div class="track"><div class="fill c-uni" style="width:16.7%"></div></div></div>
+        <p class="note">부산·경남 지역 대학을 순회하며 개최했으며, <b>부산대 IT관</b>에서 3회(2·5·6차)로 가장 많이 열렸습니다.</p>
+      </div>
+
+      <!-- 참가자 소속 유형 -->
+      <div class="panel reveal">
+        <h3>참가자 소속 유형</h3>
+        <p class="cap">누적 등록 174건 기준</p>
+        <div class="bar"><div class="lin"><span class="nm">대학</span><span class="v">145건 · 83%</span></div><div class="track"><div class="fill c-uni" style="width:83.3%"></div></div></div>
+        <div class="bar"><div class="lin"><span class="nm">기업·기타</span><span class="v">19건 · 11%</span></div><div class="track"><div class="fill c-com" style="width:10.9%"></div></div></div>
+        <div class="bar"><div class="lin"><span class="nm">연구소</span><span class="v">9건 · 5%</span></div><div class="track"><div class="fill c-lab" style="width:5.2%"></div></div></div>
+        <div class="bar"><div class="lin"><span class="nm">공공·지자체</span><span class="v">1건 · 1%</span></div><div class="track"><div class="fill c-etc" style="width:1%"></div></div></div>
+        <p class="note">대학 소속이 <b>83%</b>로 다수를 이루며, 기업·연구소·지자체까지 폭넓게 참여했습니다.</p>
+      </div>
+    </div>
+
+    <!-- 소속 기관별 Top 10 -->
+    <div class="panel wide reveal">
+      <h3>소속 기관별 참가 등록 · Top 10</h3>
+      <p class="cap">누적 등록 174건 · 참여 기관 29곳</p>
+      <div class="bar"><div class="lin"><span class="nm">동의대학교</span><span class="v">51건</span></div><div class="track"><div class="fill c-uni" style="width:100%"></div></div></div>
+      <div class="bar"><div class="lin"><span class="nm">부산대학교</span><span class="v">38건</span></div><div class="track"><div class="fill c-uni" style="width:74.5%"></div></div></div>
+      <div class="bar"><div class="lin"><span class="nm">동명대학교</span><span class="v">19건</span></div><div class="track"><div class="fill c-uni" style="width:37.3%"></div></div></div>
+      <div class="bar"><div class="lin"><span class="nm">한국전자통신연구원(ETRI)</span><span class="v">8건</span></div><div class="track"><div class="fill c-lab" style="width:15.7%"></div></div></div>
+      <div class="bar"><div class="lin"><span class="nm">국립한국해양대학교</span><span class="v">8건</span></div><div class="track"><div class="fill c-uni" style="width:15.7%"></div></div></div>
+      <div class="bar"><div class="lin"><span class="nm">동서대학교</span><span class="v">7건</span></div><div class="track"><div class="fill c-uni" style="width:13.7%"></div></div></div>
+      <div class="bar"><div class="lin"><span class="nm">부산가톨릭대학교</span><span class="v">7건</span></div><div class="track"><div class="fill c-uni" style="width:13.7%"></div></div></div>
+      <div class="bar"><div class="lin"><span class="nm">창원대학교</span><span class="v">7건</span></div><div class="track"><div class="fill c-uni" style="width:13.7%"></div></div></div>
+      <div class="bar"><div class="lin"><span class="nm">연세대학교</span><span class="v">3건</span></div><div class="track"><div class="fill c-uni" style="width:5.9%"></div></div></div>
+      <div class="bar"><div class="lin"><span class="nm">디엔아이솔루션(주)</span><span class="v">3건</span></div><div class="track"><div class="fill c-com" style="width:5.9%"></div></div></div>
+      <div class="legend">
+        <span><i style="background:var(--accent)"></i>대학</span>
+        <span><i style="background:var(--cyan)"></i>연구소</span>
+        <span><i style="background:var(--mint)"></i>기업·기타</span>
+        <span><i style="background:#c9c9c9"></i>공공·지자체</span>
+      </div>
+      <p class="note">주최·인접 대학인 <b>동의대·부산대·동명대</b>가 상위권을 형성했고, ETRI·재료연구원 등 연구소와 15개 기업·기관도 함께했습니다.</p>
+    </div>
+  </div>
+</section>
 
 <footer class="site">
   <div class="wrap">
@@ -452,6 +576,7 @@ const secObserver = new IntersectionObserver(entries => {
   });
 }, {rootMargin:"-45% 0px -50% 0px"});
 lectures.forEach(L => { const el = document.getElementById(L.id); if(el) secObserver.observe(el); });
+const insEl = document.getElementById("insights"); if(insEl) secObserver.observe(insEl);
 
 /* ===== 스크롤 리빌 ===== */
 const revObserver = new IntersectionObserver(entries => {
