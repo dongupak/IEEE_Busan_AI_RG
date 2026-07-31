@@ -208,6 +208,30 @@
     nav.menu .gh{display:none;}
   }
 
+  /* ===== 특강 목록 (상단 인덱스) ===== */
+  .idx-wrap{padding:44px 0 12px;}
+  .idx-head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:20px;}
+  .idx-head h2{font-size:clamp(1.6rem,3.4vw,2.2rem);font-weight:800;letter-spacing:-.02em;margin:0;}
+  .idx-head h2 .accent{color:var(--accent);}
+  .idx-head .idx-sub{font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+  .idx-list{list-style:none;margin:0;padding:0;border-top:2px solid var(--ink);}
+  .idx-list li a{
+    display:grid;grid-template-columns:58px 130px 200px 1fr;gap:22px;align-items:center;
+    padding:15px 8px;border-bottom:1px solid var(--line);transition:background .25s var(--ease);
+  }
+  .idx-list li a:hover{background:var(--bg);}
+  .idx-list .c-no{font-weight:800;color:var(--accent);font-size:1.02rem;letter-spacing:-.01em;white-space:nowrap;}
+  .idx-list .c-sp{font-weight:700;color:var(--ink);}
+  .idx-list .c-org{color:var(--muted);font-weight:600;font-size:.92rem;}
+  .idx-list .c-ti{color:var(--ink-2);font-weight:600;}
+  .idx-list li a:hover .c-ti{color:var(--accent);}
+  @media(max-width:760px){
+    .idx-list li a{grid-template-columns:44px 1fr;gap:2px 14px;padding:14px 6px;}
+    .idx-list .c-no{grid-row:1 / span 3;align-self:start;}
+    .idx-list .c-sp,.idx-list .c-org,.idx-list .c-ti{grid-column:2;}
+    .idx-list .c-org{font-size:.86rem;}
+  }
+
   /* ===== Insights / 통계 섹션 ===== */
   .insights{background:var(--bg);padding:78px 0;border-top:1px solid var(--line);scroll-margin-top:calc(var(--header-h) + 20px);}
   .ins-head{max-width:760px;margin:0 0 40px;}
@@ -313,6 +337,15 @@
 </svg>
 
 <main id="content" class="lectures section-white">
+  <div class="wrap">
+    <div class="idx-wrap reveal">
+      <div class="idx-head">
+        <h2>특강 <span class="accent">목록</span></h2>
+        <span class="idx-sub">회차 · 연사 · 소속 · 제목</span>
+      </div>
+      <ul class="idx-list" id="lectureIndex"><!-- rendered by JS --></ul>
+    </div>
+  </div>
   <div class="wrap" id="lectureRoot"><!-- rendered by JS --></div>
 </main>
 
@@ -422,6 +455,7 @@ const lectures = [
     date:"2026년 1월 15일 (목) 15:00 – 17:00",
     place:"부산동의대학교 학술정보교육실 (중앙도서관 1층, 소극장)",
     speaker:"한국해양대학교 데이터사이언스학과 이정훈 교수",
+    presenter:"이정훈 교수", org:"한국해양대학교",
     desc:"오늘날 인공지능 기술에서 가장 주목받고 있는 트랜스포머(Transformer)는 2017년 구글이 발표한 딥러닝 모델 구조로, '어텐션(Attention)' 메커니즘을 핵심으로 하여 텍스트 같은 순차 데이터를 처리하며, 문장 내 단어들의 관계를 파악해 맥락을 학습하는 혁신적인 기술입니다. 이 모델은 순환신경망의 한계였던 긴 시퀀스 처리 문제를 해결하고 병렬 연산으로 효율성을 높였으며, BERT·ChatGPT와 같은 대규모 언어모델(LLM)과 생성형 AI의 기반이 되었습니다. 본 강연에서는 최신 트랜스포머 기반 언어모델의 발전과 다양한 응용 시스템 설계 기법을 폭넓게 살펴봅니다.",
     files:[
       {label:"발표 자료 (PDF)", ic:"📄", primary:true, href:"2026_RG1/트랜스포머기반언어모델(이정훈교수)_2026.pdf"},
@@ -436,6 +470,7 @@ const lectures = [
     date:"2026년 1월 29일 (목) 15:00 – 17:50",
     place:"부산대학교 IT관(102동) 406호",
     speaker:"한국전자통신연구원(ETRI) 손영성 박사 (책임연구원)",
+    presenter:"손영성 박사", org:"한국전자통신연구원(ETRI)",
     bio:"ETRI 책임연구원 · UST 겸임교수 · 한국정보과학회 학회지 편집위원 · AI프렌즈학회 이사 · AI로봇 연구회 위원장",
     desc:"본 특강은 휴머노이드 로봇의 최신 기술 동향과 Physical AI의 발전 방향을 종합적으로 다룹니다. 로봇의 역사적 기원부터 후쿠시마 원전 사고와 DARPA Robotics Challenge를 계기로 촉발된 기술 발전을 살펴보며, Tesla Optimus, Figure AI, Boston Dynamics Atlas, Agility Robotics Digit 등 주요 휴머노이드 로봇의 특징과 산업 적용 사례를 소개합니다. 이어 Physical AI와 Embodied AI의 차이, 모방·강화 학습의 중요성(AGILE-X, Stanford Mobile ALOHA), Figure AI의 Helix(System 1/2)와 Physical Intelligence의 π 모델 등 최신 행동 지능 모델의 작동 원리를 분석하고, 산업 성장 전망과 기술적 과제, 향후 10년의 사회적 영향을 논의합니다.",
     files:[
@@ -453,6 +488,7 @@ const lectures = [
     date:"2026년 2월 12일 (목) 15:00 – 17:50",
     place:"동명대학교 본관(1호관) 106호",
     speaker:"한국전자통신연구원(ETRI) 김성수 박사",
+    presenter:"김성수 박사", org:"한국전자통신연구원(ETRI)",
     desc:"매일 수많은 데이터가 흐르는 디지털 세상에서 정상과 비정상을 구분하는 능력은 이제 필수입니다. 특히 보이스 피싱과 같은 지능형 금융범죄가 진화하면서 전통적 탐지 방식은 한계에 봉착했습니다.\n이번 특강에서는 시계열 데이터 분석의 기초부터 최신 AI까지 이상 탐지 기술의 전체 스펙트럼을 체계적으로 살펴봅니다. 전통적 머신러닝·딥러닝이 패턴을 학습하는 방식과, 대규모 언어모델(LLM)이 이상 탐지 패러다임을 혁신하는 과정을 확인합니다.\n나아가 에이전틱 AI(Agentic AI)와 뉴로-심볼릭 AI(Neuro-Symbolic AI)를 통해 AI가 단순 패턴 인식을 넘어 범죄의 인과관계를 이해하는 단계로 진화하는 과정을 이해하고, 보이스 피싱 탐지 연구 사례와 AGI를 향한 미래 방향성까지 조망합니다.",
     files:[
       {label:"발표 자료 1부 (PDF)", ic:"📄", primary:true, href:"2026_RG3/IEEE_Busan_AI_Research_3rd_Talk-Normal1.pdf"},
@@ -468,6 +504,7 @@ const lectures = [
     date:"2026년 2월 25일 (수) 15:00 – 17:50",
     place:"동서대학교 뉴밀레니엄관(13번, 본관) 3층 333호",
     speaker:"동서대학교 소프트웨어학과 이상걸 교수",
+    presenter:"이상걸 교수", org:"동서대학교",
     desc:"상상이 현실로 구현되는 생성형 AI의 시대, 이제 개별 모델을 넘어 여러 AI를 조화롭게 지휘하는 '오케스트레이션' 능력이 핵심 경쟁력이 되었습니다. 텍스트가 이미지가 되고, 이미지가 다시 비디오와 음악으로 이어지는 창작의 흐름은 콘텐츠 제작의 패러다임을 바꾸고 있습니다.\n이번 특강에서는 노드 기반 비주얼 프로그래밍 도구 ComfyUI로 최신 오픈소스 AI 모델을 체계적으로 다룹니다. 고해상도 이미지 생성(Flux)부터 고품질 비디오 제작(CogVideoX·HunyuanVideo), 전문 음악 생성(Stable Audio)까지 전체 파이프라인을 직접 설계·실습합니다.\n양자화 모델을 통한 하드웨어 최적화와 멀티모달 콘텐츠를 하나의 워크플로우로 통합하는 실전 노하우를 확인할 수 있습니다.",
     files:[
       {label:"발표 자료 (PDF)", ic:"📄", primary:true, href:"2026_RG4/Generative_AI_Orchestration.pdf"},
@@ -483,6 +520,7 @@ const lectures = [
     date:"2026년 7월 13일 (월) 15:00 – 17:50",
     place:"부산대학교 IT관 621호",
     speaker:"이준영 대표 (야놀자 Enterprise Solutions 부문 대표)",
+    presenter:"이준영 대표", org:"야놀자",
     bio:"야놀자 엔터프라이즈 솔루션 부문 대표 · 한국인 최초 구글 본사 입사 · 『구글은 SKY를 모른다』 저자",
     desc:"기업에서 AI 전환(AX)이 내부 생산성과 외부 서비스 혁신이라는 두 축으로 실제로 어떻게 구현되고 있는지를 보여줍니다. 이를 바탕으로 AI가 서비스 개발의 진입 장벽은 낮췄지만 아키텍처·보안·품질 판단 같은 역량의 천장은 그대로이며, 특히 정답이 없는 영역에서는 사람의 판단이 필수적인 영역으로 남는다는 통찰을 전달합니다.\n마지막으로 Demo와 실제 Product 사이의 큰 간극을 짚으며, CS 학생·연구자들에게는 깊이·넓이·연결을 갖춘 T자형 인재로 성장할 것을 제안하는 실무 중심의 강연입니다.",
     files:[
@@ -499,6 +537,7 @@ const lectures = [
     date:"2026년 7월 30일 (목) 15:00 – 17:50",
     place:"부산대학교 IT관 621호",
     speaker:"유대승 박사 (한국전자통신연구원 동남권지능화융합연구실)",
+    presenter:"유대승 박사", org:"한국전자통신연구원(ETRI)",
     desc:"오늘날 글로벌 제조 산업은 단순한 기계적 자동화를 넘어, 인공지능(AI) 기술이 물리적 생산 현장과 깊이 결합하는 AX(AI Transformation)와 피지컬 AI(Physical AI)를 통해 전례 없는 지능형 혁신을 맞이하고 있습니다. 본 특강에서는 제조 산업의 판도를 바꿀 핵심 패러다임인 AX와 피지컬 AI의 개념을 짚어보고, 이를 기반으로 한 미래 제조 혁신 전략을 심도 있게 다룹니다.\n인공지능 원천 기술이 제조업의 실제 물리 공간에 유기적으로 융합되어 자율 제조와 고도화된 지능형 공장으로 진화하는 구체적인 방안을 논의하며, 한국전자통신연구원(ETRI) 동남권지능화융합연구실이 지향하는 제조 지능화 비전과 실천적 전략을 공유합니다. 제조업의 미래 경쟁력 확보와 지능화 융합 기술에 관심 있는 연구자, 학생, 업계 관계자 모두에게 AX 시대의 이정표와 실질적인 해법을 논의하는 시간이 될 것입니다.",
     files:[
       {label:"발표 자료 · 공개버전 (PDF)", ic:"📄", primary:true, href:"2026_RG6/AI Transformation & Physical AI 중심의 미래 제조 혁신 전략_공개버전_유대승(ETRI).pdf"},
@@ -554,6 +593,15 @@ document.getElementById("lectureRoot").innerHTML = [...lectures].reverse().map(L
     </div>
   </section>`;
 }).join("");
+
+/* ===== 특강 목록(상단 인덱스) ===== */
+document.getElementById("lectureIndex").innerHTML = [...lectures].reverse().map(L => `
+  <li><a href="#${L.id}">
+    <span class="c-no">${+L.no}회</span>
+    <span class="c-sp">${esc(L.presenter || "")}</span>
+    <span class="c-org">${esc(L.org || "")}</span>
+    <span class="c-ti">${esc(L.title)}</span>
+  </a></li>`).join("");
 
 /* ===== 헤더 스크롤 상태 ===== */
 const header = document.getElementById("siteHeader");
