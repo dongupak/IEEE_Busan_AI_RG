@@ -183,7 +183,7 @@
     H.push('    -webkit-background-clip:text;background-clip:text;color:transparent;font-size:1.24rem;}');
     H.push('');
     H.push('  /* ===== 본문 카드 ===== */');
-    H.push('  .cols{display:grid;grid-template-columns:1.32fr .92fr;gap:14px;align-items:start;}');
+    H.push('  .cols{display:grid;grid-template-columns:1.32fr .92fr;gap:14px;margin-top:14px;align-items:start;}');
     H.push('  @media(max-width:860px){.cols{grid-template-columns:1fr;}}');
     H.push('  .card{position:relative;border-radius:22px;padding:clamp(22px,3vw,30px);');
     H.push('    border:1px solid var(--line);background:var(--paper);');
@@ -195,13 +195,8 @@
     H.push('    background:var(--grad);letter-spacing:.06em;box-shadow:0 6px 16px rgba(11,91,211,.28);}');
     H.push('  .ch h2{margin:0;font-size:1.1rem;font-weight:800;letter-spacing:-.015em;color:var(--ink);}');
     H.push('  .ch .line{flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent);}');
-    H.push('  .prose p{margin:0 0 14px;font-size:1.06rem;line-height:1.75;color:var(--ink-2);}');
+    H.push('  .prose p{margin:0 0 13px;font-size:.99rem;color:var(--ink-2);}');
     H.push('  .prose p:last-child{margin-bottom:0;}');
-    H.push('  /* 글이 많은 카드는 2단으로 나누고, 오른쪽 단을 한 호흡 아래에서 시작한다 */');
-    H.push('  .prose.two{display:grid;grid-template-columns:1fr 1fr;gap:0 32px;}');
-    H.push('  .prose.two .cB{margin-top:2.2em;}');
-    H.push('  @media(max-width:760px){.prose.two{grid-template-columns:1fr;}.prose.two .cB{margin-top:14px;}}');
-    H.push('  .stack{display:grid;gap:14px;margin-top:14px;}');
     H.push('');
     H.push('  /* ===== 찾아오는 길(지도) ===== */');
     H.push('  .mapfig{margin:0;}');
@@ -279,14 +274,11 @@
     H.push('    .facts{grid-template-columns:repeat(4,1fr);gap:7px;margin-top:7px;}');
     H.push('    .fact{padding:13px 13px 11px;border-radius:12px;box-shadow:none;}');
     H.push('    .fact .v{font-size:.95rem;margin-top:7px;}');
-    H.push('    .cols{grid-template-columns:1.32fr .92fr;gap:8px;}');
-    H.push('    .stack{gap:8px;margin-top:8px;}');
-    H.push('    .prose.two{gap:0 18px;}');
-    H.push('    .prose.two .cB{margin-top:1.5em;}');
+    H.push('    .cols{grid-template-columns:1.32fr .92fr;gap:8px;margin-top:8px;}');
     H.push('    .card{padding:13px 15px;border-radius:12px;box-shadow:none;break-inside:avoid;}');
     H.push('    .foot{padding:9px 15px;margin-top:7px;font-size:.7rem;box-shadow:none;}');
     H.push('    .ch{margin-bottom:13px;}');
-    H.push('    .prose p{font-size:.95rem;line-height:1.6;margin-bottom:9px;}');
+    H.push('    .prose p{font-size:.9rem;margin-bottom:9px;}');
     H.push('    .mapfig img{max-height:30mm;border-radius:10px;}');
     H.push('    .mapfig figcaption{margin-top:8px;font-size:.84rem;}');
     H.push('    .qrwrap{width:min(158px,74%);box-shadow:none;margin-bottom:10px;}');
@@ -323,126 +315,69 @@
       (d.speakerOrg ? '<div class="s">' + esc(d.speakerOrg) + '</div>' : '') + '</div>');
     H.push('    <div class="fact free"><div class="k">FEE · 참가비</div><div class="v">' + esc(d.fee || "무료") + '</div></div>');
     H.push('  </section>');
-
-    /* ---- 카드 조립: 만드는 순서 = 화면에 놓이는 순서(번호도 그 순서) ---- */
-    function card(title, inner, cls) {
-      return '    <section class="card' + (cls ? " " + cls : "") + '">\n' +
-        '      <div class="ch"><span class="n">' + idx() + '</span><h2>' + esc(title) + '</h2><span class="line"></span></div>\n' +
-        inner + '\n    </section>';
+    H.push('');
+    if (d.mapImage) {
+      H.push('  <section class="card" style="margin-top:14px">');
+      H.push('    <div class="ch"><span class="n">' + idx() + '</span><h2>찾아오는 길</h2><span class="line"></span></div>');
+      H.push('    <figure class="mapfig">');
+      H.push('      <img src="' + esc(d.mapImage) + '" alt="' + esc((d.place || "행사장") + " 위치 안내 지도") + '" loading="lazy">');
+      H.push('      <figcaption><span class="pin">📍 행사장</span>' + esc(d.place) +
+        (d.mapNote ? '<em>' + esc(d.mapNote) + '</em>' : '') + '</figcaption>');
+      H.push('    </figure>');
+      H.push('  </section>');
     }
-    function row(cards) {
-      cards = cards.filter(Boolean);
-      if (!cards.length) return "";
-      if (cards.length === 1) return cards[0];
-      return '    <div class="cols">\n' + cards.join("\n") + '\n    </div>';
+    H.push('');
+    H.push('  <div class="cols">');
+    H.push('    <section class="card">');
+    H.push('      <div class="ch"><span class="n">' + idx() + '</span><h2>강연 내용</h2><span class="line"></span></div>');
+    H.push('      <div class="prose">' + paras.map(function (p) { return '<p>' + esc(p) + '</p>'; }).join("") + '</div>');
+    H.push('    </section>');
+    H.push('');
+    H.push('    <section class="card reg">');
+    H.push('      <div class="ch"><span class="n">' + idx() + '</span><h2>참가 등록</h2><span class="line"></span></div>');
+    if (qrSvg) {
+      H.push('      <div class="qrwrap"><span></span><span></span><span></span><span></span>' + qrSvg + '</div>');
     }
-    function ps(list) {
-      return list.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join("");
+    if (d.formUrl) {
+      H.push('      <p>QR을 스캔하거나 아래 링크로 등록해 주세요.</p>');
+      H.push('      <a class="url" href="' + esc(d.formUrl) + '" target="_blank" rel="noopener">' + esc(d.formUrl) + '</a>');
+      H.push('      <a class="cta" href="' + esc(d.formUrl) + '" target="_blank" rel="noopener">등록 폼 바로가기 →</a>');
+    } else {
+      H.push('      <p>등록 안내는 추후 공지됩니다.</p>');
     }
-
-    /* 긴 글은 문장 단위로 갈라 2단으로 나눈다 */
-    function sentencesOf(t) {
-      var out = [], buf = "", i;
-      for (i = 0; i < t.length; i++) {
-        buf += t[i];
-        if (/[.!?]/.test(t[i]) && (i + 1 >= t.length || /\s/.test(t[i + 1]))) { out.push(buf.trim()); buf = ""; }
-      }
-      if (buf.trim()) out.push(buf.trim());
-      return out;
-    }
-    /* 한 덩어리를 절(쉼표) → 어절(공백) → 글자 순서로 가장 가운데에 가깝게 나눈다 */
-    function splitNear(t, re) {
-      var mid = t.length / 2, best = -1, bestD = Infinity, m;
-      re.lastIndex = 0;
-      while ((m = re.exec(t)) !== null) {
-        var pos = m.index + m[0].length, dd = Math.abs(pos - mid);
-        if (dd < bestD) { bestD = dd; best = pos; }
-      }
-      if (best < 20 || t.length - best < 20) return null;
-      return [t.slice(0, best).trim(), t.slice(best).trim()];
-    }
-    function splitBlock(t) {
-      return splitNear(t, /\s/g) || splitNear(t, /[,·]\s/g) ||
-        (t.length >= 80 ? [t.slice(0, Math.round(t.length / 2)), t.slice(Math.round(t.length / 2))] : null);
-    }
-    /* 오른쪽 단이 조금 아래에서 시작하므로 왼쪽에 약간 더 담아 아래끝을 맞춘다 */
-    function bestSplit(blocks) {
-      var total = 0, i;
-      for (i = 0; i < blocks.length; i++) total += blocks[i].length;
-      /* 오른쪽 단이 두 줄쯤 아래에서 시작하므로 그만큼 왼쪽에 더 담는다 */
-      var target = (total + 52) / 2, acc = 0, best = 0, bestD = Infinity;
-      for (i = 0; i < blocks.length - 1; i++) {
-        acc += blocks[i].length;
-        var dd = Math.abs(acc - target);
-        if (dd < bestD) { bestD = dd; best = i + 1; }
-      }
-      return { at: best, gap: total ? bestD * 2 / total : 1 };
-    }
-    function proseHtmlOf(list) {
-      var totalLen = list.join("").length;
-      if (totalLen < 300 || !list.length) return '      <div class="prose">' + ps(list) + '</div>';
-      var joinBack = list.length === 1;
-      var blocks = joinBack ? sentencesOf(list[0]) : list.slice();
-      var split = bestSplit(blocks), guard = 0;
-      /* 양쪽 분량 차이가 12%를 넘으면 가장 긴 덩어리를 더 잘게 나눠 다시 계산 */
-      while ((split.at === 0 || split.gap > 0.10) && guard++ < 8) {
-        var big = 0, bi;
-        for (bi = 1; bi < blocks.length; bi++) if (blocks[bi].length > blocks[big].length) big = bi;
-        var parts = splitBlock(blocks[big]);
-        if (!parts) break;
-        blocks = blocks.slice(0, big).concat(parts, blocks.slice(big + 1));
-        split = bestSplit(blocks);
-      }
-      var A = blocks.slice(0, split.at), B = blocks.slice(split.at);
-      if (!A.length || !B.length) return '      <div class="prose">' + ps(list) + '</div>';
-      var wrap = function (g) { return joinBack ? '<p>' + esc(g.join(" ")) + '</p>' : ps(g); };
-      return '      <div class="prose two"><div class="cA">' + wrap(A) + '</div>' +
-             '<div class="cB">' + wrap(B) + '</div></div>';
-    }
-
-    var regInner = (qrSvg ? '      <div class="qrwrap"><span></span><span></span><span></span><span></span>' + qrSvg + '</div>\n' : '') +
-      (d.formUrl
-        ? '      <p>QR을 스캔하거나 아래 링크로 등록해 주세요.</p>\n' +
-          '      <a class="url" href="' + esc(d.formUrl) + '" target="_blank" rel="noopener">' + esc(d.formUrl) + '</a>\n' +
-          '      <a class="cta" href="' + esc(d.formUrl) + '" target="_blank" rel="noopener">등록 폼 바로가기 →</a>'
-        : '      <p>등록 안내는 추후 공지됩니다.</p>');
-
-    var mapInner = '      <figure class="mapfig">\n' +
-      '        <img src="' + esc(d.mapImage || "") + '" alt="' + esc((d.place || "행사장") + " 위치 안내 지도") + '" loading="lazy">\n' +
-      '        <figcaption><span class="pin">📍 행사장</span>' + esc(d.place) +
-      (d.mapNote ? '<em>' + esc(d.mapNote) + '</em>' : '') + '</figcaption>\n' +
-      '      </figure>';
-
-    var whoInner = '      <div class="who"><div class="mg">' + monogram + '</div><div>\n' +
-      '        <div class="nm">' + esc(speakerName) + '</div>\n' +
-      (d.speakerOrg ? '        <div class="og">' + esc(d.speakerOrg) + '</div>\n' : '') +
-      '      </div></div>' +
-      (bios.length ? '\n      <ul class="bio">' + bios.map(function (b) { return '<li>' + esc(b) + '</li>'; }).join("") + '</ul>' : '');
-
-    var aboutInner = '      <div class="prose">' +
-      '<p>IEEE Busan AI 연구회는 IEEE Busan Section에서 주관하는 인공지능 기술 연구모임입니다.</p>' +
-      '<p>부산 · 경남 · 울산 지역을 중심으로 인공지능에 관심있는 연구자들의 참여로 이루어지며, 2026년부터 대학의 방학기간을 활용하여 인공지능 전문가들의 특강을 개최하고 있습니다.</p></div>';
-
-    /* 지도가 있으면 [지도 | 참가 등록] 한 줄, 없으면 참가 등록은 아래 줄로 */
-    var mapCard = d.mapImage ? card("찾아오는 길", mapInner) : "";
-    var regCard = d.mapImage ? card("참가 등록", regInner, "reg") : "";
-    var contentCard = card("강연 내용", proseHtmlOf(paras));
-    if (!regCard) regCard = card("참가 등록", regInner, "reg");
-    var rest = [];
-    if (!d.mapImage) rest.push(regCard);
-    rest.push(card("강사 소개", whoInner));
-    if (notes.length) {
-      rest.push(card("기타 안내", '      <ul class="notes">' +
-        notes.map(function (n) { return '<li>' + esc(n) + '</li>'; }).join("") + '</ul>'));
-    }
-    rest.push(card("IEEE Busan AI 연구회 소개", aboutInner, "about"));
-
-    H.push('  <div class="stack">');
-    if (mapCard) H.push(row([mapCard, regCard]));
-    H.push(contentCard);
-    for (var ri = 0; ri < rest.length; ri += 2) H.push(row([rest[ri], rest[ri + 1]]));
+    H.push('    </section>');
     H.push('  </div>');
     H.push('');
+    H.push('  <div class="cols">');
+    H.push('    <section class="card">');
+    H.push('      <div class="ch"><span class="n">' + idx() + '</span><h2>강사 소개</h2><span class="line"></span></div>');
+    H.push('      <div class="who"><div class="mg">' + monogram + '</div><div>');
+    H.push('        <div class="nm">' + esc(speakerName) + '</div>');
+    if (d.speakerOrg) H.push('        <div class="og">' + esc(d.speakerOrg) + '</div>');
+    H.push('      </div></div>');
+    if (bios.length) H.push('      <ul class="bio">' + bios.map(function (b) { return '<li>' + esc(b) + '</li>'; }).join("") + '</ul>');
+    H.push('    </section>');
+    H.push('');
+    if (notes.length) {
+      H.push('    <section class="card">');
+      H.push('      <div class="ch"><span class="n">' + idx() + '</span><h2>기타 안내</h2><span class="line"></span></div>');
+      H.push('      <ul class="notes">' + notes.map(function (n) { return '<li>' + esc(n) + '</li>'; }).join("") + '</ul>');
+      H.push('    </section>');
+    } else {
+      H.push('    <section class="card about">');
+      H.push('      <div class="ch"><span class="n">' + idx() + '</span><h2>IEEE Busan AI 연구회</h2><span class="line"></span></div>');
+      H.push('      <div class="prose"><p>IEEE Busan Section에서 주관하는 인공지능 기술 연구모임입니다. 부산 · 경남 · 울산 지역을 중심으로 인공지능에 관심있는 연구자들이 참여합니다.</p></div>');
+      H.push('    </section>');
+    }
+    H.push('  </div>');
+    H.push('');
+    if (notes.length) {
+      H.push('  <section class="card about" style="margin-top:14px">');
+      H.push('    <div class="ch"><span class="n">' + idx() + '</span><h2>IEEE Busan AI 연구회 소개</h2><span class="line"></span></div>');
+      H.push('    <div class="prose"><p>IEEE Busan AI 연구회는 IEEE Busan Section에서 주관하는 인공지능 기술 연구모임입니다.</p>');
+      H.push('    <p>부산 · 경남 · 울산 지역을 중심으로 인공지능에 관심있는 연구자들의 참여로 이루어지며, 2026년부터 대학의 방학기간을 활용하여 인공지능 전문가들의 특강을 개최하고 있습니다.</p></div>');
+      H.push('  </section>');
+    }
     H.push('  <footer class="foot">');
     H.push('    <b>IEEE Busan AI 연구회</b>');
     if (d.contact) H.push('    <span>CONTACT · ' + esc(d.contact) + '</span>');
