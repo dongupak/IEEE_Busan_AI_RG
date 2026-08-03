@@ -198,6 +198,15 @@
     H.push('  .prose p{margin:0 0 13px;font-size:.99rem;color:var(--ink-2);}');
     H.push('  .prose p:last-child{margin-bottom:0;}');
     H.push('');
+    H.push('  /* ===== 찾아오는 길(지도) ===== */');
+    H.push('  .mapfig{margin:0;}');
+    H.push('  .mapfig img{display:block;width:100%;max-height:420px;object-fit:contain;object-position:center;');
+    H.push('    background:#F1F5FC;border:1px solid var(--line);border-radius:14px;}');
+    H.push('  .mapfig figcaption{margin-top:12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;');
+    H.push('    font-size:.92rem;font-weight:700;color:var(--ink);}');
+    H.push('  .mapfig figcaption .pin{display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:999px;');
+    H.push('    background:var(--grad);color:#fff;font-size:.8rem;box-shadow:0 6px 16px rgba(11,91,211,.25);}');
+    H.push('  .mapfig figcaption em{font-style:normal;font-weight:500;color:var(--muted);font-size:.86rem;}');
     H.push('  /* ===== 참가 등록 ===== */');
     H.push('  .reg{text-align:center;border-color:rgba(11,91,211,.22);');
     H.push('    background:linear-gradient(180deg,#F3F9FF,#F7F4FF);}');
@@ -252,25 +261,28 @@
     H.push('  /* ===== 인쇄: A4 한 장에 맞춤 ===== */');
     H.push('  @media print{');
     H.push('    @page{size:A4 portrait;margin:8mm;}');
-    H.push('    html,body{background:#fff;font-size:12.4px;}');
+    H.push('    html,body{background:#fff;font-size:11.8px;}');
     H.push('    .grid-bg,.orb,.tools{display:none;}');
     H.push('    .sheet{padding:0;max-width:none;}');
-    H.push('    .hero{border-radius:14px;padding:22px 26px 24px;box-shadow:none;}');
+    H.push('    .hero{border-radius:12px;padding:18px 22px 20px;box-shadow:none;}');
     H.push('    .hero-in{max-width:none;}');
     H.push('    .net{width:210px;opacity:.5;}');
     H.push('    h1{font-size:1.95rem;margin-top:15px;}');
     H.push('    .sub{font-size:1rem;margin-top:8px;}');
     H.push('    .tagline{font-size:.9rem;margin-top:10px;}');
     H.push('    .rule{margin-top:14px;}');
-    H.push('    .facts{grid-template-columns:repeat(4,1fr);gap:8px;margin-top:9px;}');
+    H.push('    .facts{grid-template-columns:repeat(4,1fr);gap:7px;margin-top:7px;}');
     H.push('    .fact{padding:13px 13px 11px;border-radius:12px;box-shadow:none;}');
     H.push('    .fact .v{font-size:.95rem;margin-top:7px;}');
-    H.push('    .cols{grid-template-columns:1.32fr .92fr;gap:10px;margin-top:10px;}');
-    H.push('    .card{padding:18px 20px;border-radius:14px;box-shadow:none;break-inside:avoid;}');
-    H.push('    .foot{padding:13px 18px;margin-top:10px;box-shadow:none;}');
+    H.push('    .cols{grid-template-columns:1.32fr .92fr;gap:8px;margin-top:8px;}');
+    H.push('    .card{padding:13px 15px;border-radius:12px;box-shadow:none;break-inside:avoid;}');
+    H.push('    .foot{padding:9px 15px;margin-top:7px;font-size:.7rem;box-shadow:none;}');
     H.push('    .ch{margin-bottom:13px;}');
     H.push('    .prose p{font-size:.9rem;margin-bottom:9px;}');
-    H.push('    .qrwrap{width:min(184px,82%);box-shadow:none;margin-bottom:12px;}');
+    H.push('    .mapfig img{max-height:30mm;border-radius:10px;}');
+    H.push('    .mapfig figcaption{margin-top:8px;font-size:.84rem;}');
+    H.push('    .qrwrap{width:min(158px,74%);box-shadow:none;margin-bottom:10px;}');
+    H.push('    .about{display:none;}');   /* 인쇄는 한 장으로: 연구회 소개는 화면에서만 */
     H.push('    .cta{display:none;}');
     H.push('    .url{font-size:.72rem;}');
     H.push('  }');
@@ -303,6 +315,17 @@
       (d.speakerOrg ? '<div class="s">' + esc(d.speakerOrg) + '</div>' : '') + '</div>');
     H.push('    <div class="fact free"><div class="k">FEE · 참가비</div><div class="v">' + esc(d.fee || "무료") + '</div></div>');
     H.push('  </section>');
+    H.push('');
+    if (d.mapImage) {
+      H.push('  <section class="card" style="margin-top:14px">');
+      H.push('    <div class="ch"><span class="n">' + idx() + '</span><h2>찾아오는 길</h2><span class="line"></span></div>');
+      H.push('    <figure class="mapfig">');
+      H.push('      <img src="' + esc(d.mapImage) + '" alt="' + esc((d.place || "행사장") + " 위치 안내 지도") + '" loading="lazy">');
+      H.push('      <figcaption><span class="pin">📍 행사장</span>' + esc(d.place) +
+        (d.mapNote ? '<em>' + esc(d.mapNote) + '</em>' : '') + '</figcaption>');
+      H.push('    </figure>');
+      H.push('  </section>');
+    }
     H.push('');
     H.push('  <div class="cols">');
     H.push('    <section class="card">');

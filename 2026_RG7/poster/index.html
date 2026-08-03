@@ -6,7 +6,7 @@
 <title>제7회 IEEE Busan AI 연구회 초청 강연 · AI가 운전하는 시대, 자율주행 기술은 어디까지 왔는가?</title>
 <meta name="description" content="AI가 운전하는 시대, 자율주행 기술은 어디까지 왔는가? · End-to-End AI가 바꾸는 자율주행 기술의 현재와 미래 — 민경욱 박사 (한국전자통신연구원 로봇연구본부 자율주행지능연구실) · 2026년 8월 11일 (화) 15:00 – 17:50">
 <meta property="og:title" content="제7회 IEEE Busan AI 연구회 초청 강연 · AI가 운전하는 시대, 자율주행 기술은 어디까지 왔는가?">
-<meta property="og:description" content="2026년 8월 11일 (화) 15:00 – 17:50 · 동의대학교 창의관(18번 건물) 1층 PRIME 세미나실">
+<meta property="og:description" content="2026년 8월 11일 (화) 15:00 – 17:50 · 동의대학교 정보공학과 324호">
 <meta name="theme-color" content="#F4F7FD">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -104,6 +104,15 @@
   .prose p{margin:0 0 13px;font-size:.99rem;color:var(--ink-2);}
   .prose p:last-child{margin-bottom:0;}
 
+  /* ===== 찾아오는 길(지도) ===== */
+  .mapfig{margin:0;}
+  .mapfig img{display:block;width:100%;max-height:420px;object-fit:contain;object-position:center;
+    background:#F1F5FC;border:1px solid var(--line);border-radius:14px;}
+  .mapfig figcaption{margin-top:12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;
+    font-size:.92rem;font-weight:700;color:var(--ink);}
+  .mapfig figcaption .pin{display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:999px;
+    background:var(--grad);color:#fff;font-size:.8rem;box-shadow:0 6px 16px rgba(11,91,211,.25);}
+  .mapfig figcaption em{font-style:normal;font-weight:500;color:var(--muted);font-size:.86rem;}
   /* ===== 참가 등록 ===== */
   .reg{text-align:center;border-color:rgba(11,91,211,.22);
     background:linear-gradient(180deg,#F3F9FF,#F7F4FF);}
@@ -158,25 +167,28 @@
   /* ===== 인쇄: A4 한 장에 맞춤 ===== */
   @media print{
     @page{size:A4 portrait;margin:8mm;}
-    html,body{background:#fff;font-size:12.4px;}
+    html,body{background:#fff;font-size:11.8px;}
     .grid-bg,.orb,.tools{display:none;}
     .sheet{padding:0;max-width:none;}
-    .hero{border-radius:14px;padding:22px 26px 24px;box-shadow:none;}
+    .hero{border-radius:12px;padding:18px 22px 20px;box-shadow:none;}
     .hero-in{max-width:none;}
     .net{width:210px;opacity:.5;}
     h1{font-size:1.95rem;margin-top:15px;}
     .sub{font-size:1rem;margin-top:8px;}
     .tagline{font-size:.9rem;margin-top:10px;}
     .rule{margin-top:14px;}
-    .facts{grid-template-columns:repeat(4,1fr);gap:8px;margin-top:9px;}
+    .facts{grid-template-columns:repeat(4,1fr);gap:7px;margin-top:7px;}
     .fact{padding:13px 13px 11px;border-radius:12px;box-shadow:none;}
     .fact .v{font-size:.95rem;margin-top:7px;}
-    .cols{grid-template-columns:1.32fr .92fr;gap:10px;margin-top:10px;}
-    .card{padding:18px 20px;border-radius:14px;box-shadow:none;break-inside:avoid;}
-    .foot{padding:13px 18px;margin-top:10px;box-shadow:none;}
+    .cols{grid-template-columns:1.32fr .92fr;gap:8px;margin-top:8px;}
+    .card{padding:13px 15px;border-radius:12px;box-shadow:none;break-inside:avoid;}
+    .foot{padding:9px 15px;margin-top:7px;font-size:.7rem;box-shadow:none;}
     .ch{margin-bottom:13px;}
     .prose p{font-size:.9rem;margin-bottom:9px;}
-    .qrwrap{width:min(184px,82%);box-shadow:none;margin-bottom:12px;}
+    .mapfig img{max-height:30mm;border-radius:10px;}
+    .mapfig figcaption{margin-top:8px;font-size:.84rem;}
+    .qrwrap{width:min(158px,74%);box-shadow:none;margin-bottom:10px;}
+    .about{display:none;}
     .cta{display:none;}
     .url{font-size:.72rem;}
   }
@@ -202,19 +214,27 @@
 
   <section class="facts">
     <div class="fact"><div class="k">DATE · 일시</div><div class="v">2026년 8월 11일 (화)</div><div class="s">15:00 – 17:50</div></div>
-    <div class="fact"><div class="k">VENUE · 장소</div><div class="v">동의대학교 창의관(18번 건물) 1층 PRIME 세미나실</div></div>
+    <div class="fact"><div class="k">VENUE · 장소</div><div class="v">동의대학교 정보공학과 324호</div></div>
     <div class="fact"><div class="k">SPEAKER · 강사</div><div class="v">민경욱 박사</div><div class="s">한국전자통신연구원 로봇연구본부 자율주행지능연구실</div></div>
     <div class="fact free"><div class="k">FEE · 참가비</div><div class="v">무료</div></div>
   </section>
 
+  <section class="card" style="margin-top:14px">
+    <div class="ch"><span class="n">01</span><h2>찾아오는 길</h2><span class="line"></span></div>
+    <figure class="mapfig">
+      <img src="map.jpeg" alt="동의대학교 정보공학과 324호 위치 안내 지도" loading="lazy">
+      <figcaption><span class="pin">📍 행사장</span>동의대학교 정보공학과 324호<em>캠퍼스 안내도 23번 건물</em></figcaption>
+    </figure>
+  </section>
+
   <div class="cols">
     <section class="card">
-      <div class="ch"><span class="n">01</span><h2>강연 내용</h2><span class="line"></span></div>
+      <div class="ch"><span class="n">02</span><h2>강연 내용</h2><span class="line"></span></div>
       <div class="prose"><p>특강에서는 자율주행 인공지능 기술이 기존 Rule-based 방식에서 데이터 중심의 End-to-End(E2E) AI를 거쳐 Vision-Language-Action(VLA), World Model, Reasoning AI로 발전하는 최신 기술 흐름을 살펴봅니다. 글로벌 선도기업인 Tesla, Waymo, NVIDIA 등의 최신 연구와 상용화 전략을 중심으로 자율주행 AI의 핵심 기술과 경쟁력을 분석하고, 데이터셋·학습 방식·평가 기술의 변화까지 함께 소개합니다. 또한 국내 자율주행 정책과 산업 생태계, ETRI의 최신 연구 사례를 통해 우리나라 기술 수준과 향후 발전 방향을 전망하며, 자율주행 AI가 앞으로 어떤 모습으로 진화할지 함께 살펴보는 시간을 갖습니다.</p></div>
     </section>
 
     <section class="card reg">
-      <div class="ch"><span class="n">02</span><h2>참가 등록</h2><span class="line"></span></div>
+      <div class="ch"><span class="n">03</span><h2>참가 등록</h2><span class="line"></span></div>
       <div class="qrwrap"><span></span><span></span><span></span><span></span><svg class="qr" viewBox="0 0 33 33" role="img" aria-label="참가 등록 폼 QR 코드" xmlns="http://www.w3.org/2000/svg"><rect width="33" height="33" fill="#ffffff"/><path d="M2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM5 2h1v1h-1zM6 2h1v1h-1zM7 2h1v1h-1zM8 2h1v1h-1zM12 2h1v1h-1zM14 2h1v1h-1zM15 2h1v1h-1zM16 2h1v1h-1zM20 2h1v1h-1zM21 2h1v1h-1zM24 2h1v1h-1zM25 2h1v1h-1zM26 2h1v1h-1zM27 2h1v1h-1zM28 2h1v1h-1zM29 2h1v1h-1zM30 2h1v1h-1zM2 3h1v1h-1zM8 3h1v1h-1zM10 3h1v1h-1zM11 3h1v1h-1zM12 3h1v1h-1zM13 3h1v1h-1zM14 3h1v1h-1zM16 3h1v1h-1zM17 3h1v1h-1zM21 3h1v1h-1zM22 3h1v1h-1zM24 3h1v1h-1zM30 3h1v1h-1zM2 4h1v1h-1zM4 4h1v1h-1zM5 4h1v1h-1zM6 4h1v1h-1zM8 4h1v1h-1zM11 4h1v1h-1zM12 4h1v1h-1zM16 4h1v1h-1zM22 4h1v1h-1zM24 4h1v1h-1zM26 4h1v1h-1zM27 4h1v1h-1zM28 4h1v1h-1zM30 4h1v1h-1zM2 5h1v1h-1zM4 5h1v1h-1zM5 5h1v1h-1zM6 5h1v1h-1zM8 5h1v1h-1zM11 5h1v1h-1zM12 5h1v1h-1zM15 5h1v1h-1zM16 5h1v1h-1zM17 5h1v1h-1zM20 5h1v1h-1zM24 5h1v1h-1zM26 5h1v1h-1zM27 5h1v1h-1zM28 5h1v1h-1zM30 5h1v1h-1zM2 6h1v1h-1zM4 6h1v1h-1zM5 6h1v1h-1zM6 6h1v1h-1zM8 6h1v1h-1zM10 6h1v1h-1zM11 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM17 6h1v1h-1zM21 6h1v1h-1zM24 6h1v1h-1zM26 6h1v1h-1zM27 6h1v1h-1zM28 6h1v1h-1zM30 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM11 7h1v1h-1zM12 7h1v1h-1zM13 7h1v1h-1zM16 7h1v1h-1zM17 7h1v1h-1zM21 7h1v1h-1zM22 7h1v1h-1zM24 7h1v1h-1zM30 7h1v1h-1zM2 8h1v1h-1zM3 8h1v1h-1zM4 8h1v1h-1zM5 8h1v1h-1zM6 8h1v1h-1zM7 8h1v1h-1zM8 8h1v1h-1zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h1v1h-1zM25 8h1v1h-1zM26 8h1v1h-1zM27 8h1v1h-1zM28 8h1v1h-1zM29 8h1v1h-1zM30 8h1v1h-1zM11 9h1v1h-1zM13 9h1v1h-1zM15 9h1v1h-1zM16 9h1v1h-1zM17 9h1v1h-1zM18 9h1v1h-1zM19 9h1v1h-1zM21 9h1v1h-1zM22 9h1v1h-1zM2 10h1v1h-1zM4 10h1v1h-1zM6 10h1v1h-1zM8 10h1v1h-1zM11 10h1v1h-1zM14 10h1v1h-1zM15 10h1v1h-1zM18 10h1v1h-1zM19 10h1v1h-1zM21 10h1v1h-1zM22 10h1v1h-1zM26 10h1v1h-1zM29 10h1v1h-1zM2 11h1v1h-1zM6 11h1v1h-1zM7 11h1v1h-1zM14 11h1v1h-1zM17 11h1v1h-1zM18 11h1v1h-1zM22 11h1v1h-1zM24 11h1v1h-1zM27 11h1v1h-1zM30 11h1v1h-1zM2 12h1v1h-1zM3 12h1v1h-1zM4 12h1v1h-1zM5 12h1v1h-1zM8 12h1v1h-1zM9 12h1v1h-1zM10 12h1v1h-1zM13 12h1v1h-1zM16 12h1v1h-1zM19 12h1v1h-1zM22 12h1v1h-1zM24 12h1v1h-1zM25 12h1v1h-1zM26 12h1v1h-1zM28 12h1v1h-1zM29 12h1v1h-1zM30 12h1v1h-1zM4 13h1v1h-1zM5 13h1v1h-1zM7 13h1v1h-1zM11 13h1v1h-1zM13 13h1v1h-1zM14 13h1v1h-1zM15 13h1v1h-1zM19 13h1v1h-1zM20 13h1v1h-1zM22 13h1v1h-1zM24 13h1v1h-1zM26 13h1v1h-1zM29 13h1v1h-1zM4 14h1v1h-1zM5 14h1v1h-1zM6 14h1v1h-1zM8 14h1v1h-1zM9 14h1v1h-1zM10 14h1v1h-1zM12 14h1v1h-1zM14 14h1v1h-1zM17 14h1v1h-1zM18 14h1v1h-1zM19 14h1v1h-1zM21 14h1v1h-1zM22 14h1v1h-1zM24 14h1v1h-1zM27 14h1v1h-1zM29 14h1v1h-1zM30 14h1v1h-1zM2 15h1v1h-1zM3 15h1v1h-1zM4 15h1v1h-1zM7 15h1v1h-1zM9 15h1v1h-1zM14 15h1v1h-1zM15 15h1v1h-1zM16 15h1v1h-1zM17 15h1v1h-1zM18 15h1v1h-1zM19 15h1v1h-1zM20 15h1v1h-1zM23 15h1v1h-1zM24 15h1v1h-1zM27 15h1v1h-1zM30 15h1v1h-1zM2 16h1v1h-1zM3 16h1v1h-1zM6 16h1v1h-1zM7 16h1v1h-1zM8 16h1v1h-1zM10 16h1v1h-1zM11 16h1v1h-1zM12 16h1v1h-1zM15 16h1v1h-1zM18 16h1v1h-1zM19 16h1v1h-1zM20 16h1v1h-1zM22 16h1v1h-1zM23 16h1v1h-1zM27 16h1v1h-1zM29 16h1v1h-1zM30 16h1v1h-1zM4 17h1v1h-1zM5 17h1v1h-1zM7 17h1v1h-1zM11 17h1v1h-1zM14 17h1v1h-1zM15 17h1v1h-1zM16 17h1v1h-1zM18 17h1v1h-1zM19 17h1v1h-1zM20 17h1v1h-1zM21 17h1v1h-1zM22 17h1v1h-1zM23 17h1v1h-1zM24 17h1v1h-1zM25 17h1v1h-1zM27 17h1v1h-1zM29 17h1v1h-1zM3 18h1v1h-1zM5 18h1v1h-1zM6 18h1v1h-1zM7 18h1v1h-1zM8 18h1v1h-1zM9 18h1v1h-1zM14 18h1v1h-1zM15 18h1v1h-1zM18 18h1v1h-1zM19 18h1v1h-1zM22 18h1v1h-1zM23 18h1v1h-1zM24 18h1v1h-1zM25 18h1v1h-1zM27 18h1v1h-1zM29 18h1v1h-1zM30 18h1v1h-1zM3 19h1v1h-1zM4 19h1v1h-1zM5 19h1v1h-1zM7 19h1v1h-1zM9 19h1v1h-1zM11 19h1v1h-1zM13 19h1v1h-1zM14 19h1v1h-1zM17 19h1v1h-1zM18 19h1v1h-1zM22 19h1v1h-1zM23 19h1v1h-1zM24 19h1v1h-1zM27 19h1v1h-1zM28 19h1v1h-1zM30 19h1v1h-1zM2 20h1v1h-1zM4 20h1v1h-1zM5 20h1v1h-1zM7 20h1v1h-1zM8 20h1v1h-1zM12 20h1v1h-1zM13 20h1v1h-1zM15 20h1v1h-1zM19 20h1v1h-1zM24 20h1v1h-1zM25 20h1v1h-1zM29 20h1v1h-1zM30 20h1v1h-1zM3 21h1v1h-1zM5 21h1v1h-1zM6 21h1v1h-1zM7 21h1v1h-1zM12 21h1v1h-1zM14 21h1v1h-1zM15 21h1v1h-1zM18 21h1v1h-1zM19 21h1v1h-1zM20 21h1v1h-1zM21 21h1v1h-1zM22 21h1v1h-1zM24 21h1v1h-1zM26 21h1v1h-1zM27 21h1v1h-1zM29 21h1v1h-1zM2 22h1v1h-1zM6 22h1v1h-1zM8 22h1v1h-1zM9 22h1v1h-1zM13 22h1v1h-1zM14 22h1v1h-1zM17 22h1v1h-1zM18 22h1v1h-1zM19 22h1v1h-1zM22 22h1v1h-1zM23 22h1v1h-1zM24 22h1v1h-1zM25 22h1v1h-1zM26 22h1v1h-1zM10 23h1v1h-1zM11 23h1v1h-1zM14 23h1v1h-1zM15 23h1v1h-1zM19 23h1v1h-1zM22 23h1v1h-1zM26 23h1v1h-1zM28 23h1v1h-1zM29 23h1v1h-1zM30 23h1v1h-1zM2 24h1v1h-1zM3 24h1v1h-1zM4 24h1v1h-1zM5 24h1v1h-1zM6 24h1v1h-1zM7 24h1v1h-1zM8 24h1v1h-1zM11 24h1v1h-1zM12 24h1v1h-1zM13 24h1v1h-1zM14 24h1v1h-1zM15 24h1v1h-1zM18 24h1v1h-1zM19 24h1v1h-1zM21 24h1v1h-1zM22 24h1v1h-1zM24 24h1v1h-1zM26 24h1v1h-1zM27 24h1v1h-1zM29 24h1v1h-1zM30 24h1v1h-1zM2 25h1v1h-1zM8 25h1v1h-1zM11 25h1v1h-1zM15 25h1v1h-1zM16 25h1v1h-1zM19 25h1v1h-1zM22 25h1v1h-1zM26 25h1v1h-1zM27 25h1v1h-1zM29 25h1v1h-1zM30 25h1v1h-1zM2 26h1v1h-1zM4 26h1v1h-1zM5 26h1v1h-1zM6 26h1v1h-1zM8 26h1v1h-1zM10 26h1v1h-1zM13 26h1v1h-1zM14 26h1v1h-1zM16 26h1v1h-1zM19 26h1v1h-1zM22 26h1v1h-1zM23 26h1v1h-1zM24 26h1v1h-1zM25 26h1v1h-1zM26 26h1v1h-1zM2 27h1v1h-1zM4 27h1v1h-1zM5 27h1v1h-1zM6 27h1v1h-1zM8 27h1v1h-1zM11 27h1v1h-1zM13 27h1v1h-1zM18 27h1v1h-1zM19 27h1v1h-1zM20 27h1v1h-1zM22 27h1v1h-1zM25 27h1v1h-1zM26 27h1v1h-1zM28 27h1v1h-1zM29 27h1v1h-1zM30 27h1v1h-1zM2 28h1v1h-1zM4 28h1v1h-1zM5 28h1v1h-1zM6 28h1v1h-1zM8 28h1v1h-1zM10 28h1v1h-1zM11 28h1v1h-1zM13 28h1v1h-1zM15 28h1v1h-1zM16 28h1v1h-1zM21 28h1v1h-1zM25 28h1v1h-1zM26 28h1v1h-1zM27 28h1v1h-1zM30 28h1v1h-1zM2 29h1v1h-1zM8 29h1v1h-1zM11 29h1v1h-1zM12 29h1v1h-1zM14 29h1v1h-1zM16 29h1v1h-1zM18 29h1v1h-1zM19 29h1v1h-1zM21 29h1v1h-1zM22 29h1v1h-1zM24 29h1v1h-1zM25 29h1v1h-1zM26 29h1v1h-1zM29 29h1v1h-1zM2 30h1v1h-1zM3 30h1v1h-1zM4 30h1v1h-1zM5 30h1v1h-1zM6 30h1v1h-1zM7 30h1v1h-1zM8 30h1v1h-1zM10 30h1v1h-1zM11 30h1v1h-1zM17 30h1v1h-1zM18 30h1v1h-1zM19 30h1v1h-1zM20 30h1v1h-1zM21 30h1v1h-1zM22 30h1v1h-1zM24 30h1v1h-1zM25 30h1v1h-1zM26 30h1v1h-1zM29 30h1v1h-1zM30 30h1v1h-1z" fill="#0E1729"/></svg></div>
       <p>QR을 스캔하거나 아래 링크로 등록해 주세요.</p>
       <a class="url" href="https://forms.cloud.microsoft/r/FKDdNGhWnG" target="_blank" rel="noopener">https://forms.cloud.microsoft/r/FKDdNGhWnG</a>
@@ -224,7 +244,7 @@
 
   <div class="cols">
     <section class="card">
-      <div class="ch"><span class="n">03</span><h2>강사 소개</h2><span class="line"></span></div>
+      <div class="ch"><span class="n">04</span><h2>강사 소개</h2><span class="line"></span></div>
       <div class="who"><div class="mg">민</div><div>
         <div class="nm">민경욱 박사</div>
         <div class="og">한국전자통신연구원 로봇연구본부 자율주행지능연구실</div>
@@ -233,13 +253,13 @@
     </section>
 
     <section class="card">
-      <div class="ch"><span class="n">04</span><h2>기타 안내</h2><span class="line"></span></div>
+      <div class="ch"><span class="n">05</span><h2>기타 안내</h2><span class="line"></span></div>
       <ul class="notes"><li>교내 주차장 이용이 가능합니다.</li><li>주차 등록 필요시 등록폼에 표시해 주십시오.</li></ul>
     </section>
   </div>
 
   <section class="card about" style="margin-top:14px">
-    <div class="ch"><span class="n">05</span><h2>IEEE Busan AI 연구회 소개</h2><span class="line"></span></div>
+    <div class="ch"><span class="n">06</span><h2>IEEE Busan AI 연구회 소개</h2><span class="line"></span></div>
     <div class="prose"><p>IEEE Busan AI 연구회는 IEEE Busan Section에서 주관하는 인공지능 기술 연구모임입니다.</p>
     <p>부산 · 경남 · 울산 지역을 중심으로 인공지능에 관심있는 연구자들의 참여로 이루어지며, 2026년부터 대학의 방학기간을 활용하여 인공지능 전문가들의 특강을 개최하고 있습니다.</p></div>
   </section>

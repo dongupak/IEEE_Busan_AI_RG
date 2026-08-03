@@ -125,6 +125,11 @@
     </div>
     <div class="fld"><label for="place">장소 <span class="req">*</span></label>
       <input type="text" id="place" required placeholder="예) 부산대학교 IT관 621호"></div>
+    <div class="fld"><label for="mapFile">약도 · 지도 이미지 <span class="hint">(선택 · 포스터의 "찾아오는 길"에 들어갑니다)</span></label>
+      <input type="file" id="mapFile" accept="image/*">
+      <p class="hint" id="mapInfo" style="margin:6px 0 0"></p></div>
+    <div class="fld"><label for="mapNote">지도 설명 <span class="hint">(선택 · 예: 캠퍼스 안내도 23번 건물)</span></label>
+      <input type="text" id="mapNote" placeholder="예) 캠퍼스 안내도 23번 건물"></div>
 
     <h2>연사</h2>
     <div class="grid2">
@@ -220,8 +225,23 @@ function init(){
   function bios(){
     return [...document.querySelectorAll("#bioRows input")].map(i => i.value.trim()).filter(Boolean);
   }
-  function collect(){
+  /* 지도 이미지: 미리보기는 data URI, 저장은 poster/ 폴더에 쓴 파일 이름을 쓴다 */
+  let mapFile = null, mapDataUrl = "", mapName = "";
+  $("mapFile").addEventListener("change", async e => {
+    const f = e.target.files && e.target.files[0];
+    if(!f){ mapFile = null; mapDataUrl = ""; mapName = ""; $("mapInfo").textContent = ""; schedule(); return; }
+    mapFile = f;
+    const ext = (f.name.match(/\.(png|jpe?g|webp|gif|svg)$/i) || [".png"])[0].toLowerCase();
+    mapName = "map" + ext;
+    mapDataUrl = await new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(f); });
+    $("mapInfo").textContent = `저장 시 ${Poster.dirName(collect())}/poster/${mapName} 으로 함께 저장됩니다.`;
+    schedule();
+  });
+
+  function collect(forSave){
     return {
+      mapImage: forSave ? mapName : mapDataUrl,
+      mapNote: $("mapNote").value.trim(),
       year: +$("year").value || new Date().getFullYear(),
       no: +$("no").value || 1,
       title: $("title").value.trim(),
@@ -253,7 +273,10 @@ function init(){
     }catch(e){
       $("err").textContent = "미리보기 생성 오류: " + e.message;
     }
-    try{ localStorage.setItem(DRAFT_KEY, JSON.stringify({...d, bioList: bios()})); }catch(e){}
+    try{
+      const {mapImage, ...draft} = d;                 /* data URI는 초안에 넣지 않는다 */
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({...draft, bioList: bios()}));
+    }catch(e){}
   }
   document.querySelectorAll("#f input, #f textarea").forEach(el => {
     el.addEventListener("input", schedule);
@@ -266,7 +289,7 @@ function init(){
     try{ saved = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null"); }catch(e){}
     if(saved){
       ["year","no","title","subtitle","tagline","content","place","speaker","speakerTitle",
-       "speakerOrg","fee","contact","formUrl","notes"].forEach(k => { if(saved[k] != null) $(k).value = saved[k]; });
+       "speakerOrg","fee","contact","formUrl","notes","mapNote"].forEach(k => { if(saved[k] != null) $(k).value = saved[k]; });
       /* 날짜/시간은 원본 문자열이 아니라 입력값으로 되돌릴 수 없어 그대로 둔다 */
       (saved.bioList || []).forEach(b => addBioRow(b));
     }
@@ -335,7 +358,7 @@ function init(){
   }
 
   $("saveBtn").onclick = async () => {
-    const d = collect();
+    const d = collect(true);
     if(!validate(d)) return;
     logClear();
     try{
@@ -361,6 +384,16 @@ function init(){
 
       if(await exists(posterDir, "index.html")){
         if(!confirm(`${dir}/poster/index.html 이(가) 이미 있습니다. 덮어쓸까요?`)){ log("취소했습니다.", "dim"); return; }
+      }
+
+      /* 지도 이미지: 새로 고른 파일이 있으면 저장하고, 없으면 폴더에 있는 기존 파일을 그대로 쓴다 */
+      if(mapFile && mapName){
+        await writeFile(posterDir, mapName, await mapFile.arrayBuffer());
+        log("✓ " + dir + "/poster/" + mapName + " (약도)", "ok");
+      }else if(!d.mapImage){
+        for(const n of ["map.png","map.jpg","map.jpeg","map.webp","map.gif","map.svg"]){
+          if(await exists(posterDir, n)){ d.mapImage = n; log("· 기존 약도 " + n + " 를 그대로 사용", "dim"); break; }
+        }
       }
 
       await writeFile(posterDir, "index.html", Poster.buildPage(d));
