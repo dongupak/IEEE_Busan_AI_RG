@@ -91,4 +91,17 @@ Intelligence의 π 모델 등 최신 로봇 행동 지능 모델의 작동 원�
 
 * [발표 자료와 행사 안내](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG6/README.md)
 
+#### 2026년 AI 연구회 7차 특강
+* 일시 :  2026년 8월 11일 (화) 15:00 – 17:50
+* 장소 : 동의대학교 창의관(18번 건물) 1층 PRIME 세미나실
+* 강사 :  민경욱 박사 (한국전자통신연구원 로봇연구본부 자율주행지능연구실)
+* 강연 제목 : AI가 운전하는 시대, 자율주행 기술은 어디까지 왔는가? - End-to-End AI가 바꾸는 자율주행 기술의 현재와 미래
+* 강사 약력 : K-SDV 국가표준 협의체 작업반장 / 2025년 과기정통부 장관상 / 미래창조과학부 장관상 / ETRI 우수연구자상 등 다수 수상
+* 참가비 : 무료
+* [참가 등록 폼](https://forms.cloud.microsoft/r/FKDdNGhWnG)
+* [세미나 포스터](https://dongupak.github.io/IEEE_Busan_AI_RG/2026_RG7/poster/)
+* 특강 소개글 :
+특강에서는 자율주행 인공지능 기술이 기존 Rule-based 방식에서 데이터 중심의 End-to-End(E2E) AI를 거쳐 Vision-Language-Action(VLA), World Model, Reasoning AI로 발전하는 최신 기술 흐름을 살펴봅니다. 글로벌 선도기업인 Tesla, Waymo, NVIDIA 등의 최신 연구와 상용화 전략을 중심으로 자율주행 AI의 핵심 기술과 경쟁력을 분석하고, 데이터셋·학습 방식·평가 기술의 변화까지 함께 소개합니다. 또한 국내 자율주행 정책과 산업 생태계, ETRI의 최신 연구 사례를 통해 우리나라 기술 수준과 향후 발전 방향을 전망하며, 자율주행 AI가 앞으로 어떤 모습으로 진화할지 함께 살펴보는 시간을 갖습니다.
+
+* [발표 자료와 행사 안내](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG7/README.md)
 

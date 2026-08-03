@@ -167,6 +167,23 @@
   .actions a .ic{font-size:1.05rem;line-height:1;}
   .actions a.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
   .actions a.primary:hover{background:#e04d1c;border-color:#e04d1c;}
+  /* 아직 공개되지 않은 자료 */
+  .actions a.pending{color:var(--muted);border-style:dashed;background:transparent;}
+  .actions a.pending:hover{background:var(--bg-2);color:var(--ink-2);border-color:var(--muted);transform:none;}
+  .actions a.pending .ic{opacity:.55;}
+
+  /* 안내 다이얼로그 */
+  .notice{position:fixed;inset:0;z-index:130;display:none;align-items:center;justify-content:center;
+    background:rgba(17,17,17,.55);padding:20px;}
+  .notice.open{display:flex;}
+  .notice .nbox{background:var(--white);border-radius:var(--radius);padding:32px 30px 24px;
+    width:min(92vw,400px);box-shadow:0 24px 60px rgba(0,0,0,.3);text-align:center;}
+  .notice .nbox .nic{font-size:2rem;line-height:1;display:block;margin-bottom:12px;}
+  .notice .nbox h4{margin:0 0 8px;font-size:1.16rem;font-weight:800;letter-spacing:-.01em;}
+  .notice .nbox p{margin:0 0 22px;font-size:.93rem;color:var(--muted);line-height:1.6;}
+  .notice .nbox button{width:100%;height:46px;font:inherit;font-size:.94rem;font-weight:700;cursor:pointer;
+    background:var(--ink);color:#fff;border:0;border-radius:8px;transition:background .25s var(--ease);}
+  .notice .nbox button:hover{background:var(--btn-hover);}
 
   /* gallery */
   .gallery-wrap .g-title{font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 14px;}
@@ -177,6 +194,20 @@
     transition:transform .5s var(--ease),filter .3s var(--ease);
   }
   .gallery figure:hover img{transform:scale(1.06);filter:brightness(85%);}
+
+  /* 예정 특강 안내 카드 */
+  .upcoming{border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);padding:24px;}
+  .upcoming .badge{display:inline-block;background:var(--accent);color:#fff;font-size:.74rem;font-weight:800;
+    letter-spacing:.08em;padding:5px 12px;border-radius:999px;margin-bottom:14px;}
+  .upcoming p{margin:0 0 18px;font-size:.94rem;color:var(--ink-2);}
+  .upcoming .up-btn{display:flex;align-items:center;gap:8px;height:46px;padding:0 18px;border-radius:8px;
+    font-size:.9rem;font-weight:600;background:var(--white);border:1px solid var(--line);color:var(--ink);
+    margin-bottom:10px;transition:all .3s var(--ease);}
+  .upcoming .up-btn:hover{background:var(--ink);color:#fff;border-color:var(--ink);transform:translateY(-2px);}
+  .upcoming .up-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .upcoming .up-btn.primary:hover{background:#e04d1c;border-color:#e04d1c;}
+  .tag-up{display:inline-block;margin-left:9px;vertical-align:middle;background:var(--accent);color:#fff;
+    font-size:.68rem;font-weight:800;letter-spacing:.06em;padding:3px 9px;border-radius:999px;}
 
   /* reveal on scroll */
   .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease);}
@@ -288,13 +319,8 @@
       <small>연구회 특강 자료</small>
     </a>
     <nav class="menu" id="menu">
-      <a href="#rg6">6차 특강</a>
-      <a href="#rg5">5차 특강</a>
-      <a href="#rg4">4차 특강</a>
-      <a href="#rg3">3차 특강</a>
-      <a href="#rg2">2차 특강</a>
-      <a href="#rg1">1차 특강</a>
-      <a href="#insights">인사이트</a>
+      <!-- 특강 링크는 lectures 데이터로 자동 생성 -->
+      <a href="#insights" id="menuInsights">인사이트</a>
       <a class="gh" href="https://github.com/dongupak/IEEE_Busan_AI_RG" target="_blank" rel="noopener">GitHub ↗</a>
       <button class="burger" id="burger" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
     </nav>
@@ -303,13 +329,8 @@
 
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer">
-  <a href="#rg6">6차 특강</a>
-  <a href="#rg5">5차 특강</a>
-  <a href="#rg4">4차 특강</a>
-  <a href="#rg3">3차 특강</a>
-  <a href="#rg2">2차 특강</a>
-  <a href="#rg1">1차 특강</a>
-  <a href="#insights">인사이트</a>
+  <!-- 특강 링크는 lectures 데이터로 자동 생성 -->
+  <a href="#insights" id="drawerInsights">인사이트</a>
   <a href="https://github.com/dongupak/IEEE_Busan_AI_RG" target="_blank" rel="noopener">GitHub 저장소 ↗</a>
 </aside>
 
@@ -325,7 +346,7 @@
       <a class="btn btn-ghost" href="https://github.com/dongupak/IEEE_Busan_AI_RG" target="_blank" rel="noopener">GitHub에서 보기</a>
     </div>
     <div class="stats reveal">
-      <div class="item"><div class="num">0<span class="accent">6</span></div><div class="lab">특강 세션</div></div>
+      <div class="item"><div class="num" id="statCount">0<span class="accent">6</span></div><div class="lab">특강 세션</div></div>
       <div class="item"><div class="num">2026</div><div class="lab">진행 연도</div></div>
       <div class="item"><div class="num">4<span class="accent">개</span></div><div class="lab">주최 대학</div></div>
     </div>
@@ -438,6 +459,15 @@
   </div>
 </footer>
 
+<div class="notice" id="notice" role="dialog" aria-modal="true" aria-labelledby="noticeTitle">
+  <div class="nbox">
+    <span class="nic">🔒</span>
+    <h4 id="noticeTitle">아직 공개되지 않았습니다</h4>
+    <p id="noticeMsg"></p>
+    <button type="button" id="noticeOk">확인</button>
+  </div>
+</div>
+
 <div class="lightbox" id="lightbox">
   <span class="close" id="lbClose">&times;</span>
   <span class="nav prev" id="lbPrev">&#10094;</span>
@@ -447,8 +477,11 @@
 </div>
 
 <script>
-/* ===== 특강 데이터 ===== */
+/* ===== 특강 데이터 =====
+   아래 BEGIN/END 마커 사이는 포스터 생성기(tools/poster-builder.html)가 자동으로 항목을 추가하는 구간입니다.
+   마커 주석을 지우지 마세요. 새 회차는 배열 끝에 추가되고, 화면에는 최신 회차부터 표시됩니다. */
 const lectures = [
+  /* LECTURES:BEGIN */
   {
     id:"rg1", no:"01", kicker:"2026 · 1차 특강",
     title:"트랜스포머 기반 언어모델의 발전 동향과 서비스 지향 응용시스템 설계",
@@ -475,7 +508,7 @@ const lectures = [
     desc:"본 특강은 휴머노이드 로봇의 최신 기술 동향과 Physical AI의 발전 방향을 종합적으로 다룹니다. 로봇의 역사적 기원부터 후쿠시마 원전 사고와 DARPA Robotics Challenge를 계기로 촉발된 기술 발전을 살펴보며, Tesla Optimus, Figure AI, Boston Dynamics Atlas, Agility Robotics Digit 등 주요 휴머노이드 로봇의 특징과 산업 적용 사례를 소개합니다. 이어 Physical AI와 Embodied AI의 차이, 모방·강화 학습의 중요성(AGILE-X, Stanford Mobile ALOHA), Figure AI의 Helix(System 1/2)와 Physical Intelligence의 π 모델 등 최신 행동 지능 모델의 작동 원리를 분석하고, 산업 성장 전망과 기술적 과제, 향후 10년의 사회적 영향을 논의합니다.",
     files:[
       {label:"발표 자료 (PDF)", ic:"📄", primary:true, href:"2026_RG2/20260129-IEEE-BUSAN(손영성박사).pdf"},
-      {label:"세미나 포스터", ic:"🖼️", href:"2026_RG2/포스터.jpg"},
+      {label:"세미나 포스터", ic:"🖼️", href:"2026_RG2/poster/포스터.jpg"},
       {label:"세미나 안내 (PPTX)", ic:"📑", href:"2026_RG2/2차세미나안내.pptx"}
     ],
     dir:"2026_RG2/pics/",
@@ -493,6 +526,7 @@ const lectures = [
     files:[
       {label:"발표 자료 1부 (PDF)", ic:"📄", primary:true, href:"2026_RG3/IEEE_Busan_AI_Research_3rd_Talk-Normal1.pdf"},
       {label:"발표 자료 2부 (PDF)", ic:"📄", href:"2026_RG3/IEEE_Busan_AI_Research_3rd_Talk-Normal2.pdf"},
+      {label:"세미나 포스터", ic:"🖼️", href:"2026_RG3/poster/제3회_세미나포스터.png"},
       {label:"행사 사진 폴더", ic:"🖼️", href:"https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG3/pics"}
     ],
     dir:"2026_RG3/pics/",
@@ -525,7 +559,7 @@ const lectures = [
     desc:"기업에서 AI 전환(AX)이 내부 생산성과 외부 서비스 혁신이라는 두 축으로 실제로 어떻게 구현되고 있는지를 보여줍니다. 이를 바탕으로 AI가 서비스 개발의 진입 장벽은 낮췄지만 아키텍처·보안·품질 판단 같은 역량의 천장은 그대로이며, 특히 정답이 없는 영역에서는 사람의 판단이 필수적인 영역으로 남는다는 통찰을 전달합니다.\n마지막으로 Demo와 실제 Product 사이의 큰 간극을 짚으며, CS 학생·연구자들에게는 깊이·넓이·연결을 갖춘 T자형 인재로 성장할 것을 제안하는 실무 중심의 강연입니다.",
     files:[
       {label:"발표 자료 (PDF)", ic:"📄", primary:true, href:"2026_RG5/발표자료 [BK사업단, 7_13] 기업에서 바라보는 AX와 서비스_JY.pdf"},
-      {label:"세미나 포스터", ic:"🖼️", href:"2026_RG5/제5회세미나_이준영대표_포스터.png"},
+      {label:"세미나 포스터", ic:"🖼️", href:"2026_RG5/poster/제5회세미나_이준영대표_포스터.pdf"},
       {label:"행사 사진 폴더", ic:"🖼️", href:"https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG5/pics"}
     ],
     dir:"2026_RG5/pics/",
@@ -546,7 +580,31 @@ const lectures = [
     ],
     dir:"2026_RG6/pics/",
     pics:["rg6_01.jpg","rg6_02.jpg","rg6_03.jpg","rg6_04.jpg","rg6_05.jpg","rg6_06.jpg","rg6_07.jpg","rg6_08.jpg","rg6_09.jpg"]
+  },
+  {
+    id:"rg7", no:"07", kicker:"2026 · 7차 특강",
+    title:"AI가 운전하는 시대, 자율주행 기술은 어디까지 왔는가?",
+    subtitle:"End-to-End AI가 바꾸는 자율주행 기술의 현재와 미래",
+    date:"2026년 8월 11일 (화) 15:00 – 17:50",
+    place:"동의대학교 창의관(18번 건물) 1층 PRIME 세미나실",
+    speaker:"민경욱 박사 (한국전자통신연구원 로봇연구본부 자율주행지능연구실)",
+    presenter:"민경욱 박사", org:"한국전자통신연구원 로봇연구본부 자율주행지능연구실",
+    bio:"K-SDV 국가표준 협의체 작업반장 · 2025년 과기정통부 장관상 · 미래창조과학부 장관상 / ETRI 우수연구자상 등 다수 수상",
+    desc:"특강에서는 자율주행 인공지능 기술이 기존 Rule-based 방식에서 데이터 중심의 End-to-End(E2E) AI를 거쳐 Vision-Language-Action(VLA), World Model, Reasoning AI로 발전하는 최신 기술 흐름을 살펴봅니다. 글로벌 선도기업인 Tesla, Waymo, NVIDIA 등의 최신 연구와 상용화 전략을 중심으로 자율주행 AI의 핵심 기술과 경쟁력을 분석하고, 데이터셋·학습 방식·평가 기술의 변화까지 함께 소개합니다. 또한 국내 자율주행 정책과 산업 생태계, ETRI의 최신 연구 사례를 통해 우리나라 기술 수준과 향후 발전 방향을 전망하며, 자율주행 AI가 앞으로 어떤 모습으로 진화할지 함께 살펴보는 시간을 갖습니다.",
+    upcoming:true,
+    poster:"2026_RG7/poster/",
+    formUrl:"https://forms.cloud.microsoft/r/FKDdNGhWnG",
+    files:[
+      {label:"발표 자료 (PDF)", ic:"📄", pending:true, note:"특강이 끝난 뒤 이곳에 공개됩니다."},
+      {label:"세미나 포스터", ic:"🖼️", primary:true, href:"2026_RG7/poster/"},
+      {label:"행사 사진 폴더", ic:"🖼️", pending:true, note:"특강이 끝난 뒤 이곳에 공개됩니다."},
+      {label:"참가 등록 폼", ic:"📝", href:"https://forms.cloud.microsoft/r/FKDdNGhWnG"},
+      {label:"자료 폴더", ic:"📁", href:"https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG7"}
+    ],
+    dir:"2026_RG7/pics/",
+    pics:[]
   }
+  /* LECTURES:END */
 ];
 
 /* ===== 렌더링 ===== */
@@ -562,21 +620,40 @@ document.getElementById("lectureRoot").innerHTML = [...lectures].reverse().map(L
     L.bio ? ["약력", L.bio] : null
   ].filter(Boolean).map(([k,v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("");
 
-  const actions = L.files.map(f =>
-    `<a class="${f.primary?'primary':''}" href="${enc(f.href)}" target="_blank" rel="noopener"><span class="ic">${f.ic}</span>${esc(f.label)}</a>`
-  ).join("");
+  /* href가 없거나 pending인 자료는 눌렀을 때 "아직 공개되지 않았습니다" 안내를 띄운다 */
+  const actions = L.files.map(f => {
+    if(f.pending || !f.href){
+      const msg = f.note || "특강이 끝난 뒤 이곳에 공개됩니다.";
+      return `<a class="pending" href="#${L.id}" role="button" aria-disabled="true"
+        data-pending="${esc(f.label)}" data-note="${esc(msg)}"><span class="ic">${f.ic}</span>${esc(f.label)}</a>`;
+    }
+    return `<a class="${f.primary?'primary':''}" href="${enc(f.href)}" target="_blank" rel="noopener"><span class="ic">${f.ic}</span>${esc(f.label)}</a>`;
+  }).join("");
 
-  const gallery = L.pics.map(name => {
+  const gallery = (L.pics || []).map(name => {
     const src = enc(L.dir + name);
     const idx = allImages.push(src) - 1;
     return `<figure><img loading="lazy" src="${src}" alt="${esc(L.kicker)} 행사 사진" data-idx="${idx}"></figure>`;
   }).join("");
+
+  /* 사진이 아직 없는 예정 특강은 갤러리 대신 참가 안내 카드를 보여준다 */
+  const aside = gallery
+    ? `<p class="g-title">${esc(L.gtitle || "📷 행사 사진 · 클릭하면 크게 보기")}</p>
+       <div class="gallery">${gallery}</div>`
+    : `<p class="g-title">📌 참가 안내</p>
+       <div class="upcoming">
+         <span class="badge">진행 예정</span>
+         <p>아래에서 상세 안내를 확인하고 참가 등록해 주세요. 행사 사진과 발표 자료는 특강 후 이곳에 올라갑니다.</p>
+         ${L.poster ? `<a class="up-btn primary" href="${enc(L.poster)}">🖼️ 포스터 자세히 보기</a>` : ""}
+         ${L.formUrl ? `<a class="up-btn" href="${enc(L.formUrl)}" target="_blank" rel="noopener">📝 참가 등록 폼</a>` : ""}
+       </div>`;
 
   return `
   <section class="lecture reveal" id="${L.id}">
     <div class="index-tag">
       <span class="no">${L.no}</span>
       <span class="kicker">${esc(L.kicker)}</span>
+      ${L.upcoming ? `<span class="tag-up">예정</span>` : ""}
     </div>
     <h2>${esc(L.title)}</h2>
     ${L.subtitle ? `<p class="sub">${esc(L.subtitle)}</p>` : ""}
@@ -586,10 +663,7 @@ document.getElementById("lectureRoot").innerHTML = [...lectures].reverse().map(L
         <p class="desc">${esc(L.desc)}</p>
         <div class="actions">${actions}</div>
       </div>
-      <div class="gallery-wrap">
-        <p class="g-title">${esc(L.gtitle || "📷 행사 사진 · 클릭하면 크게 보기")}</p>
-        <div class="gallery">${gallery}</div>
-      </div>
+      <div class="gallery-wrap">${aside}</div>
     </div>
   </section>`;
 }).join("");
@@ -600,8 +674,27 @@ document.getElementById("lectureIndex").innerHTML = [...lectures].reverse().map(
     <span class="c-no">${+L.no}회</span>
     <span class="c-sp">${esc(L.presenter || "")}</span>
     <span class="c-org">${esc(L.org || "")}</span>
-    <span class="c-ti">${esc(L.title)}</span>
+    <span class="c-ti">${esc(L.title)}${L.upcoming ? `<span class="tag-up">예정</span>` : ""}</span>
   </a></li>`).join("");
+
+/* ===== 네비게이션 링크 · 히어로 카운트 (데이터에서 생성) ===== */
+(() => {
+  const newest = [...lectures].reverse();
+  const link = L => {
+    const a = document.createElement("a");
+    a.href = "#" + L.id;
+    a.textContent = `${+L.no}차 특강`;
+    return a;
+  };
+  const menuAnchor = document.getElementById("menuInsights");
+  newest.slice(0, 6).forEach(L => menuAnchor.parentNode.insertBefore(link(L), menuAnchor));
+  const drawerAnchor = document.getElementById("drawerInsights");
+  newest.forEach(L => drawerAnchor.parentNode.insertBefore(link(L), drawerAnchor));
+
+  const n = String(lectures.length).padStart(2, "0");
+  const el = document.getElementById("statCount");
+  if (el) el.innerHTML = `${n.slice(0, -1)}<span class="accent">${n.slice(-1)}</span>`;
+})();
 
 /* ===== 헤더 스크롤 상태 ===== */
 const header = document.getElementById("siteHeader");
@@ -632,6 +725,29 @@ const revObserver = new IntersectionObserver(entries => {
 }, {rootMargin:"0px 0px -8% 0px"});
 document.querySelectorAll(".reveal").forEach(el => revObserver.observe(el));
 
+/* ===== 미공개 자료 안내 다이얼로그 ===== */
+const notice = document.getElementById("notice"), noticeMsg = document.getElementById("noticeMsg");
+let noticeLast = null;
+function openNotice(label, note){
+  noticeLast = document.activeElement;
+  noticeMsg.textContent = `${label} — ${note}`;
+  notice.classList.add("open");
+  document.getElementById("noticeOk").focus();
+}
+function closeNotice(){
+  notice.classList.remove("open");
+  if(noticeLast) noticeLast.focus();
+}
+document.getElementById("lectureRoot").addEventListener("click", e => {
+  const a = e.target.closest("a[data-pending]");
+  if(!a) return;
+  e.preventDefault();
+  openNotice(a.dataset.pending, a.dataset.note);
+});
+document.getElementById("noticeOk").onclick = closeNotice;
+notice.addEventListener("click", e => { if(e.target === notice) closeNotice(); });
+addEventListener("keydown", e => { if(e.key === "Escape" && notice.classList.contains("open")) closeNotice(); });
+
 /* ===== 라이트박스 ===== */
 const lb = document.getElementById("lightbox"), lbImg = document.getElementById("lbImg"), lbCount = document.getElementById("lbCount");
 let cur = 0;
@@ -649,6 +765,18 @@ addEventListener("keydown", e => {
   if(e.key === "Escape") lb.classList.remove("open");
   if(e.key === "ArrowLeft") show(cur-1);
   if(e.key === "ArrowRight") show(cur+1);
+});
+
+/* ===== Ctrl+E : 운영자용 포스터 생성기 (비밀번호 확인 후 진입) ===== */
+addEventListener("keydown", e => {
+  if(!(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== "e" || e.altKey || e.shiftKey) return;
+  e.preventDefault();
+  if(window.RGGate){ RGGate.open({redirect:"tools/poster-builder.html"}); return; }
+  const s = document.createElement("script");
+  s.src = "tools/gate.js";
+  s.onload = () => RGGate.open({redirect:"tools/poster-builder.html"});
+  s.onerror = () => alert("포스터 생성기 모듈(tools/gate.js)을 불러오지 못했습니다.");
+  document.head.appendChild(s);
 });
 </script>
 </body>
