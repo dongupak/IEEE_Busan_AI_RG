@@ -8,6 +8,8 @@
 Thumbs.db
 desktop.ini
 
-# 개인정보가 포함된 자료 (공개 저장소에 올리지 않음)
+# 개인정보 · 사적 메시지 (공개 저장소에 올리지 않음)
 응답/
 mail_list.xlsx
+summary.md
+*/summary.md
