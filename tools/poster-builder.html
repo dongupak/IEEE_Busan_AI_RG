@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>세미나 포스터 생성기 · IEEE Busan AI RG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F8F8F8; --white:#fff; --ink:#222; --ink-2:#313131; --muted:#6b6b6b;
+    --accent:#FA5D29; --navy:#0F2C63; --line:#e4e4e4; --radius:12px;
+    --ease:cubic-bezier(.25,1,.5,1);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);line-height:1.6;
+    font-family:"Inter Tight","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+  a{color:var(--accent);}
+
+  header.bar{position:sticky;top:0;z-index:20;background:rgba(248,248,248,.94);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);padding:12px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  header.bar .t{font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;gap:9px;}
+  header.bar .t i{width:10px;height:10px;border-radius:50%;background:var(--accent);font-style:normal;}
+  header.bar .sp{flex:1;}
+  header.bar small{color:var(--muted);font-weight:600;font-size:.82rem;}
+
+  .layout{display:grid;grid-template-columns:minmax(380px,470px) 1fr;gap:0;align-items:start;}
+  @media(max-width:1000px){.layout{grid-template-columns:1fr;}}
+
+  .form{padding:22px;border-right:1px solid var(--line);}
+  .form h2{font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);margin:26px 0 12px;}
+  .form h2:first-child{margin-top:0;}
+  .fld{margin-bottom:13px;}
+  .fld label{display:block;font-size:.84rem;font-weight:700;color:var(--ink-2);margin-bottom:5px;}
+  .fld label .req{color:var(--accent);}
+  .fld .hint{font-weight:500;color:var(--muted);font-size:.78rem;}
+  input[type=text],input[type=number],input[type=date],input[type=time],input[type=url],textarea,select{
+    width:100%;font:inherit;font-size:.94rem;padding:10px 12px;border:1px solid var(--line);
+    border-radius:9px;background:var(--white);color:var(--ink);}
+  input:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent;}
+  textarea{resize:vertical;min-height:96px;line-height:1.65;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+
+  .bio-row{display:flex;gap:8px;margin-bottom:8px;}
+  .bio-row input{flex:1;}
+  .bio-row button{width:42px;flex:none;font:inherit;font-size:1.1rem;cursor:pointer;
+    background:var(--white);border:1px solid var(--line);border-radius:9px;color:var(--muted);}
+  .bio-row button:hover{background:#fdecea;color:#d93a17;border-color:#f3c4bb;}
+  .addbtn{font:inherit;font-size:.85rem;font-weight:700;cursor:pointer;background:var(--white);
+    border:1px dashed #c8c8c8;border-radius:9px;padding:9px 14px;color:var(--ink-2);width:100%;}
+  .addbtn:hover{border-color:var(--accent);color:var(--accent);}
+
+  .actions{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--line);
+    padding:16px 0 4px;margin-top:24px;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;height:48px;
+    font:inherit;font-size:.94rem;font-weight:700;cursor:pointer;border-radius:9px;border:1px solid transparent;
+    transition:all .25s var(--ease);margin-bottom:9px;}
+  .btn-main{background:var(--ink);color:#fff;}
+  .btn-main:hover{background:#383838;}
+  .btn-sub{background:var(--white);color:var(--ink);border-color:var(--line);}
+  .btn-sub:hover{background:#efefef;}
+  .btn:disabled{opacity:.5;cursor:not-allowed;}
+  .chk{display:flex;align-items:flex-start;gap:9px;font-size:.86rem;color:var(--ink-2);margin-bottom:10px;}
+  .chk input{margin-top:4px;}
+
+  .log{font-size:.83rem;background:#12161d;color:#dfe6f0;border-radius:9px;padding:14px 16px;
+    margin-top:12px;white-space:pre-wrap;word-break:break-all;display:none;line-height:1.75;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;max-height:280px;overflow:auto;}
+  .log.on{display:block;}
+  .log .ok{color:#7ee2a8;} .log .no{color:#ff9b8a;} .log .dim{color:#93a2b8;}
+
+  .preview{position:sticky;top:57px;height:calc(100vh - 57px);display:flex;flex-direction:column;background:#e9edf3;}
+  .preview .ptop{display:flex;align-items:center;gap:10px;padding:10px 18px;border-bottom:1px solid var(--line);
+    background:var(--white);flex-wrap:wrap;}
+  .preview .ptop b{font-size:.85rem;}
+  .preview .ptop .path{font-size:.78rem;color:var(--muted);font-family:ui-monospace,Menlo,monospace;}
+  .preview iframe{flex:1;width:100%;border:0;background:#fff;}
+  .warn{background:#fff6ed;border:1px solid #ffd9b8;color:#8a4b12;border-radius:9px;padding:11px 14px;
+    font-size:.83rem;margin-bottom:12px;line-height:1.6;}
+  .err{color:#d93a17;font-weight:700;font-size:.84rem;min-height:20px;}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <span class="t"><i></i>세미나 포스터 생성기</span>
+  <small id="targetInfo">저장 위치를 아직 고르지 않았습니다</small>
+  <span class="sp"></span>
+  <small><a href="../index.html">← 연구회 홈</a></small>
+</header>
+
+<div class="layout">
+  <!-- ============ 입력 폼 ============ -->
+  <form class="form" id="f" autocomplete="off">
+    <div class="warn" id="fsWarn" style="display:none"></div>
+
+    <h2>회차 정보</h2>
+    <div class="grid2">
+      <div class="fld"><label for="year">연도 <span class="req">*</span></label>
+        <input type="number" id="year" min="2020" max="2100" step="1" value="2026" required></div>
+      <div class="fld"><label for="no">회차 <span class="req">*</span></label>
+        <input type="number" id="no" min="1" max="99" step="1" value="7" required></div>
+    </div>
+
+    <h2>강연</h2>
+    <div class="fld"><label for="title">강연 제목 <span class="req">*</span></label>
+      <input type="text" id="title" required placeholder="예) AI Transformation & Physical AI 중심의 미래 제조 혁신 전략"></div>
+    <div class="fld"><label for="subtitle">부제 <span class="hint">(선택)</span></label>
+      <input type="text" id="subtitle" placeholder="예) T자형 인재 성장의 제안"></div>
+    <div class="fld"><label for="tagline">포스터 한 줄 소개 <span class="hint">(선택 · 제목 아래 문구)</span></label>
+      <input type="text" id="tagline" placeholder="예) AI가 제조 현장의 물리적 공간과 융합하는 미래를 함께 논의합니다."></div>
+    <div class="fld"><label for="content">강연 내용 <span class="req">*</span>
+      <span class="hint">— 빈 줄 없이 한 줄에 한 문단씩</span></label>
+      <textarea id="content" required placeholder="첫 번째 문단&#10;두 번째 문단"></textarea></div>
+
+    <h2>일시 · 장소</h2>
+    <div class="grid3">
+      <div class="fld"><label for="date">날짜 <span class="req">*</span></label><input type="date" id="date" required></div>
+      <div class="fld"><label for="start">시작</label><input type="time" id="start" value="15:00"></div>
+      <div class="fld"><label for="end">종료</label><input type="time" id="end" value="17:50"></div>
+    </div>
+    <div class="fld"><label for="place">장소 <span class="req">*</span></label>
+      <input type="text" id="place" required placeholder="예) 부산대학교 IT관 621호"></div>
+
+    <h2>연사</h2>
+    <div class="grid2">
+      <div class="fld"><label for="speaker">연사 <span class="req">*</span></label>
+        <input type="text" id="speaker" required placeholder="예) 유대승"></div>
+      <div class="fld"><label for="speakerTitle">직함 <span class="hint">(선택)</span></label>
+        <input type="text" id="speakerTitle" placeholder="예) 박사 / 교수 / 대표"></div>
+    </div>
+    <div class="fld"><label for="speakerOrg">연사 소속 <span class="req">*</span></label>
+      <input type="text" id="speakerOrg" required placeholder="예) 한국전자통신연구원 동남권지능화융합연구실"></div>
+    <div class="fld"><label>연사 약력 <span class="hint">— 한 줄에 하나씩 추가</span></label>
+      <div id="bioRows"></div>
+      <button type="button" class="addbtn" id="addBio">+ 약력 한 줄 추가</button>
+    </div>
+
+    <h2>참가 · 안내</h2>
+    <div class="grid2">
+      <div class="fld"><label for="fee">참가비</label><input type="text" id="fee" value="무료"></div>
+      <div class="fld"><label for="contact">문의처</label><input type="text" id="contact" placeholder="예) ymkang@tu.ac.kr"></div>
+    </div>
+    <div class="fld"><label for="formUrl">등록 폼 URL <span class="hint">— QR 코드로도 들어갑니다</span></label>
+      <input type="url" id="formUrl" placeholder="https://forms.office.com/r/XXXXXXXX"></div>
+    <div class="fld"><label for="notes">기타 안내 <span class="hint">— 한 줄에 하나씩 (주차 안내 등)</span></label>
+      <textarea id="notes" placeholder="교내 주차장 이용 가능 (등록 폼에 주차지원 표기)&#10;참가자 정보를 정확히 입력해 주세요"></textarea></div>
+
+    <div class="actions">
+      <p class="err" id="err"></p>
+      <label class="chk"><input type="checkbox" id="optIndex" checked>
+        <span>연구회 홈(<code>index.html</code>)에 이번 회차 항목 추가</span></label>
+      <label class="chk"><input type="checkbox" id="optReadme" checked>
+        <span>최상위 <code>README.md</code>에도 회차 안내 추가</span></label>
+      <button type="button" class="btn btn-main" id="saveBtn">📁 폴더 선택하고 저장하기</button>
+      <button type="button" class="btn btn-sub" id="dlBtn">⬇ 파일로 내려받기 (수동 배치)</button>
+      <button type="button" class="btn btn-sub" id="openBtn">🔎 포스터 새 탭에서 보기</button>
+      <div class="log" id="log"></div>
+    </div>
+  </form>
+
+  <!-- ============ 미리보기 ============ -->
+  <div class="preview">
+    <div class="ptop">
+      <b>실시간 미리보기</b>
+      <span class="path" id="outPath">2026_RG7/poster/index.html</span>
+    </div>
+    <iframe id="pv" title="포스터 미리보기"></iframe>
+  </div>
+</div>
+
+<script src="gate.js"></script>
+<script src="qr.js"></script>
+<script src="poster-template.js"></script>
+<script>
+/* ===== 비밀번호 세션 확인 (홈에서 Ctrl+E로 들어오지 않은 경우 직접 확인) ===== */
+RGGate.require(init);
+
+function init(){
+  const $ = id => document.getElementById(id);
+  const DRAFT_KEY = "rg-poster-draft";
+  const WEEK = ["일","월","화","수","목","금","토"];
+
+  /* ---------- 약력 줄 ---------- */
+  function addBioRow(value){
+    const row = document.createElement("div");
+    row.className = "bio-row";
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "예) ETRI 책임연구원 · UST 겸임교수";
+    input.value = value || "";
+    input.addEventListener("input", schedule);
+    const del = document.createElement("button");
+    del.type = "button";
+    del.textContent = "−";
+    del.title = "이 줄 삭제";
+    del.onclick = () => { row.remove(); schedule(); };
+    row.append(input, del);
+    $("bioRows").appendChild(row);
+    return input;
+  }
+  $("addBio").onclick = () => { addBioRow("").focus(); schedule(); };
+
+  /* ---------- 입력값 → 데이터 ---------- */
+  function fmtDate(v){
+    if(!v) return "";
+    const [y,m,d] = v.split("-").map(Number);
+    const wd = WEEK[new Date(y, m-1, d).getDay()];
+    return `${y}년 ${m}월 ${d}일 (${wd})`;
+  }
+  function fmtTime(){
+    const s = $("start").value, e = $("end").value;
+    if(s && e) return `${s} – ${e}`;
+    return s || e || "";
+  }
+  function bios(){
+    return [...document.querySelectorAll("#bioRows input")].map(i => i.value.trim()).filter(Boolean);
+  }
+  function collect(){
+    return {
+      year: +$("year").value || new Date().getFullYear(),
+      no: +$("no").value || 1,
+      title: $("title").value.trim(),
+      subtitle: $("subtitle").value.trim(),
+      tagline: $("tagline").value.trim(),
+      content: $("content").value,
+      date: fmtDate($("date").value),
+      time: fmtTime(),
+      place: $("place").value.trim(),
+      speaker: $("speaker").value.trim(),
+      speakerTitle: $("speakerTitle").value.trim(),
+      speakerOrg: $("speakerOrg").value.trim(),
+      bios: bios().join("\n"),
+      fee: $("fee").value.trim() || "무료",
+      contact: $("contact").value.trim(),
+      formUrl: $("formUrl").value.trim(),
+      notes: $("notes").value
+    };
+  }
+
+  /* ---------- 미리보기 ---------- */
+  let timer = null;
+  function schedule(){ clearTimeout(timer); timer = setTimeout(render, 220); }
+  function render(){
+    const d = collect();
+    $("outPath").textContent = `${Poster.dirName(d)}/poster/index.html`;
+    try{
+      $("pv").srcdoc = Poster.buildPage(d);
+    }catch(e){
+      $("err").textContent = "미리보기 생성 오류: " + e.message;
+    }
+    try{ localStorage.setItem(DRAFT_KEY, JSON.stringify({...d, bioList: bios()})); }catch(e){}
+  }
+  document.querySelectorAll("#f input, #f textarea").forEach(el => {
+    el.addEventListener("input", schedule);
+    el.addEventListener("change", schedule);
+  });
+
+  /* ---------- 초안 복원 ---------- */
+  (function restore(){
+    let saved = null;
+    try{ saved = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null"); }catch(e){}
+    if(saved){
+      ["year","no","title","subtitle","tagline","content","place","speaker","speakerTitle",
+       "speakerOrg","fee","contact","formUrl","notes"].forEach(k => { if(saved[k] != null) $(k).value = saved[k]; });
+      /* 날짜/시간은 원본 문자열이 아니라 입력값으로 되돌릴 수 없어 그대로 둔다 */
+      (saved.bioList || []).forEach(b => addBioRow(b));
+    }
+    if(!document.querySelector("#bioRows input")) addBioRow("");
+    if(!$("contact").value) $("contact").value = "ymkang@tu.ac.kr";
+    render();
+  })();
+
+  /* ---------- 검증 ---------- */
+  function validate(d){
+    const miss = [];
+    if(!d.title) miss.push("강연 제목");
+    if(!d.content.trim()) miss.push("강연 내용");
+    if(!d.date) miss.push("날짜");
+    if(!d.place) miss.push("장소");
+    if(!d.speaker) miss.push("연사");
+    if(!d.speakerOrg) miss.push("연사 소속");
+    if(!d.year || !d.no) miss.push("연도/회차");
+    if(miss.length){ $("err").textContent = "필수 항목을 입력하세요: " + miss.join(", "); return false; }
+    if(d.formUrl && !/^https?:\/\//i.test(d.formUrl)){
+      $("err").textContent = "등록 폼 URL은 http(s):// 로 시작해야 합니다."; return false;
+    }
+    $("err").textContent = "";
+    return true;
+  }
+
+  /* ---------- 로그 ---------- */
+  const logEl = $("log");
+  function logClear(){ logEl.innerHTML = ""; logEl.classList.add("on"); }
+  function log(msg, cls){
+    const s = document.createElement("span");
+    if(cls) s.className = cls;
+    s.textContent = msg + "\n";
+    logEl.appendChild(s);
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  /* ---------- 파일 저장 (File System Access API) ---------- */
+  const canFS = typeof window.showDirectoryPicker === "function";
+  const LOCAL_TIP = "저장소 폴더에서 <code>python3 -m http.server</code>를 실행한 뒤 " +
+    "<b>Chrome/Edge</b>로 <code>http://localhost:8000/</code>를 열고 Ctrl+E로 들어오면 폴더에 바로 저장됩니다.";
+  if(!canFS){
+    $("fsWarn").style.display = "block";
+    $("fsWarn").innerHTML = "이 브라우저에서는 폴더에 바로 저장할 수 없습니다. " + LOCAL_TIP +
+      " 지금은 아래 <b>파일로 내려받기</b>를 쓰세요.";
+    $("saveBtn").disabled = true;
+  }else if(location.protocol === "file:"){
+    $("fsWarn").style.display = "block";
+    $("fsWarn").innerHTML = "파일을 <code>file://</code>로 직접 열었습니다. 폴더 저장이 거부될 수 있습니다. " + LOCAL_TIP;
+  }
+
+  let rootHandle = null;
+
+  async function writeFile(dirHandle, name, contents){
+    const fh = await dirHandle.getFileHandle(name, {create:true});
+    const w = await fh.createWritable();
+    await w.write(contents);
+    await w.close();
+  }
+  async function exists(dirHandle, name){
+    try{ await dirHandle.getFileHandle(name); return true; }catch(e){ return false; }
+  }
+  async function readFile(dirHandle, name){
+    const fh = await dirHandle.getFileHandle(name);
+    return (await fh.getFile()).text();
+  }
+
+  $("saveBtn").onclick = async () => {
+    const d = collect();
+    if(!validate(d)) return;
+    logClear();
+    try{
+      if(!rootHandle){
+        log("저장소 최상위 폴더(IEEE_AI_RG)를 선택하세요…", "dim");
+        rootHandle = await window.showDirectoryPicker({mode:"readwrite"});
+      }
+      /* 파일을 쓰기 전에 저장소 최상위가 맞는지 확인한다.
+         (2026_RGn/poster 처럼 index.html이 있는 하위 폴더를 골라도 통과하지 않도록 내용까지 본다) */
+      let rootIndex = null;
+      try { rootIndex = await readFile(rootHandle, "index.html"); } catch (e) { rootIndex = null; }
+      if(rootIndex === null || !/lectureRoot|const lectures\s*=/.test(rootIndex)){
+        log("✗ 선택한 폴더(" + rootHandle.name + ")는 저장소 최상위가 아닙니다.", "no");
+        log("  연구회 홈의 index.html이 들어 있는 IEEE_AI_RG 폴더를 골라주세요.", "dim");
+        rootHandle = null;
+        return;
+      }
+      $("targetInfo").textContent = "저장 위치: " + rootHandle.name;
+
+      const dir = Poster.dirName(d);                       /* 예: 2026_RG7 */
+      const rgDir = await rootHandle.getDirectoryHandle(dir, {create:true});
+      const posterDir = await rgDir.getDirectoryHandle("poster", {create:true});
+
+      if(await exists(posterDir, "index.html")){
+        if(!confirm(`${dir}/poster/index.html 이(가) 이미 있습니다. 덮어쓸까요?`)){ log("취소했습니다.", "dim"); return; }
+      }
+
+      await writeFile(posterDir, "index.html", Poster.buildPage(d));
+      log("✓ " + dir + "/poster/index.html", "ok");
+
+      await writeFile(rgDir, "README.md", Poster.buildReadme(d));
+      log("✓ " + dir + "/README.md", "ok");
+
+      const picsDir = await rgDir.getDirectoryHandle("pics", {create:true});
+      if(!(await exists(picsDir, "README.md"))){
+        await writeFile(picsDir, "README.md",
+          `# 행사 사진 모음\n${d.no}차 특강(${d.title})의 강의 장면과 네트워킹 장면 사진입니다.\n`);
+        log("✓ " + dir + "/pics/README.md (사진 폴더 준비)", "ok");
+      }
+
+      if($("optIndex").checked){
+        const src = await readFile(rootHandle, "index.html");
+        const id = Poster.lectureId(d);
+        const already = src.includes(`id:"${id}"`);
+        const next = Poster.insertEntry(src, Poster.buildEntry(d), id);
+        await writeFile(rootHandle, "index.html", next);
+        log((already ? "✓ index.html — " + id + " 항목 교체" : "✓ index.html — " + id + " 항목 추가"), "ok");
+      }
+
+      if($("optReadme").checked){
+        const src = await readFile(rootHandle, "README.md");
+        if(src.includes(`#### ${d.year}년 AI 연구회 ${d.no}차 특강`)){
+          log("· README.md — 이미 같은 회차 블록이 있어 건너뜀", "dim");
+        }else{
+          await writeFile(rootHandle, "README.md", Poster.appendRootBlock(src, Poster.buildRootBlock(d)));
+          log("✓ README.md — " + d.no + "차 특강 안내 추가", "ok");
+        }
+      }
+
+      log("");
+      log("완료했습니다. 홈에서 새로고침하면 " + d.no + "차 특강이 보입니다.", "ok");
+      log("발표자료·행사사진은 나중에 " + dir + " 폴더에 직접 넣어주세요.", "dim");
+    }catch(e){
+      if(e && e.name === "AbortError"){ log("폴더 선택을 취소했습니다.", "dim"); return; }
+      log("✗ 저장 실패: " + (e && e.message ? e.message : e), "no");
+    }
+  };
+
+  /* ---------- 내려받기 (수동 배치) ---------- */
+  function download(name, text){
+    const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  }
+  $("dlBtn").onclick = async () => {
+    const d = collect();
+    if(!validate(d)) return;
+    const dir = Poster.dirName(d);
+    logClear();
+    download("poster-index.html", Poster.buildPage(d));
+    download(dir + "-README.md", Poster.buildReadme(d));
+    log("내려받은 파일을 아래 위치로 옮겨주세요.", "dim");
+    log("  poster-index.html → " + dir + "/poster/index.html", "ok");
+    log("  " + dir + "-README.md → " + dir + "/README.md", "ok");
+    log("");
+    log("그리고 index.html의 /* LECTURES:END */ 바로 위에 아래 항목을 붙여넣으세요.", "dim");
+    log("(앞 항목 끝에 쉼표를 잊지 마세요)", "dim");
+    log("");
+    log(Poster.buildEntry(d));
+    try{ await navigator.clipboard.writeText(Poster.buildEntry(d)); log("\n※ 위 항목은 클립보드에도 복사했습니다.", "dim"); }catch(e){}
+  };
+
+  /* ---------- 새 탭 미리보기 ---------- */
+  $("openBtn").onclick = () => {
+    const d = collect();
+    if(!validate(d)) return;
+    const w = window.open("", "_blank");
+    if(!w){ $("err").textContent = "팝업이 차단되었습니다."; return; }
+    w.document.write(Poster.buildPage(d));
+    w.document.close();
+  };
+}
+</script>
+</body>
+</html>
