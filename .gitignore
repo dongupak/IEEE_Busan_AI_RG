@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# 개인정보가 포함된 자료 (공개 저장소에 올리지 않음)
+응답/
+mail_list.xlsx
