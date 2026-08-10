@@ -255,6 +255,7 @@
   .idx-list .c-sp{font-weight:700;color:var(--ink);}
   .idx-list .c-org{color:var(--muted);font-weight:600;font-size:.92rem;}
   .idx-list .c-venue{color:var(--ink-2);font-weight:700;font-size:.92rem;}
+  .idx-list .c-venue .c-date{display:block;margin-top:2px;font-weight:600;font-size:.74rem;color:var(--muted);letter-spacing:.02em;}
   .idx-list .c-ti{color:var(--ink-2);font-weight:600;}
   .idx-list li a:hover .c-ti{color:var(--accent);}
   @media(max-width:760px){
@@ -694,12 +695,13 @@ document.getElementById("lectureRoot").innerHTML = [...lectures].reverse().map(L
 
 /* ===== 특강 목록(상단 인덱스) ===== */
 const venueOf = p => { const m = String(p || "").match(/^[^\s(]+/); return m ? m[0] : ""; };
+const dateShort = s => { const m = String(s || "").match(/(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일/); return m ? `${m[1]}.${m[2].padStart(2, "0")}.${m[3].padStart(2, "0")}` : ""; };
 document.getElementById("lectureIndex").innerHTML = [...lectures].reverse().map(L => `
   <li><a href="#${L.id}">
     <span class="c-no">${+L.no}회</span>
     <span class="c-sp">${esc(L.presenter || "")}</span>
     <span class="c-org">${esc(L.org || "")}</span>
-    <span class="c-venue">${esc(L.venue || venueOf(L.place))}</span>
+    <span class="c-venue">${esc(L.venue || venueOf(L.place))}<small class="c-date">${dateShort(L.date)}</small></span>
     <span class="c-ti">${esc(L.title)}${L.upcoming ? `<span class="tag-up">예정</span>` : ""}</span>
   </a></li>`).join("");
 
