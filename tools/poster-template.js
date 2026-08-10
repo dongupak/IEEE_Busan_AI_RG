@@ -36,6 +36,12 @@
     return t.trim();
   }
 
+  /* 개최지: 장소 문자열에서 기관명만 (첫 공백/괄호 앞) — "부산대학교 IT관 621호" -> "부산대학교" */
+  function venueOf(place) {
+    var m = String(place == null ? "" : place).match(/^[^\s(]+/);
+    return m ? m[0] : "";
+  }
+
   /* 강사 표기: "유대승 박사 (한국전자통신연구원 동남권지능화융합연구실)" */
   function speakerLine(d) {
     var name = [d.speaker, d.speakerTitle].filter(Boolean).join(" ").trim();
@@ -480,7 +486,7 @@
     L.push("    date:" + j(dateText(d)) + ",");
     L.push("    place:" + j(d.place) + ",");
     L.push("    speaker:" + j(speakerLine(d)) + ",");
-    L.push("    presenter:" + j([d.speaker, d.speakerTitle].filter(Boolean).join(" ")) + ", org:" + j(d.speakerOrg || "") + ",");
+    L.push("    presenter:" + j([d.speaker, d.speakerTitle].filter(Boolean).join(" ")) + ", org:" + j(d.speakerOrg || "") + ", venue:" + j(d.venue || venueOf(d.place)) + ",");
     if (bios.length) L.push("    bio:" + j(bios.join(" · ")) + ",");
     L.push("    desc:" + j(desc) + ",");
     L.push("    upcoming:true,");
