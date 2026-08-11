@@ -341,6 +341,25 @@
   .legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:18px;font-size:.78rem;color:var(--muted);font-weight:600;}
   .legend span{display:inline-flex;align-items:center;gap:6px;}
   .legend i{width:10px;height:10px;border-radius:3px;display:inline-block;}
+  .legend i.ln{width:18px;height:2px;border-radius:1px;background:var(--ink);}
+
+  /* 회차별 등록 추이 차트 */
+  .chart-wrap{overflow-x:auto;}
+  .chart{display:block;width:100%;min-width:720px;height:auto;margin:4px 0 2px;}
+  .chart .c-grid line{stroke:var(--line);stroke-width:1;}
+  .chart .c-axis{stroke:var(--bg-2);stroke-width:1;}
+  .chart text{font-family:inherit;fill:var(--muted);}
+  .chart .c-tick text,.chart .c-xlab text{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;}
+  .chart .c-val text{font-size:14px;font-weight:800;fill:var(--ink);}
+  .chart .f-new{fill:var(--accent);}
+  .chart .f-ret{fill:var(--cyan);}
+  .chart .c-line{fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .chart .c-dot circle{fill:var(--ink);stroke:var(--white);stroke-width:2;}
+  /* 좁은 화면에서는 축소 배율만큼 글자를 키운다 (가로 스크롤) */
+  @media(max-width:900px){
+    .chart .c-tick text,.chart .c-xlab text{font-size:16px;}
+    .chart .c-val text{font-size:18px;}
+  }
   .note{margin:18px 0 0;font-size:.82rem;color:var(--muted);line-height:1.6;}
   .note b{color:var(--ink-2);font-weight:700;}
 </style>
@@ -486,21 +505,97 @@
         <span><i style="background:var(--mint)"></i>기업·기타</span>
         <span><i style="background:#c9c9c9"></i>공공·지자체</span>
       </div>
-      <p class="note">주최·인접 대학인 <b>동의대·부산대·동명대</b>가 상위권을 형성했고, ETRI와 10개 기업·기관, 지자체까지 함께했습니다. 학과·연구실 단위로 적은 소속은 대학 기준으로 합산했습니다.</p>
+      <p class="note">세미나를 함께 연 <b>동의대·부산대·동명대</b>를 비롯해 지역 대학에서 등록이 이어졌고, ETRI와 10개 기업·기관, 지자체에서도 참여했습니다. 학과·연구실 단위로 적은 소속은 대학 기준으로 합산했습니다.</p>
     </div>
 
     <!-- 회차별 등록 추이 -->
     <div class="panel wide reveal">
       <h3>회차별 참가 등록 추이</h3>
       <p class="cap">회차별 등록 건수 · 신규는 그 회차에 처음 등록한 참가자</p>
-      <div class="bar"><div class="lin"><span class="nm">1차 · 이정훈 (트랜스포머 언어모델)</span><span class="v">26건 · 신규 26</span></div><div class="track"><div class="fill c-uni" style="width:76.5%"></div></div></div>
-      <div class="bar"><div class="lin"><span class="nm">2차 · 손영성 (휴머노이드·피지컬 AI)</span><span class="v">34건 · 신규 24</span></div><div class="track"><div class="fill c-uni" style="width:100%"></div></div></div>
-      <div class="bar"><div class="lin"><span class="nm">3차 · 김성수 (시계열 이상 탐지)</span><span class="v">29건 · 신규 11</span></div><div class="track"><div class="fill c-uni" style="width:85.3%"></div></div></div>
-      <div class="bar"><div class="lin"><span class="nm">4차 · 이상걸 (생성형 AI 오케스트레이션)</span><span class="v">17건 · 신규 4</span></div><div class="track"><div class="fill c-uni" style="width:50%"></div></div></div>
-      <div class="bar"><div class="lin"><span class="nm">5차 · 이준영 (기업에서 바라보는 AX)</span><span class="v">24건 · 신규 14</span></div><div class="track"><div class="fill c-uni" style="width:70.6%"></div></div></div>
-      <div class="bar"><div class="lin"><span class="nm">6차 · 유대승 (미래 제조 혁신)</span><span class="v">27건 · 신규 10</span></div><div class="track"><div class="fill c-uni" style="width:79.4%"></div></div></div>
-      <div class="bar"><div class="lin"><span class="nm">7차 · 민경욱 (자율주행 AI)</span><span class="v">32건 · 신규 13</span></div><div class="track"><div class="fill c-uni" style="width:94.1%"></div></div></div>
-      <p class="note">고유 참가자 102명 중 <b>40명(39%)</b>이 두 번 이상 참석했고, 7회 전체를 함께한 참가자도 1명 있습니다. 7차는 <b>32건</b>으로 2차에 이어 두 번째로 많은 등록을 기록했습니다.</p>
+      <div class="chart-wrap">
+      <svg class="chart" viewBox="0 0 1000 300" role="img" aria-labelledby="trendTitle trendDesc">
+        <title id="trendTitle">회차별 참가 등록 추이</title>
+        <desc id="trendDesc">1차 26건(신규 26), 2차 34건(신규 24), 3차 29건(신규 11), 4차 17건(신규 4), 5차 24건(신규 14), 6차 27건(신규 10), 7차 32건(신규 13).</desc>
+        <g class="c-grid">
+          <line x1="42" x2="986" y1="258" y2="258"/>
+          <line x1="42" x2="986" y1="200" y2="200"/>
+          <line x1="42" x2="986" y1="142" y2="142"/>
+          <line x1="42" x2="986" y1="84" y2="84"/>
+          <line x1="42" x2="986" y1="26" y2="26"/>
+        </g>
+        <g class="c-tick">
+          <text x="32" y="258" dy=".32em" text-anchor="end">0</text>
+          <text x="32" y="200" dy=".32em" text-anchor="end">10</text>
+          <text x="32" y="142" dy=".32em" text-anchor="end">20</text>
+          <text x="32" y="84" dy=".32em" text-anchor="end">30</text>
+          <text x="32" y="26" dy=".32em" text-anchor="end">40</text>
+        </g>
+        <g class="c-cols">
+          <g><title>1차 · 등록 26건 (신규 26 · 재참가 0)</title>
+            <path class="f-new" d="M99.4,111.2 a4,4 0 0 1 4,-4 h12 a4,4 0 0 1 4,4 v146.8 h-20 Z"/>
+          </g>
+          <g><title>2차 · 등록 34건 (신규 24 · 재참가 10)</title>
+            <path class="f-ret" d="M234.3,64.8 a4,4 0 0 1 4,-4 h12 a4,4 0 0 1 4,4 v52.0 h-20 Z"/>
+            <rect class="f-new" x="234.3" y="118.8" width="20" height="139.2"/>
+          </g>
+          <g><title>3차 · 등록 29건 (신규 11 · 재참가 18)</title>
+            <path class="f-ret" d="M369.1,93.8 a4,4 0 0 1 4,-4 h12 a4,4 0 0 1 4,4 v98.4 h-20 Z"/>
+            <rect class="f-new" x="369.1" y="194.2" width="20" height="63.8"/>
+          </g>
+          <g><title>4차 · 등록 17건 (신규 4 · 재참가 13)</title>
+            <path class="f-ret" d="M504.0,163.4 a4,4 0 0 1 4,-4 h12 a4,4 0 0 1 4,4 v69.4 h-20 Z"/>
+            <rect class="f-new" x="504.0" y="234.8" width="20" height="23.2"/>
+          </g>
+          <g><title>5차 · 등록 24건 (신규 14 · 재참가 10)</title>
+            <path class="f-ret" d="M638.9,122.8 a4,4 0 0 1 4,-4 h12 a4,4 0 0 1 4,4 v52.0 h-20 Z"/>
+            <rect class="f-new" x="638.9" y="176.8" width="20" height="81.2"/>
+          </g>
+          <g><title>6차 · 등록 27건 (신규 10 · 재참가 17)</title>
+            <path class="f-ret" d="M773.7,105.4 a4,4 0 0 1 4,-4 h12 a4,4 0 0 1 4,4 v92.6 h-20 Z"/>
+            <rect class="f-new" x="773.7" y="200.0" width="20" height="58.0"/>
+          </g>
+          <g><title>7차 · 등록 32건 (신규 13 · 재참가 19)</title>
+            <path class="f-ret" d="M908.6,76.4 a4,4 0 0 1 4,-4 h12 a4,4 0 0 1 4,4 v104.2 h-20 Z"/>
+            <rect class="f-new" x="908.6" y="182.6" width="20" height="75.4"/>
+          </g>
+        </g>
+        <polyline class="c-line" points="109.4,107.2 244.3,60.8 379.1,89.8 514.0,159.4 648.9,118.8 783.7,101.4 918.6,72.4"/>
+        <g class="c-dot">
+          <circle cx="109.4" cy="107.2" r="4.5"/>
+          <circle cx="244.3" cy="60.8" r="4.5"/>
+          <circle cx="379.1" cy="89.8" r="4.5"/>
+          <circle cx="514.0" cy="159.4" r="4.5"/>
+          <circle cx="648.9" cy="118.8" r="4.5"/>
+          <circle cx="783.7" cy="101.4" r="4.5"/>
+          <circle cx="918.6" cy="72.4" r="4.5"/>
+        </g>
+        <g class="c-val">
+          <text x="109.4" y="94.2" text-anchor="middle">26</text>
+          <text x="244.3" y="47.8" text-anchor="middle">34</text>
+          <text x="379.1" y="76.8" text-anchor="middle">29</text>
+          <text x="514.0" y="146.4" text-anchor="middle">17</text>
+          <text x="648.9" y="105.8" text-anchor="middle">24</text>
+          <text x="783.7" y="88.4" text-anchor="middle">27</text>
+          <text x="918.6" y="59.4" text-anchor="middle">32</text>
+        </g>
+        <g class="c-xlab">
+          <text x="109.4" y="282" text-anchor="middle">1차</text>
+          <text x="244.3" y="282" text-anchor="middle">2차</text>
+          <text x="379.1" y="282" text-anchor="middle">3차</text>
+          <text x="514.0" y="282" text-anchor="middle">4차</text>
+          <text x="648.9" y="282" text-anchor="middle">5차</text>
+          <text x="783.7" y="282" text-anchor="middle">6차</text>
+          <text x="918.6" y="282" text-anchor="middle">7차</text>
+        </g>
+        <line class="c-axis" x1="42" x2="986" y1="258" y2="258"/>
+      </svg>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--accent)"></i>신규 참가</span>
+        <span><i style="background:var(--cyan)"></i>재참가</span>
+        <span><i class="ln"></i>총 등록 추이</span>
+      </div>
+      <p class="note">고유 참가자 102명 가운데 <b>40명(39%)</b>이 두 번 이상 참석했고, 7회 모두 참석한 참가자도 1명 있습니다. 매 회차 새로 등록한 참가자가 꾸준히 이어졌습니다.</p>
     </div>
   </div>
 </section>
