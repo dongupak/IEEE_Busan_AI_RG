@@ -103,6 +103,8 @@ Intelligence의 π 모델 등 최신 로봇 행동 지능 모델의 작동 원�
 * 특강 소개글 :
 특강에서는 자율주행 인공지능 기술이 기존 Rule-based 방식에서 데이터 중심의 End-to-End(E2E) AI를 거쳐 Vision-Language-Action(VLA), World Model, Reasoning AI로 발전하는 최신 기술 흐름을 살펴봅니다. 글로벌 선도기업인 Tesla, Waymo, NVIDIA 등의 최신 연구와 상용화 전략을 중심으로 자율주행 AI의 핵심 기술과 경쟁력을 분석하고, 데이터셋·학습 방식·평가 기술의 변화까지 함께 소개합니다. 또한 국내 자율주행 정책과 산업 생태계, ETRI의 최신 연구 사례를 통해 우리나라 기술 수준과 향후 발전 방향을 전망하며, 자율주행 AI가 앞으로 어떤 모습으로 진화할지 함께 살펴보는 시간을 갖습니다.
 
+* [7차 특강 발표자료(PDF)](https://github.com/dongupak/IEEE_Busan_AI_RG/blob/main/2026_RG7/lecturenotes/%EC%9E%90%EC%9C%A8%EC%A3%BC%ED%96%89%20AI%28ETRI%20%EB%AF%BC%EA%B2%BD%EC%9A%B1%29_%EC%A0%9C%EC%B6%9C.pdf)
+* [행사 사진](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG7/pics)
 * [발표 자료와 행사 안내](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG7/README.md)
 
 #### 2026년 AI 연구회 8차 특강
