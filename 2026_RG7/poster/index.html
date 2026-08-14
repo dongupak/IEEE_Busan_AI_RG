@@ -164,33 +164,40 @@
   @keyframes dash{to{stroke-dashoffset:-280;}}
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 
-  /* ===== 인쇄: A4 한 장에 맞춤 ===== */
+  /* ===== 인쇄 · PDF: 화면 그대로 A4 한 장에 담기 ===== */
+  /* 인쇄 직전 JS가 채우는 값 (화면 폭 1000px 기준 배치를 A4에 맞춰 축소) */
+  :root{--pscale:.5;--pdy:0px;}
+  /* 인쇄 배치 높이를 재는 동안만 화면 밖에서 1000px 폭으로 그린다 */
+  .measure body{zoom:1!important;padding-top:0!important;}  /* 축소된 값을 다시 재지 않도록 */
+  .measure .sheet{position:absolute!important;left:-12000px!important;top:0!important;
+    width:1000px!important;max-width:1000px!important;}
+  .measure .facts{grid-template-columns:repeat(4,1fr)!important;}
+  .measure .cols{grid-template-columns:1.32fr .92fr!important;}
+  .measure .net{display:block!important;}
+
   @media print{
-    @page{size:A4 portrait;margin:8mm;}
-    html,body{background:#fff;font-size:11.8px;}
-    .grid-bg,.orb,.tools{display:none;}
-    .sheet{padding:0;max-width:none;}
-    .hero{border-radius:12px;padding:18px 22px 20px;box-shadow:none;}
-    .hero-in{max-width:none;}
-    .net{width:210px;opacity:.5;}
-    h1{font-size:1.95rem;margin-top:15px;}
-    .sub{font-size:1rem;margin-top:8px;}
-    .tagline{font-size:.9rem;margin-top:10px;}
-    .rule{margin-top:14px;}
-    .facts{grid-template-columns:repeat(4,1fr);gap:7px;margin-top:7px;}
-    .fact{padding:13px 13px 11px;border-radius:12px;box-shadow:none;}
-    .fact .v{font-size:.95rem;margin-top:7px;}
-    .cols{grid-template-columns:1.32fr .92fr;gap:8px;margin-top:8px;}
-    .card{padding:13px 15px;border-radius:12px;box-shadow:none;break-inside:avoid;}
-    .foot{padding:9px 15px;margin-top:7px;font-size:.7rem;box-shadow:none;}
-    .ch{margin-bottom:13px;}
-    .prose p{font-size:.9rem;margin-bottom:9px;}
-    .mapfig img{max-height:30mm;border-radius:10px;}
-    .mapfig figcaption{margin-top:8px;font-size:.84rem;}
-    .qrwrap{width:min(158px,74%);box-shadow:none;margin-bottom:10px;}
-    .about{display:none;}
-    .cta{display:none;}
-    .url{font-size:.72rem;}
+    @page{size:A4 portrait;margin:0;}
+    *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+    html{width:210mm;height:297mm;overflow:hidden;background:#F4F7FD;}
+    /* zoom은 레이아웃까지 축소하므로 종이 한 장을 넘기지 않는다 */
+    body{zoom:var(--pscale);width:1000px;margin:0 auto;padding-top:var(--pdy);
+      position:relative;background-attachment:scroll;}
+    .grid-bg{position:absolute;}
+    .sheet{width:1000px;max-width:1000px;margin:0;}
+    /* 좁은 종이 폭 때문에 모바일 레이아웃으로 바뀌지 않도록 화면 배치를 고정 */
+    .facts{grid-template-columns:repeat(4,1fr);}
+    .cols{grid-template-columns:1.32fr .92fr;}
+    .net{display:block;}
+    .tools{display:none;}
+    .hero,.fact,.card,.foot{break-inside:avoid;}
+  }
+  /* zoom을 지원하지 않는 브라우저에서는 잘리지 않게 여러 장으로 인쇄 */
+  @supports not (zoom:1){
+    @media print{
+      html{height:auto;overflow:visible;}
+      body{width:auto;padding-top:0;}
+      .sheet{width:auto;max-width:1000px;margin:0 auto;}
+    }
   }
 </style>
 </head>
@@ -222,7 +229,7 @@
   <section class="card" style="margin-top:14px">
     <div class="ch"><span class="n">01</span><h2>찾아오는 길</h2><span class="line"></span></div>
     <figure class="mapfig">
-      <img src="map.jpeg" alt="동의대학교 정보공학관 324호 위치 안내 지도" loading="lazy">
+      <img src="map.jpeg" alt="동의대학교 정보공학관 324호 위치 안내 지도">
       <figcaption><span class="pin">📍 행사장</span>동의대학교 정보공학관 324호<em>캠퍼스 안내도 23번 건물</em></figcaption>
     </figure>
   </section>
@@ -274,5 +281,36 @@
     <a href="https://dongupak.github.io/IEEE_Busan_AI_RG">← 연구회 홈으로</a>
   </div>
 </div>
+<script>
+/* 인쇄 · PDF 저장 시 화면 배치(폭 1000px) 그대로 A4 한 장에 맞춰 축소한다. */
+(function(){
+  var PAGE_W=794, PAGE_H=1123;            /* A4 210×297mm @96dpi */
+  var SAFE=19;                            /* 가장자리 여백 약 5mm */
+  var LAYOUT_W=1000;                      /* 인쇄에 쓸 화면 배치 폭 */
+  var root=document.documentElement;
+  function fit(){
+    var sheet=document.querySelector('.sheet');
+    if(!sheet) return;
+    root.classList.add('measure');
+    var h=Math.ceil(sheet.getBoundingClientRect().height);
+    root.classList.remove('measure');
+    if(!h) return;
+    var s=Math.min((PAGE_W-2*SAFE)/LAYOUT_W, (PAGE_H-2*SAFE)/h);
+    root.style.setProperty('--pscale', s.toFixed(4));
+    /* 세로 가운데 정렬 — body는 zoom된 좌표계라 s로 나눠 준다 */
+    root.style.setProperty('--pdy', ((PAGE_H-h*s)/2/s).toFixed(2)+'px');
+  }
+  window.addEventListener('load', fit);
+  window.addEventListener('resize', fit);
+  window.addEventListener('beforeprint', fit);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fit);
+  var mq=window.matchMedia&&window.matchMedia('print');
+  if(mq){                                 /* beforeprint 미지원 브라우저 대비 */
+    var onmq=function(e){ if(e.matches) fit(); };
+    mq.addEventListener ? mq.addEventListener('change',onmq) : mq.addListener&&mq.addListener(onmq);
+  }
+  fit();
+})();
+</script>
 </body>
 </html>
