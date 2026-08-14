@@ -146,6 +146,28 @@
   ul.notes li::before{content:"▹";position:absolute;left:1px;top:-1px;color:var(--blue);font-weight:700;}
   .about{background:linear-gradient(180deg,#F8F5FF,#FFFFFF);}
 
+  /* ===== 주관 · 후원 띠 ===== */
+  .orgs{margin-top:14px;border-radius:20px;border:1px solid var(--line);
+    padding:14px clamp(16px,2.4vw,24px);background:var(--paper);
+    box-shadow:0 10px 26px rgba(19,42,88,.06);
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
+    gap:12px clamp(18px,3vw,30px);}
+  .og{display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-width:0;}
+  .og-lb{flex:none;font-family:var(--mono);font-size:.7rem;font-weight:700;
+    letter-spacing:.1em;color:var(--muted);
+    border:1px solid var(--line);border-radius:8px;padding:5px 10px;background:#FBFCFF;}
+  .og-lb.spon{color:var(--violet);border-color:rgba(122,59,232,.28);background:#FAF6FF;}
+  /* 로고는 높이를 맞춰 나란히 둔다. jpg는 흰 바탕이라 얇은 테두리로 경계를 준다. */
+  .lg{display:block;height:46px;width:auto;border-radius:6px;}
+  .lg.card-lg{border:1px solid var(--line);padding:3px 7px;background:#fff;}
+  .og-nm{font-size:.82rem;font-weight:700;color:var(--ink-2);letter-spacing:-.01em;}
+  .og-div{align-self:stretch;width:1px;background:var(--line);}
+  @media(max-width:760px){
+    .orgs{gap:12px 16px;}
+    .lg{height:38px;}
+    .og-div{display:none;}
+  }
+
   /* ===== 푸터 ===== */
   .foot{margin-top:14px;border-radius:20px;border:1px solid var(--line);padding:20px clamp(20px,3vw,28px);
     background:var(--paper);box-shadow:0 10px 26px rgba(19,42,88,.06);
@@ -189,7 +211,7 @@
     .cols{grid-template-columns:1.32fr .92fr;}
     .net{display:block;}
     .tools{display:none;}
-    .hero,.fact,.card,.foot{break-inside:avoid;}
+    .hero,.fact,.card,.orgs,.foot{break-inside:avoid;}
   }
   /* zoom을 지원하지 않는 브라우저에서는 잘리지 않게 여러 장으로 인쇄 */
   @supports not (zoom:1){
@@ -224,6 +246,21 @@
     <div class="fact"><div class="k">VENUE · 장소</div><div class="v">동명대학교 15호관(정보통신관) 301호</div></div>
     <div class="fact"><div class="k">SPEAKER · 강사</div><div class="v">정호열 박사</div><div class="s">한국전자통신연구원 라이프케어AX연구실</div></div>
     <div class="fact free"><div class="k">FEE · 참가비</div><div class="v">무료</div></div>
+  </section>
+
+  <section class="orgs" aria-label="주관 및 후원 기관">
+    <div class="og">
+      <span class="og-lb">주관</span>
+      <img class="lg" src="flag.png" alt="IEEE Busan Section">
+      <span class="og-nm">IEEE Busan Section</span>
+    </div>
+    <span class="og-div" aria-hidden="true"></span>
+    <div class="og">
+      <span class="og-lb spon">후원</span>
+      <img class="lg card-lg" src="bRise.jpg" alt="부산라이즈혁신원">
+      <img class="lg card-lg" src="tuRise.jpg" alt="동명대학교 TU 앵커사업단">
+      <span class="og-nm">부산라이즈혁신원 · TU 앵커사업단</span>
+    </div>
   </section>
 
   <section class="card" style="margin-top:14px">
@@ -270,6 +307,7 @@
     <div class="prose"><p>IEEE Busan AI 연구회는 IEEE Busan Section에서 주관하는 인공지능 기술 연구모임입니다.</p>
     <p>부산 · 경남 · 울산 지역을 중심으로 인공지능에 관심있는 연구자들의 참여로 이루어지며, 2026년부터 대학의 방학기간을 활용하여 인공지능 전문가들의 특강을 개최하고 있습니다.</p></div>
   </section>
+
   <footer class="foot">
     <b>IEEE Busan AI 연구회</b>
     <span>CONTACT · ymkang@tu.ac.kr</span>
