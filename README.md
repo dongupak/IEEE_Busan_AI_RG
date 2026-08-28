@@ -121,5 +121,6 @@ Intelligence의 π 모델 등 최신 로봇 행동 지능 모델의 작동 원�
 
 * [8차 특강 발표자료(PDF)](https://github.com/dongupak/IEEE_Busan_AI_RG/blob/main/2026_RG8/lecturenotes/bio_ai_DrJung.pdf)
 * [강연 소개 자료(PDF)](https://github.com/dongupak/IEEE_Busan_AI_RG/blob/main/2026_RG8/lecturenotes/%EA%B0%95%EC%97%B0%EC%86%8C%EA%B0%9C.pdf)
+* [행사 사진](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG8/pics)
 * [발표 자료와 행사 안내](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG8/README.md)
 

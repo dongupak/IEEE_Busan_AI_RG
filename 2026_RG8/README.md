@@ -16,6 +16,9 @@
 * [8차 특강 발표자료 — 바이오의료 인공지능 현황과 전망 (ETRI 정호열 박사)](https://github.com/dongupak/IEEE_Busan_AI_RG/blob/main/2026_RG8/lecturenotes/bio_ai_DrJung.pdf)
 * [강연 소개 자료](https://github.com/dongupak/IEEE_Busan_AI_RG/blob/main/2026_RG8/lecturenotes/%EA%B0%95%EC%97%B0%EC%86%8C%EA%B0%9C.pdf)
 
+#### 행사 사진
+* [행사 사진 모음 (rg8_01 ~ rg8_11)](https://github.com/dongupak/IEEE_Busan_AI_RG/tree/main/2026_RG8/pics)
+
 #### 기타 안내
 * 주차 지원을 위해 등록 폼에서 주차권 요청을 표시해 주십시오.
 
